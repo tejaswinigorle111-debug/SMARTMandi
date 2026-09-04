@@ -1,0 +1,11 @@
+{
+  "name": "SMARTMandi - Market Decision Support",
+  "description": "Farmer-focused market decision-support tool helping farmers discover the highest estimated net return by comparing market prices, distance, and transport costs.",
+  "requestFramePermissions": [
+    "geolocation",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
