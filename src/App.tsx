@@ -18,7 +18,7 @@ export default function App() {
   // Active query state
   const [currentCrop, setCurrentCrop] = useState<CropType>('Tomato');
   const [currentQuantity, setCurrentQuantity] = useState<number>(1000);
-  const [currentLocation, setCurrentLocation] = useState<string>('Nandyal, Andhra Pradesh');
+  const [currentLocation, setCurrentLocation] = useState<string>('Nashik, Maharashtra');
   const [marketResults, setMarketResults] = useState<CalculatedMarketResult[]>([]);
 
   // Modals
@@ -30,7 +30,7 @@ export default function App() {
     handleCalculation({
       crop: 'Tomato',
       quantity: 1000,
-      location: 'Nandyal, Andhra Pradesh',
+      location: 'Nashik, Maharashtra',
     }, false);
   }, []);
 

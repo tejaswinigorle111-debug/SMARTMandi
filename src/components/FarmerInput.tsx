@@ -21,9 +21,9 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
 
   const [crop, setCrop] = useState<CropType>('Tomato');
   const [quantity, setQuantity] = useState<string>('1000');
-  const [location, setLocation] = useState<string>('Nandyal, Andhra Pradesh');
-  const [latitude, setLatitude] = useState<number | undefined>(15.48);
-  const [longitude, setLongitude] = useState<number | undefined>(78.48);
+  const [location, setLocation] = useState<string>('Nashik, Maharashtra');
+  const [latitude, setLatitude] = useState<number | undefined>(19.99);
+  const [longitude, setLongitude] = useState<number | undefined>(73.78);
 
   const [isLocating, setIsLocating] = useState<boolean>(false);
   const [locationStatus, setLocationStatus] = useState<string | null>(null);
@@ -59,15 +59,15 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
         setLatitude(lat);
         setLongitude(lng);
 
-        const detectedName = `Nandyal Rural (${lat.toFixed(2)}°N, ${lng.toFixed(2)}°E)`;
+        const detectedName = `Nashik Rural (${lat.toFixed(2)}°N, ${lng.toFixed(2)}°E)`;
         setLocation(detectedName);
         setLocationStatus(`${t.input.locationSuccess} ${detectedName}`);
       },
       (error) => {
         setIsLocating(false);
         console.warn('Geolocation error:', error);
-        setLocation('Nandyal, Andhra Pradesh');
-        setLocationStatus('Using regional location (Nandyal, Andhra Pradesh).');
+        setLocation('Nashik, Maharashtra');
+        setLocationStatus('Using regional location (Nashik, Maharashtra).');
       },
       { timeout: 8000, enableHighAccuracy: false }
     );
@@ -96,7 +96,7 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
       speechRecognitionRef.current = recognition;
       recognition.continuous = false;
       recognition.interimResults = false;
-      recognition.lang = language === 'te' ? 'te-IN' : 'en-IN';
+      recognition.lang = language === 'mr' ? 'mr-IN' : 'en-IN';
 
       recognition.onstart = () => {
         setIsListening(true);
@@ -108,15 +108,15 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
         setIsListening(false);
         setSpeechStatus(`Recognized: "${transcript}"`);
 
-        if (transcript.includes('tomato') || transcript.includes('టమాటో')) {
+        if (transcript.includes('tomato') || transcript.includes('टोमॅटो') || transcript.includes('टमाटर')) {
           setCrop('Tomato');
-        } else if (transcript.includes('rice') || transcript.includes('వరి') || transcript.includes('paddy')) {
+        } else if (transcript.includes('rice') || transcript.includes('भात') || transcript.includes('तांदूळ') || transcript.includes('paddy')) {
           setCrop('Rice');
-        } else if (transcript.includes('cotton') || transcript.includes('పత్తి')) {
+        } else if (transcript.includes('cotton') || transcript.includes('कापूस') || transcript.includes('कपास')) {
           setCrop('Cotton');
-        } else if (transcript.includes('chilli') || transcript.includes('మిర్చి')) {
+        } else if (transcript.includes('chilli') || transcript.includes('chili') || transcript.includes('मिरची') || transcript.includes('लाल मिरची')) {
           setCrop('Chilli');
-        } else if (transcript.includes('maize') || transcript.includes('మొక్కజొన్న') || transcript.includes('corn')) {
+        } else if (transcript.includes('maize') || transcript.includes('मका') || transcript.includes('corn')) {
           setCrop('Maize');
         }
 
@@ -125,14 +125,20 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
           setQuantity(numbers[0]);
         }
 
-        if (transcript.includes('nandyal') || transcript.includes('నంద్యాల')) {
-          setLocation('Nandyal, Andhra Pradesh');
-        } else if (transcript.includes('kurnool') || transcript.includes('కర్నూలు')) {
-          setLocation('Kurnool, Andhra Pradesh');
-        } else if (transcript.includes('adoni') || transcript.includes('ఆదోని')) {
-          setLocation('Adoni, Andhra Pradesh');
-        } else if (transcript.includes('guntur') || transcript.includes('గుంటూరు')) {
-          setLocation('Guntur, Andhra Pradesh');
+        if (transcript.includes('nashik') || transcript.includes('नाशिक')) {
+          setLocation('Nashik, Maharashtra');
+        } else if (transcript.includes('pune') || transcript.includes('पुणे')) {
+          setLocation('Pune, Maharashtra');
+        } else if (transcript.includes('ahmednagar') || transcript.includes('अहमदनगर')) {
+          setLocation('Ahmednagar, Maharashtra');
+        } else if (transcript.includes('kolhapur') || transcript.includes('कोल्हापूर')) {
+          setLocation('Kolhapur, Maharashtra');
+        } else if (transcript.includes('nagpur') || transcript.includes('नागपूर')) {
+          setLocation('Nagpur, Maharashtra');
+        } else if (transcript.includes('jalgaon') || transcript.includes('जळगाव')) {
+          setLocation('Jalgaon, Maharashtra');
+        } else if (transcript.includes('dhule') || transcript.includes('धुळे')) {
+          setLocation('Dhule, Maharashtra');
         }
       };
 
@@ -163,7 +169,7 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
     onCalculate({
       crop,
       quantity: parsedQty,
-      location: location || 'Nandyal, Andhra Pradesh',
+      location: location || 'Nashik, Maharashtra',
       latitude,
       longitude,
     });
@@ -225,7 +231,7 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
                   >
                     {cropOptions.map((item) => (
                       <option key={item.id} value={item.id} className="py-2 text-base font-semibold">
-                        {item.icon} {language === 'te' ? item.labelTe : item.labelEn}
+                        {item.icon} {language === 'mr' ? item.labelMr : item.labelEn}
                       </option>
                     ))}
                   </select>
@@ -326,7 +332,7 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
                 <span className="text-sm font-black text-stone-900 mr-1">Quick Presets:</span>
                 <button
                   type="button"
-                  onClick={() => handleQuickPreset('Tomato', '1000', 'Nandyal, Andhra Pradesh')}
+                  onClick={() => handleQuickPreset('Tomato', '1000', 'Nashik, Maharashtra')}
                   className={`text-sm px-3.5 py-2 rounded-xl border-2 transition-all cursor-pointer font-bold ${
                     crop === 'Tomato' && quantity === '1000'
                       ? 'bg-emerald-100 border-emerald-700 text-emerald-950 font-black shadow-xs'
@@ -337,7 +343,7 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleQuickPreset('Cotton', '3000', 'Adoni, Andhra Pradesh')}
+                  onClick={() => handleQuickPreset('Cotton', '3000', 'Jalgaon, Maharashtra')}
                   className={`text-sm px-3.5 py-2 rounded-xl border-2 transition-all cursor-pointer font-bold ${
                     crop === 'Cotton' && quantity === '3000'
                       ? 'bg-emerald-100 border-emerald-700 text-emerald-950 font-black shadow-xs'
@@ -348,7 +354,7 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleQuickPreset('Chilli', '800', 'Guntur, Andhra Pradesh')}
+                  onClick={() => handleQuickPreset('Chilli', '800', 'Nagpur, Maharashtra')}
                   className={`text-sm px-3.5 py-2 rounded-xl border-2 transition-all cursor-pointer font-bold ${
                     crop === 'Chilli' && quantity === '800'
                       ? 'bg-emerald-100 border-emerald-700 text-emerald-950 font-black shadow-xs'
@@ -359,7 +365,7 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleQuickPreset('Maize', '2000', 'Kurnool, Andhra Pradesh')}
+                  onClick={() => handleQuickPreset('Maize', '2000', 'Dhule, Maharashtra')}
                   className={`text-sm px-3.5 py-2 rounded-xl border-2 transition-all cursor-pointer font-bold ${
                     crop === 'Maize' && quantity === '2000'
                       ? 'bg-emerald-100 border-emerald-700 text-emerald-950 font-black shadow-xs'
@@ -392,7 +398,7 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
                     <>
                       <Mic className="w-4 h-4 text-emerald-700" />
                       <span>Speak</span>
-                      <span className="text-stone-600 font-bold">EN / తెలుగు</span>
+                      <span className="text-stone-600 font-bold">EN / मराठी</span>
                     </>
                   )}
                 </button>

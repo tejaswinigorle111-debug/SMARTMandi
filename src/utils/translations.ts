@@ -34,7 +34,7 @@ export const translations = {
       quantityLabel: 'Quantity',
       quantityPlaceholder: 'Enter quantity in kg (e.g. 1000)',
       locationLabel: 'Your Location',
-      locationPlaceholder: 'Enter village, town or district (e.g. Nandyal, Dhone)',
+      locationPlaceholder: 'Enter village, town or district (e.g. Nashik, Pune, Ahmednagar)',
       useLocationBtn: 'Use My Location',
       locationDetecting: 'Locating...',
       locationSuccess: 'Location detected: ',
@@ -44,7 +44,7 @@ export const translations = {
       speechNotSupported: 'Speech recognition is not supported in this browser. Please type directly.',
       speechPrompt: 'Speak your crop, quantity or village name.',
       submitBtn: 'Find Best Market',
-      quickFillNote: 'Quick test: 1,000 kg Tomato from Nandyal',
+      quickFillNote: 'Quick test: 1,000 kg Tomato from Nashik',
     },
     results: {
       heading: 'Market Options',
