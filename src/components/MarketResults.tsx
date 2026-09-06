@@ -33,6 +33,9 @@ export const MarketResults: React.FC<MarketResultsProps> = ({
     year: 'numeric',
   }).format(new Date());
 
+  const cropData = cropOptions.find((c) => c.id === crop);
+  const cropDisplayName = language === 'te' ? (cropData?.labelTe || crop) : (cropData?.labelEn || crop);
+
   return (
     <section
       id="market-results-section"
@@ -62,22 +65,26 @@ export const MarketResults: React.FC<MarketResultsProps> = ({
             </span>
             <div>
               <span className="text-sm font-black text-emerald-950 uppercase tracking-wide block">
-                Your Calculated Query
+                {language === 'te' ? 'మీరు నమోదు చేసిన వివరాలు' : 'Your Calculated Query'}
               </span>
               <h3 className="text-xl sm:text-2xl font-black text-stone-950">
-                {crop} • {quantity.toLocaleString('en-IN')} kg
+                {cropDisplayName} • {(quantity / 100).toLocaleString('en-IN')} {language === 'te' ? 'క్వింటాళ్లు' : 'quintals'}
               </h3>
             </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-sm text-stone-700">
             <div>
-              <span className="text-stone-500 block font-bold text-xs uppercase tracking-wider">Origin Location</span>
+              <span className="text-stone-500 block font-bold text-xs uppercase tracking-wider">
+                {language === 'te' ? 'మీ ప్రాంతం' : 'Origin Location'}
+              </span>
               <span className="font-extrabold text-stone-950 text-base">{location}</span>
             </div>
             <div className="h-8 w-px bg-stone-300 hidden sm:block" />
             <div>
-              <span className="text-stone-500 block font-bold text-xs uppercase tracking-wider">Sample Market Data</span>
+              <span className="text-stone-500 block font-bold text-xs uppercase tracking-wider">
+                {language === 'te' ? 'మార్కెట్ డేటా' : 'Market Data'}
+              </span>
               <span className="font-extrabold text-stone-950 text-base">{currentDateFormatted}</span>
             </div>
           </div>

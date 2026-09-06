@@ -1,6 +1,6 @@
 export type CropType = 'Tomato' | 'Rice' | 'Cotton' | 'Chilli' | 'Maize' | 'Onion' | 'Potato' | 'Soybean' | 'Wheat' | 'Groundnut' | 'Tur' | 'Gram' | 'Grapes' | 'Mango' | 'Banana';
 
-export type Language = 'en' | 'mr';
+export type Language = 'en' | 'te';
 
 export interface MandiMarket {
   id: string;

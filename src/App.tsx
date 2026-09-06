@@ -17,24 +17,15 @@ export default function App() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // Active query state
-  const [currentCrop, setCurrentCrop] = useState<CropType>('Tomato');
-  const [currentQuantity, setCurrentQuantity] = useState<number>(1000);
-  const [currentLocation, setCurrentLocation] = useState<string>('Nashik, Maharashtra');
+  const [currentCrop, setCurrentCrop] = useState<CropType | ''>('');
+  const [currentQuantity, setCurrentQuantity] = useState<number>(0);
+  const [currentLocation, setCurrentLocation] = useState<string>('');
   const [marketResults, setMarketResults] = useState<CalculatedMarketResult[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Modals
   const [isPricesModalOpen, setIsPricesModalOpen] = useState<boolean>(false);
   const [isAboutModalOpen, setIsAboutModalOpen] = useState<boolean>(false);
-
-  // Run initial calculation so the application is immediately interactive on load
-  useEffect(() => {
-    handleCalculation({
-      crop: 'Tomato',
-      quantity: 1000,
-      location: 'Nashik, Maharashtra',
-    }, false);
-  }, []);
 
   const handleCalculation = async (data: FarmerInputData, shouldScroll = true) => {
     setIsLoading(true);

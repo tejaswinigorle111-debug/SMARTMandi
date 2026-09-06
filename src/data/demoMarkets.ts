@@ -1,20 +1,20 @@
 import { CropType, MandiMarket, CropHistoricalTrend } from '../types';
-export const cropOptions: { id: CropType; labelEn: string; labelMr: string; unit: string; typicalYieldText: string; icon: string }[] = [
-  { id: 'Tomato', labelEn: 'Tomato', labelMr: 'टोमॅटो', unit: 'kg', typicalYieldText: 'Fresh vegetable - Perishable', icon: '🍅' },
-  { id: 'Rice', labelEn: 'Rice (Paddy)', labelMr: 'तांदूळ / भात', unit: 'kg', typicalYieldText: 'Grade A Quality', icon: '🌾' },
-  { id: 'Cotton', labelEn: 'Cotton (Kapas)', labelMr: 'कापूस', unit: 'kg', typicalYieldText: 'Medium / Long staple', icon: '🌱' },
-  { id: 'Chilli', labelEn: 'Chilli (Dry Red)', labelMr: 'सुक्या लाल मिरची', unit: 'kg', typicalYieldText: 'Premium spicy variety', icon: '🌶️' },
-  { id: 'Maize', labelEn: 'Maize (Corn)', labelMr: 'मका', unit: 'kg', typicalYieldText: 'Yellow feed grain', icon: '🌽' },
-  { id: 'Onion', labelEn: 'Onion', labelMr: 'कांदा', unit: 'kg', typicalYieldText: 'Red / White Onion', icon: '🧅' },
-  { id: 'Potato', labelEn: 'Potato', labelMr: 'बटाटा', unit: 'kg', typicalYieldText: 'Table Potato', icon: '🥔' },
-  { id: 'Soybean', labelEn: 'Soybean', labelMr: 'सोयाबीन', unit: 'kg', typicalYieldText: 'Yellow Soybean', icon: '🫘' },
-  { id: 'Wheat', labelEn: 'Wheat', labelMr: 'गहू', unit: 'kg', typicalYieldText: 'Milling Quality', icon: '🌾' },
-  { id: 'Groundnut', labelEn: 'Groundnut', labelMr: 'भुईमूग', unit: 'kg', typicalYieldText: 'In shell', icon: '🥜' },
-  { id: 'Tur', labelEn: 'Tur (Pigeon Pea)', labelMr: 'तूर', unit: 'kg', typicalYieldText: 'Split / Whole', icon: '🫘' },
-  { id: 'Gram', labelEn: 'Gram (Chickpea)', labelMr: 'हरभरा', unit: 'kg', typicalYieldText: 'Desi / Kabuli', icon: '🫘' },
-  { id: 'Grapes', labelEn: 'Grapes', labelMr: 'द्राक्षे', unit: 'kg', typicalYieldText: 'Fresh table grapes', icon: '🍇' },
-  { id: 'Mango', labelEn: 'Mango', labelMr: 'आंबा', unit: 'kg', typicalYieldText: 'Fresh fruit', icon: '🥭' },
-  { id: 'Banana', labelEn: 'Banana', labelMr: 'केळी', unit: 'kg', typicalYieldText: 'Fresh fruit', icon: '🍌' },
+export const cropOptions: { id: CropType; labelEn: string; labelTe: string; unit: string; typicalYieldText: string; icon: string }[] = [
+  { id: 'Tomato', labelEn: 'Tomato', labelTe: 'టమోటా', unit: 'kg', typicalYieldText: 'Fresh vegetable - Perishable', icon: '🍅' },
+  { id: 'Rice', labelEn: 'Rice (Paddy)', labelTe: 'వరి / బియ్యం', unit: 'kg', typicalYieldText: 'Grade A Quality', icon: '🌾' },
+  { id: 'Cotton', labelEn: 'Cotton (Kapas)', labelTe: 'పత్తి', unit: 'kg', typicalYieldText: 'Medium / Long staple', icon: '🌱' },
+  { id: 'Chilli', labelEn: 'Chilli (Dry Red)', labelTe: 'మిరపకాయలు', unit: 'kg', typicalYieldText: 'Premium spicy variety', icon: '🌶️' },
+  { id: 'Maize', labelEn: 'Maize (Corn)', labelTe: 'మొక్కజొన్న', unit: 'kg', typicalYieldText: 'Yellow feed grain', icon: '🌽' },
+  { id: 'Onion', labelEn: 'Onion', labelTe: 'ఉల్లిపాయ', unit: 'kg', typicalYieldText: 'Red / White Onion', icon: '🧅' },
+  { id: 'Potato', labelEn: 'Potato', labelTe: 'బంగాళాదుంప', unit: 'kg', typicalYieldText: 'Table Potato', icon: '🥔' },
+  { id: 'Soybean', labelEn: 'Soybean', labelTe: 'సోయాబీన్', unit: 'kg', typicalYieldText: 'Yellow Soybean', icon: '🫘' },
+  { id: 'Wheat', labelEn: 'Wheat', labelTe: 'గోధుమలు', unit: 'kg', typicalYieldText: 'Milling Quality', icon: '🌾' },
+  { id: 'Groundnut', labelEn: 'Groundnut', labelTe: 'వేరుశనగ', unit: 'kg', typicalYieldText: 'In shell', icon: '🥜' },
+  { id: 'Tur', labelEn: 'Tur (Pigeon Pea)', labelTe: 'కందులు', unit: 'kg', typicalYieldText: 'Split / Whole', icon: '🫘' },
+  { id: 'Gram', labelEn: 'Gram (Chickpea)', labelTe: 'శనగలు', unit: 'kg', typicalYieldText: 'Desi / Kabuli', icon: '🫘' },
+  { id: 'Grapes', labelEn: 'Grapes', labelTe: 'ద్రాక్ష', unit: 'kg', typicalYieldText: 'Fresh table grapes', icon: '🍇' },
+  { id: 'Mango', labelEn: 'Mango', labelTe: 'మామిడి', unit: 'kg', typicalYieldText: 'Fresh fruit', icon: '🥭' },
+  { id: 'Banana', labelEn: 'Banana', labelTe: 'అరటి', unit: 'kg', typicalYieldText: 'Fresh fruit', icon: '🍌' },
 ];
 
 export const demoMarkets: MandiMarket[] = [

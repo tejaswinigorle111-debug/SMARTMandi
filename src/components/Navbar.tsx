@@ -114,16 +114,16 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span className="text-stone-400 text-sm mx-1">|</span>
               <button
                 type="button"
-                onClick={() => onLanguageChange('mr')}
+                onClick={() => onLanguageChange('te')}
                 className={`px-2.5 py-1 text-sm rounded-full transition-all cursor-pointer ${
-                  language === 'mr'
+                  language === 'te'
                     ? 'font-black text-emerald-950 bg-white shadow-xs'
                     : 'text-stone-700 hover:text-stone-950 font-bold'
                 }`}
-                aria-pressed={language === 'mr'}
-                id="lang-btn-mr"
+                aria-pressed={language === 'te'}
+                id="lang-btn-te"
               >
-                मराठी
+                తెలుగు
               </button>
             </div>
 
@@ -143,11 +143,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Mobile language toggle */}
             <button
               type="button"
-              onClick={() => onLanguageChange(language === 'en' ? 'mr' : 'en')}
+              onClick={() => onLanguageChange(language === 'en' ? 'te' : 'en')}
               className="px-2.5 py-1.5 text-xs font-bold bg-stone-100 rounded-lg border border-stone-200 text-stone-800"
               id="mobile-lang-toggle"
             >
-              {language === 'en' ? 'मराठी' : 'EN'}
+              {language === 'en' ? 'తెలుగు' : 'EN'}
             </button>
             <button
               type="button"

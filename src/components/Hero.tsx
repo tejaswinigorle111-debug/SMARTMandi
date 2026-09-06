@@ -42,20 +42,30 @@ export const Hero: React.FC<HeroProps> = ({
             {/* Pill Tag */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 border border-emerald-300 w-fit mb-4 shadow-2xs">
               <span className="text-sm font-black text-emerald-950 tracking-wider flex items-center gap-2">
-                <span className="text-emerald-700">✦</span> SMART AGRICULTURE • MANDI DECISION SUPPORT
+                <span className="text-emerald-700">✦</span> {t.hero.subLabel}
               </span>
             </div>
 
             {/* Main Title */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-stone-950 tracking-tight leading-[1.15] font-display">
-              Find the <span className="text-[#165B33]">Best Market</span>
-              <br />
-              for Your Crop
+              {language === 'te' ? (
+                <>
+                  మీ పంటకు <span className="text-[#165B33]">సరైన మార్కెట్‌ను</span>
+                  <br />
+                  ఎంచుకోండి
+                </>
+              ) : (
+                <>
+                  Find the <span className="text-[#165B33]">Best Market</span>
+                  <br />
+                  for Your Crop
+                </>
+              )}
             </h1>
 
             {/* Subtitle */}
             <p className="mt-4 text-lg sm:text-xl text-stone-800 max-w-xl leading-relaxed font-bold">
-              Compare market prices, transport costs and expected net returns before you sell.
+              {t.hero.subText}
             </p>
 
             {/* Call To Action Buttons */}
@@ -100,11 +110,11 @@ export const Hero: React.FC<HeroProps> = ({
                     <ShieldCheck className="w-5 h-5 text-emerald-800" />
                   </div>
                   <span className="text-base font-black text-stone-950 font-display">
-                    Better Returns
+                    {t.hero.floatingTitle}
                   </span>
                 </div>
                 <p className="text-sm text-stone-800 leading-snug font-bold">
-                  Estimate net returns after transport costs before making mandi trips.
+                  {t.hero.floatingDesc}
                 </p>
               </div>
             </div>
@@ -119,10 +129,10 @@ export const Hero: React.FC<HeroProps> = ({
             </div>
             <div>
               <h4 className="text-base font-black text-stone-950">
-                Transport Cost Factored
+                {language === 'te' ? 'రవాణా ఖర్చుతో కూడిన లెక్క' : 'Transport Cost Factored'}
               </h4>
               <p className="text-sm font-bold text-stone-700 mt-1">
-                Estimated transport cost based on distance and quantity
+                {language === 'te' ? 'దూరం మరియు పరిమాణం ఆధారంగా అంచనా రవాణా ఖర్చు' : 'Estimated transport cost based on distance and quantity'}
               </p>
             </div>
           </div>
@@ -133,10 +143,10 @@ export const Hero: React.FC<HeroProps> = ({
             </div>
             <div>
               <h4 className="text-base font-black text-stone-950">
-                Multi-Mandi Benchmarking
+                {language === 'te' ? 'వివిధ మార్కెట్ల పోలిక' : 'Multi-Mandi Benchmarking'}
               </h4>
               <p className="text-sm font-bold text-stone-700 mt-1">
-                Compares local and regional yards simultaneously
+                {language === 'te' ? 'సమీప మరియు ప్రాంతీయ మార్కెట్లను ఒకేసారి సరిపోలుస్తుంది' : 'Compares local and regional yards simultaneously'}
               </p>
             </div>
           </div>
@@ -147,10 +157,10 @@ export const Hero: React.FC<HeroProps> = ({
             </div>
             <div>
               <h4 className="text-base font-black text-stone-950">
-                Maximized Net Return
+                {language === 'te' ? 'గరిష్ట నికర లాభం' : 'Maximized Net Return'}
               </h4>
               <p className="text-sm font-bold text-stone-700 mt-1">
-                Ranked by estimated net return
+                {language === 'te' ? 'నికర లాభం ఆధారంగా ప్రాధాన్యత' : 'Ranked by estimated net return'}
               </p>
             </div>
           </div>

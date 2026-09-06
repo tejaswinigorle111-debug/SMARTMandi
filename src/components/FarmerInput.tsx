@@ -4,7 +4,6 @@ import { CropType, Language, FarmerInputData } from '../types';
 import { cropOptions } from '../data/demoMarkets';
 import { getTranslation } from '../utils/translations';
 import vibrantHarvestImage from '../assets/images/vibrant_harvest_fields_1788514203779.jpg';
-import scenicFarmImage from '../assets/images/scenic_farm_backdrop_1788514179084.jpg';
 
 interface FarmerInputProps {
   language: Language;
@@ -19,11 +18,12 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
 }) => {
   const t = getTranslation(language);
 
-  const [crop, setCrop] = useState<CropType>('Tomato');
-  const [quantity, setQuantity] = useState<string>('1000');
-  const [location, setLocation] = useState<string>('Nashik, Maharashtra');
-  const [latitude, setLatitude] = useState<number | undefined>(19.99);
-  const [longitude, setLongitude] = useState<number | undefined>(73.78);
+  // Start with clean slate
+  const [crop, setCrop] = useState<CropType | ''>('');
+  const [quantity, setQuantity] = useState<string>('');
+  const [location, setLocation] = useState<string>('');
+  const [latitude, setLatitude] = useState<number | undefined>(undefined);
+  const [longitude, setLongitude] = useState<number | undefined>(undefined);
 
   const [isLocating, setIsLocating] = useState<boolean>(false);
   const [locationStatus, setLocationStatus] = useState<string | null>(null);
@@ -32,24 +32,15 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
   const [speechStatus, setSpeechStatus] = useState<string | null>(null);
   const speechRecognitionRef = useRef<any>(null);
 
-  // Quick preset buttons for instant test matching reference image
-  const handleQuickPreset = (pCrop: CropType, pQty: string, pLoc: string) => {
-    setCrop(pCrop);
-    setQuantity(pQty);
-    setLocation(pLoc);
-    setLocationStatus(null);
-    setSpeechStatus(null);
-  };
-
   // Browser Geolocation integration
   const handleUseMyLocation = () => {
     if (!navigator.geolocation) {
-      setLocationStatus(t.input.locationError);
+      setLocationStatus(t.input.locationError || 'Geolocation is not supported by your browser.');
       return;
     }
 
     setIsLocating(true);
-    setLocationStatus(t.input.locationDetecting);
+    setLocationStatus(t.input.locationDetecting || 'Detecting your location...');
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -59,15 +50,19 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
         setLatitude(lat);
         setLongitude(lng);
 
-        const detectedName = `Nashik Rural (${lat.toFixed(2)}°N, ${lng.toFixed(2)}°E)`;
+        const detectedName = `Lat: ${lat.toFixed(4)}, Lng: ${lng.toFixed(4)}`;
         setLocation(detectedName);
-        setLocationStatus(`${t.input.locationSuccess} ${detectedName}`);
+        setLocationStatus(`${t.input.locationSuccess || 'Location acquired:'} ${detectedName}`);
       },
       (error) => {
         setIsLocating(false);
         console.warn('Geolocation error:', error);
-        setLocation('Nashik, Maharashtra');
-        setLocationStatus('Using regional location (Nashik, Maharashtra).');
+
+        let errorMsg = 'Could not get location. Please type it manually.';
+        if (error.code === error.PERMISSION_DENIED) {
+          errorMsg = 'Location permission denied. Please enter it manually.';
+        }
+        setLocationStatus(errorMsg);
       },
       { timeout: 8000, enableHighAccuracy: false }
     );
@@ -96,7 +91,7 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
       speechRecognitionRef.current = recognition;
       recognition.continuous = false;
       recognition.interimResults = false;
-      recognition.lang = language === 'mr' ? 'mr-IN' : 'en-IN';
+      recognition.lang = language === 'te' ? 'te-IN' : 'en-IN';
 
       recognition.onstart = () => {
         setIsListening(true);
@@ -108,37 +103,41 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
         setIsListening(false);
         setSpeechStatus(`Recognized: "${transcript}"`);
 
-        if (transcript.includes('tomato') || transcript.includes('टोमॅटो') || transcript.includes('टमाटर')) {
+        if (transcript.includes('tomato') || transcript.includes('టమోటా') || transcript.includes('టమాట')) {
           setCrop('Tomato');
-        } else if (transcript.includes('rice') || transcript.includes('भात') || transcript.includes('तांदूळ') || transcript.includes('paddy')) {
+        } else if (transcript.includes('rice') || transcript.includes('paddy') || transcript.includes('వరి') || transcript.includes('బియ్యం') || transcript.includes('వడ్లు')) {
           setCrop('Rice');
-        } else if (transcript.includes('cotton') || transcript.includes('कापूस') || transcript.includes('कपास')) {
+        } else if (transcript.includes('cotton') || transcript.includes('పత్తి') || transcript.includes('దూది')) {
           setCrop('Cotton');
-        } else if (transcript.includes('chilli') || transcript.includes('chili') || transcript.includes('मिरची') || transcript.includes('लाल मिरची')) {
+        } else if (transcript.includes('chilli') || transcript.includes('chili') || transcript.includes('మిరప') || transcript.includes('మిర్చి') || transcript.includes('ఎండుమిర్చి')) {
           setCrop('Chilli');
-        } else if (transcript.includes('maize') || transcript.includes('मका') || transcript.includes('corn')) {
+        } else if (transcript.includes('maize') || transcript.includes('corn') || transcript.includes('మొక్కజొన్న') || transcript.includes('జొన్న')) {
           setCrop('Maize');
+        } else if (transcript.includes('onion') || transcript.includes('ఉల్లిపాయ') || transcript.includes('ఉల్లి')) {
+          setCrop('Onion');
+        } else if (transcript.includes('potato') || transcript.includes('బంగాళాదుంప') || transcript.includes('ఆలూ')) {
+          setCrop('Potato');
+        } else if (transcript.includes('soybean') || transcript.includes('సోయాబీన్') || transcript.includes('సోయా')) {
+          setCrop('Soybean');
+        } else if (transcript.includes('wheat') || transcript.includes('గోధుమలు') || transcript.includes('గోధుమ')) {
+          setCrop('Wheat');
+        } else if (transcript.includes('groundnut') || transcript.includes('వేరుశనగ') || transcript.includes('పల్లీ')) {
+          setCrop('Groundnut');
+        } else if (transcript.includes('tur') || transcript.includes('కందులు') || transcript.includes('కంది')) {
+          setCrop('Tur');
+        } else if (transcript.includes('gram') || transcript.includes('శనగలు') || transcript.includes('శనగ')) {
+          setCrop('Gram');
+        } else if (transcript.includes('grapes') || transcript.includes('ద్రాక్ష')) {
+          setCrop('Grapes');
+        } else if (transcript.includes('mango') || transcript.includes('మామిడి')) {
+          setCrop('Mango');
+        } else if (transcript.includes('banana') || transcript.includes('అరటి')) {
+          setCrop('Banana');
         }
 
         const numbers = transcript.match(/\d+/g);
         if (numbers && numbers.length > 0) {
           setQuantity(numbers[0]);
-        }
-
-        if (transcript.includes('nashik') || transcript.includes('नाशिक')) {
-          setLocation('Nashik, Maharashtra');
-        } else if (transcript.includes('pune') || transcript.includes('पुणे')) {
-          setLocation('Pune, Maharashtra');
-        } else if (transcript.includes('ahmednagar') || transcript.includes('अहमदनगर')) {
-          setLocation('Ahmednagar, Maharashtra');
-        } else if (transcript.includes('kolhapur') || transcript.includes('कोल्हापूर')) {
-          setLocation('Kolhapur, Maharashtra');
-        } else if (transcript.includes('nagpur') || transcript.includes('नागपूर')) {
-          setLocation('Nagpur, Maharashtra');
-        } else if (transcript.includes('jalgaon') || transcript.includes('जळगाव')) {
-          setLocation('Jalgaon, Maharashtra');
-        } else if (transcript.includes('dhule') || transcript.includes('धुळे')) {
-          setLocation('Dhule, Maharashtra');
         }
       };
 
@@ -162,14 +161,24 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
     e.preventDefault();
     const parsedQty = parseFloat(quantity);
     if (!parsedQty || parsedQty <= 0) {
-      alert('Please enter a valid harvest quantity in kilograms.');
+      alert(language === 'te' ? 'దయచేసి సరైన పరిమాణాన్ని క్వింటాళ్లలో నమోదు చేయండి.' : 'Please enter a valid harvest quantity in quintals.');
+      return;
+    }
+
+    if (!crop) {
+      alert(language === 'te' ? 'దయచేసి ఒక పంటను ఎంచుకోండి.' : 'Please select a crop.');
+      return;
+    }
+
+    if (!location.trim()) {
+      alert(language === 'te' ? 'దయచేసి మీ ప్రాంతాన్ని నమోదు చేయండి.' : 'Please enter your location.');
       return;
     }
 
     onCalculate({
       crop,
-      quantity: parsedQty,
-      location: location || 'Nashik, Maharashtra',
+      quantity: parsedQty * 100, // Convert Quintals back to Kg for backend
+      location: location.trim(),
       latitude,
       longitude,
     });
@@ -180,7 +189,7 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
       id="farmer-input-section"
       className="relative py-14 sm:py-20 scroll-mt-20 border-b border-emerald-900/15 overflow-hidden bg-linear-to-b from-[#E2EFE3] via-[#ECF5EE] to-[#E5EFE6]"
     >
-      {/* Shaded agricultural farming backdrop with flourishing green crops and golden harvest rows */}
+      {/* Background Images */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <img
           src={vibrantHarvestImage}
@@ -188,19 +197,14 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
           className="w-full h-full object-cover object-center opacity-35 mix-blend-multiply filter contrast-110 saturate-120"
           referrerPolicy="no-referrer"
         />
-        {/* Soft atmospheric farming vignette */}
         <div className="absolute inset-0 bg-linear-to-t from-[#E5EFE6] via-transparent to-[#E2EFE3]/75" />
       </div>
 
-      {/* Decorative atmospheric vegetable crop shades & warm sunlight */}
-      <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[800px] h-[360px] bg-radial from-emerald-400/25 via-amber-200/15 to-transparent blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-10 w-72 h-72 bg-radial from-red-500/10 via-emerald-200/10 to-transparent blur-2xl pointer-events-none" />
-
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Heading */}
-        <div className="text-center mb-9">
+        <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/95 backdrop-blur-xs border border-emerald-800/20 text-emerald-950 text-sm font-extrabold uppercase tracking-wide mb-3 shadow-xs">
-            <span>🌾</span> Farmer Market Calculator
+            <span>🌾</span> {language === 'te' ? 'రైతు మార్కెట్ క్యాలిక్యులేటర్' : 'Farmer Market Calculator'}
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-stone-950 tracking-tight font-display drop-shadow-xs">
             {t.input.heading}
@@ -211,222 +215,190 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
         </div>
 
         {/* Input Card Container */}
-        <div className="bg-white/95 backdrop-blur-md rounded-2xl p-6 sm:p-8 shadow-md border border-stone-300">
-          <form onSubmit={handleSubmit} className="space-y-7" id="farmer-input-form">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-white/95 backdrop-blur-md rounded-2xl p-6 sm:p-10 shadow-md border border-stone-300">
+
+          {/* Voice Search Header */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-6 mb-6 border-b border-stone-200">
+            <div>
+              <h3 className="text-xl font-black text-stone-900">
+                {language === 'te' ? 'మీ వివరాలను నమోదు చేయండి' : 'Enter Your Details'}
+              </h3>
+              <p className="text-stone-600 text-sm font-bold mt-1">
+                {language === 'te' ? 'ఉత్తమ మార్కెట్‌ను కనుగొనడానికి అన్ని దశలను పూర్తి చేయండి' : 'Complete all steps to find the best market'}
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleToggleSpeech}
+              className={`inline-flex items-center gap-2 px-5 py-3 rounded-xl text-base font-black border-2 transition-all cursor-pointer shadow-xs ${isListening
+                  ? 'bg-rose-100 text-rose-900 border-rose-500 animate-pulse'
+                  : 'bg-[#165B33] text-white border-[#165B33] hover:bg-[#114828]'
+                }`}
+            >
+              {isListening ? (
+                <><MicOff className="w-5 h-5" /><span>{t.input.listening}</span></>
+              ) : (
+                <><Mic className="w-5 h-5" /><span>{language === 'te' ? 'వాయిస్ సెర్చ్' : 'Voice Search'} ({t.input.langSwitch})</span></>
+              )}
+            </button>
+          </div>
+
+          {(speechStatus && isListening) && (
+            <div className="mb-6 p-3 bg-emerald-100 border border-emerald-300 rounded-xl text-sm font-bold text-emerald-950 flex items-center gap-2.5">
+              <Mic className="w-5 h-5 text-emerald-800 shrink-0" />
+              <span>{speechStatus}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-8" id="farmer-input-form">
+
+            {/* Step 1 & 2 Row */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* 1. CROP SELECTION */}
               <div className="flex flex-col">
-                <label
-                  htmlFor="crop-select"
-                  className="block text-base font-extrabold text-stone-900 mb-2.5"
-                >
-                  1. Select Crop
+                <label className="flex items-center gap-2 text-lg font-black text-stone-900 mb-4">
+                  <span className="w-6 h-6 rounded-full bg-emerald-100 text-[#165B33] text-sm flex items-center justify-center">1</span>
+                  {t.input.cropLabel || 'Select Crop'}
                 </label>
-                <div className="relative">
-                  <select
-                    id="crop-select"
-                    value={crop}
-                    onChange={(e) => setCrop(e.target.value as CropType)}
-                    className="w-full bg-white border-2 border-stone-300 hover:border-stone-400 focus:border-emerald-700 focus:ring-2 focus:ring-emerald-700/30 text-stone-950 font-bold rounded-xl px-4 py-3.5 text-base outline-hidden transition-all appearance-none cursor-pointer"
-                  >
-                    {cropOptions.map((item) => (
-                      <option key={item.id} value={item.id} className="py-2 text-base font-semibold">
-                        {item.icon} {language === 'mr' ? item.labelMr : item.labelEn}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-stone-700">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </div>
+                <div className="grid grid-cols-3 sm:grid-cols-3 gap-3">
+                  {cropOptions.map((item) => {
+                    const isSelected = crop === item.id;
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => setCrop(item.id as CropType)}
+                        className={`flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all cursor-pointer ${isSelected
+                            ? 'border-[#165B33] bg-[#E5F5E9] shadow-sm'
+                            : 'border-stone-200 bg-white hover:border-[#82C394] hover:bg-stone-50'
+                          }`}
+                      >
+                        <span className="text-3xl mb-2">{item.icon}</span>
+                        <span className={`text-sm font-bold text-center ${isSelected ? 'text-[#165B33]' : 'text-stone-700'}`}>
+                          {language === 'te' ? item.labelTe : item.labelEn}<br />
+                          <span className="text-xs font-semibold opacity-80">
+                            ({language === 'te' ? item.labelEn : item.labelTe})
+                          </span>
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* 2. QUANTITY INPUT */}
+              {/* 2. QUANTITY INPUT (QUINTALS) */}
               <div className="flex flex-col">
-                <label
-                  htmlFor="quantity-input"
-                  className="block text-base font-extrabold text-stone-900 mb-2.5"
-                >
-                  2. Quantity
+                <label className="flex items-center gap-2 text-lg font-black text-stone-900 mb-4">
+                  <span className="w-6 h-6 rounded-full bg-emerald-100 text-[#165B33] text-sm flex items-center justify-center">2</span>
+                  {t.input.quantityLabel || 'Quantity (Quintals)'}
                 </label>
-                <div className="relative">
-                  <input
-                    id="quantity-input"
-                    type="number"
-                    min="10"
-                    max="100000"
-                    step="10"
-                    value={quantity}
-                    onChange={(e) => setQuantity(e.target.value)}
-                    placeholder={t.input.quantityPlaceholder}
-                    required
-                    className="w-full bg-white border-2 border-stone-300 hover:border-stone-400 focus:border-emerald-700 focus:ring-2 focus:ring-emerald-700/30 text-stone-950 font-bold rounded-xl px-4 py-3.5 text-base outline-hidden transition-all pr-14"
-                  />
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-stone-700 text-base font-extrabold">
-                    kg
+
+                <div className="bg-white p-5 rounded-xl border-2 border-stone-200 shadow-xs flex flex-col items-center">
+                  <div className="flex items-center justify-center gap-2 sm:gap-4 mb-4 w-full">
+                    <button type="button" onClick={() => setQuantity(String(Math.max(1, (parseInt(quantity) || 0) - 5)))} className="w-12 h-12 rounded-lg bg-[#165B33] text-white font-black text-lg hover:bg-[#114828] transition-colors">-5</button>
+                    <button type="button" onClick={() => setQuantity(String(Math.max(1, (parseInt(quantity) || 0) - 1)))} className="w-12 h-12 rounded-lg bg-[#165B33] text-white font-black text-lg hover:bg-[#114828] transition-colors">-1</button>
+
+                    <div className="flex-1 max-w-[120px] text-center">
+                      <span className="text-4xl font-black text-stone-950 font-display">{quantity || '0'}</span>
+                      <span className="text-sm font-bold text-stone-600 block mt-1">{language === 'te' ? 'క్వింటాళ్లు' : 'quintals'}</span>
+                    </div>
+
+                    <button type="button" onClick={() => setQuantity(String((parseInt(quantity) || 0) + 1))} className="w-12 h-12 rounded-lg bg-[#165B33] text-white font-black text-lg hover:bg-[#114828] transition-colors">+1</button>
+                    <button type="button" onClick={() => setQuantity(String((parseInt(quantity) || 0) + 5))} className="w-12 h-12 rounded-lg bg-[#165B33] text-white font-black text-lg hover:bg-[#114828] transition-colors">+5</button>
+                  </div>
+                  <div className="text-xs font-bold text-stone-500 mb-4">
+                    {language === 'te' ? '1 క్వింటా = 100 కిలోలు' : '1 Quintal = 100 kg'}
+                  </div>
+
+                  <div className="w-full relative mt-2 pt-4 border-t border-stone-100">
+                    <label htmlFor="quantity-input" className="text-xs font-bold text-stone-500 mb-1.5 block">
+                      {language === 'te' ? 'లేదా నేరుగా సంఖ్యను నమోదు చేయండి:' : 'Or enter number directly:'}
+                    </label>
+                    <input
+                      id="quantity-input"
+                      type="number"
+                      min="1"
+                      max="1000"
+                      step="1"
+                      value={quantity}
+                      onChange={(e) => setQuantity(e.target.value)}
+                      placeholder="e.g. 25"
+                      className={`w-full bg-stone-50 border-2 rounded-lg px-4 py-3 text-base outline-hidden transition-all pr-20 ${quantity ? 'border-[#165B33] ring-1 ring-[#165B33] font-black text-stone-950 bg-emerald-50/20' : 'border-stone-300 hover:border-stone-400 font-bold text-stone-600'
+                        }`}
+                    />
+                    <div className="absolute bottom-0 right-0 h-12 flex items-center pr-4 pointer-events-none text-stone-600 text-sm font-bold">
+                      {language === 'te' ? 'క్వింటాళ్లు' : 'quintals'}
+                    </div>
                   </div>
                 </div>
               </div>
+            </div>
 
-              {/* 3. LOCATION INPUT & INLINE USE MY LOCATION BUTTON */}
-              <div className="flex flex-col">
-                <label
-                  htmlFor="location-input"
-                  className="block text-base font-extrabold text-stone-900 mb-2.5"
-                >
-                  3. Your Location
-                </label>
-                <div className="relative flex items-center">
+            {/* 3. LOCATION INPUT */}
+            <div className="flex flex-col pt-4 border-t border-stone-100">
+              <label htmlFor="location-input" className="flex items-center gap-2 text-lg font-black text-stone-900 mb-3">
+                <span className="w-6 h-6 rounded-full bg-emerald-100 text-[#165B33] text-sm flex items-center justify-center">3</span>
+                {t.input.locationLabel || 'Your Location'}
+              </label>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="relative flex-1">
                   <input
                     id="location-input"
                     type="text"
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
-                    placeholder={t.input.locationPlaceholder}
+                    placeholder={t.input.locationPlaceholder || "Enter city, district or village"}
                     required
-                    className="w-full bg-white border-2 border-stone-300 hover:border-stone-400 focus:border-emerald-700 focus:ring-2 focus:ring-emerald-700/30 text-stone-950 font-bold rounded-xl px-4 py-3.5 text-base outline-hidden transition-all pr-40"
+                    className={`w-full bg-white border-2 rounded-xl px-4 py-4 pl-11 text-base outline-hidden transition-all ${location ? 'border-[#165B33] ring-1 ring-[#165B33] font-black text-stone-950 bg-emerald-50/30' : 'border-stone-300 hover:border-stone-400 font-bold text-stone-600'
+                      }`}
                   />
-                  <div className="absolute right-2 flex items-center">
-                    <button
-                      type="button"
-                      onClick={handleUseMyLocation}
-                      disabled={isLocating}
-                      className="inline-flex items-center gap-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-950 border border-emerald-300 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-extrabold cursor-pointer transition-colors shadow-2xs"
-                      id="btn-use-my-location"
-                    >
-                      {isLocating ? (
-                        <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-800" />
-                      ) : (
-                        <MapPin className="w-3.5 h-3.5 text-emerald-800" />
-                      )}
-                      <span>Locate</span>
-                    </button>
+                  <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                    <MapPin className={`w-5 h-5 ${location ? 'text-[#165B33]' : 'text-stone-400'}`} />
                   </div>
                 </div>
-              </div>
-            </div>
 
-            {/* Non-blocking feedback bars for Geolocation & Speech */}
-            {(locationStatus || speechStatus) && (
-              <div className="space-y-2">
-                {locationStatus && (
-                  <div className="p-3 bg-stone-100 border border-stone-300 rounded-xl text-sm font-bold text-stone-900 flex items-center gap-2.5">
-                    <MapPin className="w-4 h-4 text-emerald-800 shrink-0" />
-                    <span>{locationStatus}</span>
-                  </div>
-                )}
-                {speechStatus && (
-                  <div className="p-3 bg-emerald-100 border border-emerald-300 rounded-xl text-sm font-bold text-emerald-950 flex items-center gap-2.5">
-                    <Mic className="w-4 h-4 text-emerald-800 shrink-0" />
-                    <span>{speechStatus}</span>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Sub-bar: Quick Test Presets on Left, Voice Input on Right */}
-            <div className="pt-2 flex flex-wrap items-center justify-between gap-4">
-              <div className="flex flex-wrap items-center gap-2.5">
-                <span className="text-sm font-black text-stone-900 mr-1">{t.input.quickPresetsLabel}</span>
                 <button
                   type="button"
-                  onClick={() => handleQuickPreset('Tomato', '1000', 'Nashik, Maharashtra')}
-                  className={`text-sm px-3.5 py-2 rounded-xl border-2 transition-all cursor-pointer font-bold ${
-                    crop === 'Tomato' && quantity === '1000'
-                      ? 'bg-emerald-100 border-emerald-700 text-emerald-950 font-black shadow-xs'
-                      : 'bg-white border-stone-300 text-stone-800 hover:bg-stone-100'
-                  }`}
+                  onClick={handleUseMyLocation}
+                  disabled={isLocating}
+                  className="shrink-0 flex justify-center items-center gap-2 bg-stone-100 hover:bg-stone-200 text-stone-800 border-2 border-stone-200 px-6 py-4 rounded-xl font-black transition-colors cursor-pointer"
                 >
-                  {t.input.presetTomato}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleQuickPreset('Cotton', '3000', 'Jalgaon, Maharashtra')}
-                  className={`text-sm px-3.5 py-2 rounded-xl border-2 transition-all cursor-pointer font-bold ${
-                    crop === 'Cotton' && quantity === '3000'
-                      ? 'bg-emerald-100 border-emerald-700 text-emerald-950 font-black shadow-xs'
-                      : 'bg-white border-stone-300 text-stone-800 hover:bg-stone-100'
-                  }`}
-                >
-                  {t.input.presetCotton}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleQuickPreset('Chilli', '800', 'Nagpur, Maharashtra')}
-                  className={`text-sm px-3.5 py-2 rounded-xl border-2 transition-all cursor-pointer font-bold ${
-                    crop === 'Chilli' && quantity === '800'
-                      ? 'bg-emerald-100 border-emerald-700 text-emerald-950 font-black shadow-xs'
-                      : 'bg-white border-stone-300 text-stone-800 hover:bg-stone-100'
-                  }`}
-                >
-                  {t.input.presetChilli}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleQuickPreset('Maize', '2000', 'Dhule, Maharashtra')}
-                  className={`text-sm px-3.5 py-2 rounded-xl border-2 transition-all cursor-pointer font-bold ${
-                    crop === 'Maize' && quantity === '2000'
-                      ? 'bg-emerald-100 border-emerald-700 text-emerald-950 font-black shadow-xs'
-                      : 'bg-white border-stone-300 text-stone-800 hover:bg-stone-100'
-                  }`}
-                >
-                  {t.input.presetMaize}
-                </button>
-              </div>
-
-              {/* Voice Input */}
-              <div className="flex items-center gap-2.5">
-                <span className="text-sm font-black text-stone-900">{t.input.voiceLabel}</span>
-                <button
-                  type="button"
-                  onClick={handleToggleSpeech}
-                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-black border-2 transition-all cursor-pointer ${
-                    isListening
-                      ? 'bg-rose-100 text-rose-900 border-rose-500 animate-pulse'
-                      : 'bg-white text-stone-900 border-stone-300 hover:border-emerald-700 hover:text-emerald-900 shadow-2xs'
-                  }`}
-                  id="btn-voice-input"
-                >
-                  {isListening ? (
-                    <>
-                      <MicOff className="w-4 h-4 text-rose-700" />
-                      <span>{t.input.listening}</span>
-                    </>
+                  {isLocating ? (
+                    <><Loader2 className="w-5 h-5 animate-spin" /> {t.input.locationDetecting || 'Locating...'}</>
                   ) : (
-                    <>
-                      <Mic className="w-4 h-4 text-emerald-700" />
-                      <span>{t.input.speakBtn}</span>
-                      <span className="text-stone-600 font-bold">{t.input.langSwitch}</span>
-                    </>
+                    <><MapPin className="w-5 h-5" /> {t.input.useLocationBtn || 'Use GPS'}</>
                   )}
                 </button>
               </div>
+
+              {locationStatus && (
+                <p className={`mt-2.5 text-sm font-bold flex items-center gap-1.5 ${locationStatus.includes('Error') || locationStatus.includes('denied') || locationStatus.includes('Could not') ? 'text-rose-600' : 'text-emerald-700'}`}>
+                  {locationStatus}
+                </p>
+              )}
             </div>
 
-            {/* Primary Full-Width Action Button */}
-            <div className="pt-3">
+            {/* 4. SUBMIT */}
+            <div className="pt-6 border-t border-stone-200">
+              <label className="flex items-center gap-2 text-lg font-black text-stone-900 mb-4">
+                <span className="w-6 h-6 rounded-full bg-emerald-100 text-[#165B33] text-sm flex items-center justify-center">4</span>
+                {language === 'te' ? 'మార్కెట్లను విశ్లేషించండి' : 'Analyze Markets'}
+              </label>
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-[#165B33] hover:bg-[#114828] active:scale-[0.99] text-white text-lg font-black py-4 px-6 rounded-xl shadow-md hover:shadow-lg transition-all cursor-pointer flex items-center justify-center gap-3 tracking-wide"
-                id="btn-find-best-market-main"
+                className="w-full bg-[#165B33] hover:bg-[#114828] text-white text-xl font-black py-5 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-3 tracking-wide disabled:opacity-70 disabled:hover:bg-[#165B33] cursor-pointer"
               >
                 {isLoading ? (
-                  <>
-                    <Loader2 className="w-6 h-6 animate-spin text-emerald-200" />
-                    <span>{t.input.analyzing}</span>
-                  </>
+                  <><Loader2 className="w-6 h-6 animate-spin text-emerald-200" /> <span>{t.input.analyzing || 'Calculating...'}</span></>
                 ) : (
-                  <>
-                    <Search className="w-6 h-6 text-emerald-200" />
-                    <span>{t.input.submitBtn}</span>
-                  </>
+                  <><Search className="w-6 h-6 text-emerald-200" /> <span>{t.input.submitBtn || 'Find Best Market'}</span></>
                 )}
               </button>
-              <p className="text-center text-sm font-bold text-stone-700 mt-2.5">
-                {t.input.disclaimerText}
+              <p className="text-center text-sm font-bold text-stone-600 mt-3">
+                {t.input.disclaimerText || 'Calculations include transport costs based on distance.'}
               </p>
             </div>
           </form>
