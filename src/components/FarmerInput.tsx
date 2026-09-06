@@ -12,6 +12,7 @@ import {
 import { CropType, Language, FarmerInputData, CropCategory } from '../types';
 import { cropOptions } from '../data/demoMarkets';
 import { getTranslation } from '../utils/translations';
+import { reverseGeocode } from '../services/api';
 import vibrantHarvestImage from '../assets/images/vibrant_harvest_fields_1788514203779.jpg';
 
 interface FarmerInputProps {
@@ -104,14 +105,19 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
     setLocationStatus(t.input.locationDetecting);
 
     navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setIsLocating(false);
+      async (position) => {
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
         setLatitude(lat);
         setLongitude(lng);
 
-        const detectedName = `Lat: ${lat.toFixed(4)}, Lng: ${lng.toFixed(4)}`;
+        let detectedName = `GPS (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
+        try {
+          detectedName = await reverseGeocode(lat, lng);
+        } catch {
+          // Coordinates remain as a truthful fallback if reverse geocoding is unavailable.
+        }
+        setIsLocating(false);
         setLocation(detectedName);
         setLocationStatus(`${t.input.locationSuccess}${detectedName}`);
       },
@@ -492,13 +498,12 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
                 type="button"
                 id="crop-dropdown-trigger"
                 onClick={() => setIsDropdownOpen((prev) => !prev)}
-                className={`w-full min-h-[58px] px-4 py-3 bg-white border-2 rounded-xl flex items-center justify-between transition-all cursor-pointer shadow-xs ${
-                  isDropdownOpen
-                    ? 'border-[#165B33] ring-2 ring-[#165B33]/20 bg-emerald-50/10'
-                    : crop
+                className={`w-full min-h-[58px] px-4 py-3 bg-white border-2 rounded-xl flex items-center justify-between transition-all cursor-pointer shadow-xs ${isDropdownOpen
+                  ? 'border-[#165B33] ring-2 ring-[#165B33]/20 bg-emerald-50/10'
+                  : crop
                     ? 'border-[#165B33] bg-emerald-50/20'
                     : 'border-stone-300 hover:border-emerald-600'
-                }`}
+                  }`}
                 aria-expanded={isDropdownOpen}
                 aria-haspopup="listbox"
               >
@@ -511,6 +516,7 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
                       <div className="flex flex-wrap items-baseline gap-2 truncate">
                         <span className="text-base sm:text-lg font-black text-stone-950">
                           {getCropName(selectedCropObj)}
+
                         </span>
                         {language !== 'en' && (
                           <span className="text-sm font-semibold text-stone-500">

@@ -22,6 +22,15 @@ export interface MandiMarket {
   tradingHours: string;
 }
 
+export interface MarketPriceRecord {
+  id: string | number;
+  name: string;
+  location: string;
+  crop?: string;
+  price_per_kg?: number;
+  cropPrices?: Partial<Record<CropType, number>>;
+}
+
 export interface FarmerInputData {
   crop: CropType;
   quantity: number;

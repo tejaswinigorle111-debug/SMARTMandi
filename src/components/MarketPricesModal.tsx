@@ -1,7 +1,7 @@
 import React from 'react';
 import { X, TrendingUp, Info } from 'lucide-react';
-import { demoMarkets, cropOptions } from '../data/demoMarkets';
-import { Language } from '../types';
+import { fetchMarkets } from '../services/api';
+import { Language, MarketPriceRecord } from '../types';
 import { getTranslation } from '../utils/translations';
 
 interface MarketPricesModalProps {
@@ -16,14 +16,22 @@ export const MarketPricesModal: React.FC<MarketPricesModalProps> = ({
   language,
 }) => {
   const t = getTranslation(language);
+  const [markets, setMarkets] = React.useState<MarketPriceRecord[]>([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [loadError, setLoadError] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (!isOpen) return;
+    setIsLoading(true);
+    setLoadError(null);
+    fetchMarkets()
+      .then(setMarkets)
+      .catch(() => setLoadError('Live market prices are unavailable right now.'))
+      .finally(() => setIsLoading(false));
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
-  const getCropName = (crop: (typeof cropOptions)[0]) => {
-    if (language === 'te') return crop.labelTe;
-    if (language === 'hi') return crop.labelHi;
-    if (language === 'mr') return crop.labelMr;
-    return crop.labelEn;
-  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
@@ -65,25 +73,25 @@ export const MarketPricesModal: React.FC<MarketPricesModalProps> = ({
               <tr className="bg-[#F7F9F7] text-stone-900 text-sm font-black uppercase tracking-wider border-b-2 border-stone-200">
                 <th className="p-4">{t.marketPricesModal.mandiCol}</th>
                 <th className="p-4">{t.marketPricesModal.locationCol}</th>
-                {cropOptions.map((c) => (
-                  <th key={c.id} className="p-4 text-center">
-                    {getCropName(c)} (₹/{t.input.kgLabel})
-                  </th>
-                ))}
+                <th className="p-4">{t.input.cropLabel}</th>
+                <th className="p-4 text-right">{t.results.marketPriceLabel} (₹/{t.input.kgLabel})</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-stone-200">
-              {demoMarkets.map((m) => (
+              {isLoading && (
+                <tr><td colSpan={4} className="p-6 text-center font-bold">Loading live market prices...</td></tr>
+              )}
+              {!isLoading && markets.map((m) => (
                 <tr key={m.id} className="hover:bg-stone-50">
                   <td className="p-4 font-black text-stone-950">{m.name}</td>
                   <td className="p-4 text-stone-700 text-sm font-bold">{m.location}</td>
-                  {cropOptions.map((c) => (
-                    <td key={c.id} className="p-4 text-center font-black text-[#165B33] text-base">
-                      ₹{m.cropPrices[c.id]}
-                    </td>
-                  ))}
+                  <td className="p-4 text-stone-700 font-bold">{m.crop || Object.keys(m.cropPrices || {})[0] || 'Market price'}</td>
+                  <td className="p-4 text-right font-black text-[#165B33] text-base">₹{m.price_per_kg ?? Object.values(m.cropPrices || {})[0] ?? '-'}</td>
                 </tr>
               ))}
+              {!isLoading && markets.length === 0 && (
+                <tr><td colSpan={4} className="p-6 text-center font-bold">{loadError || 'No market prices available.'}</td></tr>
+              )}
             </tbody>
           </table>
         </div>
