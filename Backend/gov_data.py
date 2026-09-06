@@ -75,9 +75,14 @@ def reverse_geocode(latitude, longitude):
             address.get("state_district") or address.get("district"),
             address.get("state"),
         ) if value)
-        result = {"name": place or "GPS location", "latitude": latitude, "longitude": longitude}
+        result = {
+            "name": place or "GPS location",
+            "state": address.get("state"),
+            "latitude": latitude,
+            "longitude": longitude,
+        }
     except (requests.RequestException, ValueError, TypeError):
-        result = {"name": "GPS location", "latitude": latitude, "longitude": longitude}
+        result = {"name": "GPS location", "state": None, "latitude": latitude, "longitude": longitude}
 
     _REVERSE_GEOCODING_CACHE[cache_key] = result
     return result
@@ -107,10 +112,17 @@ def fetch_live_markets(crop=None, location=None, latitude=None, longitude=None):
     params = {
         "api-key": api_key,
         "format": "json",
-        "limit": 100,
+        "limit": 500,
     }
     if crop:
         params["filters[commodity]"] = crop
+
+    origin = (latitude, longitude) if latitude is not None and longitude is not None else _geocode(location or "")
+    origin_state = None
+    if latitude is not None and longitude is not None:
+        origin_state = reverse_geocode(latitude, longitude).get("state")
+    if origin_state:
+        params["filters[state]"] = origin_state
 
     try:
         response = requests.get(
@@ -124,7 +136,6 @@ def fetch_live_markets(crop=None, location=None, latitude=None, longitude=None):
     except (requests.RequestException, ValueError):
         return [], False
 
-    origin = (latitude, longitude) if latitude is not None and longitude is not None else _geocode(location or "")
     live_markets = []
     for index, record in enumerate(records):
         try:
@@ -137,8 +148,10 @@ def fetch_live_markets(crop=None, location=None, latitude=None, longitude=None):
         market_name = record.get("market") or "Maharashtra Mandi"
         district = record.get("district") or "Unknown district"
         state = record.get("state") or "India"
-        market_coordinates = _geocode(f"{market_name}, {district}, {state}, India")
+        market_coordinates = _geocode(f"{district}, {state}, India")
         distance = _distance_km(origin, market_coordinates)
+        if distance is None:
+            continue
         live_markets.append({
             "id": f"live-{index}",
             "name": market_name,
@@ -146,7 +159,7 @@ def fetch_live_markets(crop=None, location=None, latitude=None, longitude=None):
             "state": state,
             "crop": record.get("commodity") or crop or "Unknown",
             "price_per_kg": round(price, 2),
-            "distance_km": distance if distance is not None else 50,
+            "distance_km": distance,
             "transport_rate": 0.05,
             "arrival_quantity": record.get("arrival_quantity"),
             "price_date": record.get("arrival_date"),
