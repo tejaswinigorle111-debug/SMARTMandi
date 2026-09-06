@@ -46,7 +46,7 @@ export const Footer: React.FC<FooterProps> = ({
           <div className="md:col-span-6 flex flex-col sm:flex-row sm:justify-end gap-8 text-sm">
             <div className="space-y-3">
               <span className="text-sm font-black text-[#74C69D] uppercase tracking-wider block">
-                Navigation
+                {t.footer.navTitle}
               </span>
               <ul className="space-y-2.5 font-bold text-base">
                 <li>
@@ -82,7 +82,7 @@ export const Footer: React.FC<FooterProps> = ({
 
             <div className="space-y-3">
               <span className="text-sm font-black text-[#74C69D] uppercase tracking-wider block">
-                Actions
+                {t.footer.actionsTitle}
               </span>
               <button
                 type="button"
@@ -98,7 +98,7 @@ export const Footer: React.FC<FooterProps> = ({
         <div className="mt-12 pt-8 border-t border-white/15 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm font-bold text-stone-300">
           <p>© 2026 {t.footer.copyright}</p>
           <p className="text-stone-300 font-bold">
-            Strengthening market linkages & price discovery for Indian farmers.
+            {t.footer.missionStatement}
           </p>
         </div>
       </div>

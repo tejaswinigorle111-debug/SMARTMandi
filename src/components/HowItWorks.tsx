@@ -23,7 +23,7 @@ export const HowItWorks: React.FC<HowItWorksProps> = ({ language }) => {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 text-emerald-950 text-sm font-black uppercase tracking-wide mb-3 border border-emerald-300 shadow-2xs">
-            {language === 'te' ? 'నాలుగు సులభమైన దశలు' : 'Simple Four-Step Flow'}
+            {t.howItWorks.badge}
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-stone-950 tracking-tight font-display">
             {t.howItWorks.heading}
@@ -58,7 +58,7 @@ export const HowItWorks: React.FC<HowItWorksProps> = ({ language }) => {
               </div>
 
               <div className="mt-6 pt-4 border-t border-stone-200 flex items-center text-sm font-extrabold text-[#165B33]">
-                <span>{language === 'te' ? `దశ ${step.num} (మొత్తం 4 లో)` : `Step ${step.num} of 04`}</span>
+                <span>{`${t.howItWorks.stepPrefix} ${step.num} ${t.howItWorks.ofSteps}`}</span>
               </div>
             </div>
           ))}

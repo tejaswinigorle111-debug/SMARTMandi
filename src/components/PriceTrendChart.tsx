@@ -13,7 +13,7 @@ import {
 import { Line } from 'react-chartjs-2';
 import { TrendingUp } from 'lucide-react';
 import { CropType, Language } from '../types';
-import { cropHistoricalTrends } from '../data/demoMarkets';
+import { cropOptions, cropHistoricalTrends } from '../data/demoMarkets';
 import { getTranslation } from '../utils/translations';
 
 ChartJS.register(
@@ -38,12 +38,21 @@ export const PriceTrendChart: React.FC<PriceTrendChartProps> = ({
 }) => {
   const t = getTranslation(language);
   const trend = cropHistoricalTrends[crop] || cropHistoricalTrends.Tomato;
+  const cropObj = cropOptions.find((c) => c.id === crop);
+  const localizedCropName =
+    language === 'te'
+      ? cropObj?.labelTe || crop
+      : language === 'hi'
+      ? cropObj?.labelHi || crop
+      : language === 'mr'
+      ? cropObj?.labelMr || crop
+      : cropObj?.labelEn || crop;
 
   const chartData = {
     labels: trend.days,
     datasets: [
       {
-        label: `${crop} Historical Price (₹/kg)`,
+        label: `${localizedCropName} (${t.charts.priceAxis})`,
         data: trend.prices,
         borderColor: '#2D6A4F',
         backgroundColor: 'rgba(116, 198, 157, 0.22)',
@@ -73,7 +82,7 @@ export const PriceTrendChart: React.FC<PriceTrendChartProps> = ({
         padding: 12,
         cornerRadius: 8,
         callbacks: {
-          label: (context: any) => `Avg Market Rate: ₹${context.raw}/kg`,
+          label: (context: any) => `${t.charts.tooltipAvgRate} ₹${context.raw}/kg`,
         },
       },
     },
@@ -89,7 +98,7 @@ export const PriceTrendChart: React.FC<PriceTrendChartProps> = ({
         },
         title: {
           display: true,
-          text: 'Price (₹/kg)',
+          text: t.charts.priceAxis,
           font: { size: 13, weight: 'bold' as const },
           color: '#1C1F1C',
         },
@@ -111,14 +120,14 @@ export const PriceTrendChart: React.FC<PriceTrendChartProps> = ({
       <div>
         <div className="flex items-center justify-between gap-2 mb-1">
           <h4 className="text-xl font-black text-stone-950 font-display">
-            Price Trend ({crop})
+            {t.charts.priceTrendTitle} ({localizedCropName})
           </h4>
           <span className="text-xs font-black bg-stone-100 text-stone-800 px-3 py-1 rounded-md border border-stone-300">
-            7-Day History
+            {t.charts.sevenDayHistory}
           </span>
         </div>
         <p className="text-sm font-bold text-stone-700 mb-4">
-          7-day sample mandi modal price trend across the region
+          {t.charts.priceTrendSub}
         </p>
       </div>
 
@@ -128,10 +137,10 @@ export const PriceTrendChart: React.FC<PriceTrendChartProps> = ({
 
       <div className="mt-3 pt-3 border-t-2 border-stone-200 flex items-center justify-between text-xs sm:text-sm font-bold text-stone-700">
         <div>
-          <span>7-Day Average: </span>
+          <span>{t.charts.sevenDayAverage} </span>
           <span className="font-black text-stone-950 text-base">₹{trend.averagePrice}/kg</span>
         </div>
-        <span className="font-bold text-stone-600">Historical Trend</span>
+        <span className="font-bold text-stone-600">{t.charts.historicalTrend}</span>
       </div>
     </div>
   );

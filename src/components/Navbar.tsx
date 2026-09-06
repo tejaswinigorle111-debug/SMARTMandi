@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Globe, Menu, X, ArrowUpRight, TrendingUp } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Globe, Menu, X, TrendingUp, ChevronDown, Check } from 'lucide-react';
 import { Language } from '../types';
 import { getTranslation } from '../utils/translations';
 import smartMandiLogo from '../assets/images/smartmandi_logo_1788515902109.jpg';
@@ -12,6 +12,13 @@ interface NavbarProps {
   onScrollToInput: () => void;
 }
 
+export const languages: { code: Language; name: string; native: string }[] = [
+  { code: 'en', name: 'English', native: 'English' },
+  { code: 'te', name: 'Telugu', native: 'తెలుగు' },
+  { code: 'hi', name: 'Hindi', native: 'हिन्दी' },
+  { code: 'mr', name: 'Marathi', native: 'मराठी' },
+];
+
 export const Navbar: React.FC<NavbarProps> = ({
   language,
   onLanguageChange,
@@ -20,7 +27,26 @@ export const Navbar: React.FC<NavbarProps> = ({
   onScrollToInput,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+  const langDropdownRef = useRef<HTMLDivElement>(null);
   const t = getTranslation(language);
+
+  const currentLang = languages.find((l) => l.code === language) || languages[0];
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        langDropdownRef.current &&
+        !langDropdownRef.current.contains(event.target as Node)
+      ) {
+        setLangDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleNavClick = (action: () => void) => {
     action();
@@ -28,7 +54,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white border-b border-stone-200">
+    <header className="sticky top-0 z-40 bg-[#ECF5EE] border-b border-[#CFDFD1] shadow-2xs backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Brand */}
@@ -53,7 +79,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   </span>
                 </div>
                 <p className="text-xs font-bold text-stone-700 leading-none mt-0.5">
-                  Smart Market. Better Returns.
+                  {t.tagline}
                 </p>
               </div>
             </a>
@@ -95,36 +121,58 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Right Action: Language Selector & CTA Button */}
           <div className="hidden sm:flex items-center gap-4">
-            {/* Language Switcher */}
-            <div className="flex items-center bg-stone-100 rounded-full px-2.5 py-1 border border-stone-300">
-              <Globe className="w-4 h-4 text-stone-700 mr-1.5" />
+            {/* Language Selector Dropdown */}
+            <div className="relative" ref={langDropdownRef}>
               <button
                 type="button"
-                onClick={() => onLanguageChange('en')}
-                className={`px-2.5 py-1 text-sm rounded-full transition-all cursor-pointer ${
-                  language === 'en'
-                    ? 'font-black text-emerald-950 bg-white shadow-xs'
-                    : 'text-stone-700 hover:text-stone-950 font-bold'
-                }`}
-                aria-pressed={language === 'en'}
-                id="lang-btn-en"
+                onClick={() => setLangDropdownOpen(!langDropdownOpen)}
+                className="flex items-center gap-2 bg-white/95 hover:bg-white px-3.5 py-2 rounded-xl border border-stone-300 shadow-2xs font-black text-stone-900 text-sm cursor-pointer transition-all hover:border-emerald-600"
+                id="lang-dropdown-trigger"
+                aria-expanded={langDropdownOpen}
               >
-                English
+                <Globe className="w-4 h-4 text-[#165B33]" />
+                <span>{currentLang.native}</span>
+                <ChevronDown
+                  className={`w-3.5 h-3.5 text-stone-500 transition-transform duration-200 ${
+                    langDropdownOpen ? 'rotate-180 text-[#165B33]' : ''
+                  }`}
+                />
               </button>
-              <span className="text-stone-400 text-sm mx-1">|</span>
-              <button
-                type="button"
-                onClick={() => onLanguageChange('te')}
-                className={`px-2.5 py-1 text-sm rounded-full transition-all cursor-pointer ${
-                  language === 'te'
-                    ? 'font-black text-emerald-950 bg-white shadow-xs'
-                    : 'text-stone-700 hover:text-stone-950 font-bold'
-                }`}
-                aria-pressed={language === 'te'}
-                id="lang-btn-te"
-              >
-                తెలుగు
-              </button>
+
+              {langDropdownOpen && (
+                <div
+                  className="absolute right-0 mt-2 w-44 bg-white border-2 border-stone-200 rounded-2xl shadow-xl overflow-hidden z-50"
+                  id="lang-dropdown-menu"
+                >
+                  <div className="py-1 divide-y divide-stone-100">
+                    {languages.map((l) => (
+                      <button
+                        key={l.code}
+                        type="button"
+                        onClick={() => {
+                          onLanguageChange(l.code);
+                          setLangDropdownOpen(false);
+                        }}
+                        className={`w-full px-4 py-2.5 flex items-center justify-between text-left text-sm transition-colors cursor-pointer ${
+                          language === l.code
+                            ? 'bg-[#E5F5E9] text-[#165B33] font-black'
+                            : 'text-stone-800 font-bold hover:bg-stone-50'
+                        }`}
+                      >
+                        <div>
+                          <span className="block">{l.native}</span>
+                          <span className="text-[11px] text-stone-400 font-semibold">
+                            {l.name}
+                          </span>
+                        </div>
+                        {language === l.code && (
+                          <Check className="w-4 h-4 text-[#165B33]" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Primary Action Button */}
@@ -140,15 +188,23 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Mobile menu trigger */}
           <div className="flex items-center gap-2 sm:hidden">
-            {/* Mobile language toggle */}
-            <button
-              type="button"
-              onClick={() => onLanguageChange(language === 'en' ? 'te' : 'en')}
-              className="px-2.5 py-1.5 text-xs font-bold bg-stone-100 rounded-lg border border-stone-200 text-stone-800"
-              id="mobile-lang-toggle"
-            >
-              {language === 'en' ? 'తెలుగు' : 'EN'}
-            </button>
+            {/* Mobile language dropdown button */}
+            <div className="relative">
+              <select
+                value={language}
+                onChange={(e) => onLanguageChange(e.target.value as Language)}
+                className="px-2.5 py-1.5 text-xs font-black bg-white rounded-lg border border-stone-300 text-stone-800 appearance-none pr-6 cursor-pointer"
+                id="mobile-lang-select"
+              >
+                {languages.map((l) => (
+                  <option key={l.code} value={l.code}>
+                    {l.native}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="w-3 h-3 text-stone-500 absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            </div>
+
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -156,7 +212,11 @@ export const Navbar: React.FC<NavbarProps> = ({
               aria-label="Toggle Navigation Menu"
               id="mobile-menu-toggle"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
             </button>
           </div>
         </div>
@@ -164,7 +224,10 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="sm:hidden border-b border-stone-200 bg-white px-4 pt-3 pb-6 space-y-3 shadow-md" id="mobile-menu">
+        <div
+          className="sm:hidden border-b border-stone-200 bg-white px-4 pt-3 pb-6 space-y-3 shadow-md"
+          id="mobile-menu"
+        >
           <div className="flex flex-col space-y-2 text-base font-semibold text-stone-800">
             <a
               href="#"
@@ -176,7 +239,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               type="button"
               onClick={() => handleNavClick(onOpenMarketPrices)}
-              className="text-left px-3 py-2 rounded-lg hover:bg-stone-50 flex items-center justify-between text-stone-600"
+              className="text-left px-3 py-2 rounded-lg hover:bg-stone-50 flex items-center justify-between text-stone-600 cursor-pointer"
             >
               <span>{t.nav.marketPrices}</span>
               <TrendingUp className="w-4 h-4 text-emerald-700" />
@@ -191,9 +254,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               type="button"
               onClick={() => handleNavClick(onOpenAbout)}
-              className="text-left px-3 py-2 rounded-lg hover:bg-stone-50 text-stone-600"
+              className="text-left px-3 py-2 rounded-lg hover:bg-stone-50 text-stone-600 cursor-pointer"
             >
-              {t.nav.about}
+              <span>{t.nav.about}</span>
             </button>
           </div>
 
@@ -201,7 +264,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               type="button"
               onClick={() => handleNavClick(onScrollToInput)}
-              className="w-full bg-[#165B33] text-white text-center font-bold py-3 rounded-xl shadow-xs hover:bg-[#134E2E]"
+              className="w-full bg-[#165B33] text-white text-center font-bold py-3 rounded-xl shadow-xs hover:bg-[#134E2E] cursor-pointer"
             >
               {t.nav.findMarket}
             </button>

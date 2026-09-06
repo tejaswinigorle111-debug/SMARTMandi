@@ -23,7 +23,7 @@ export const Benefits: React.FC<BenefitsProps> = ({ language }) => {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 text-emerald-950 text-sm font-black uppercase tracking-wide mb-3 border border-emerald-300 shadow-2xs">
-            {language === 'te' ? 'ప్రత్యేక ప్రయోజనాలు' : 'Core Differentiators'}
+            {t.whySmartMandi.badge}
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-stone-950 tracking-tight font-display">
             {t.whySmartMandi.heading}
@@ -59,7 +59,7 @@ export const Benefits: React.FC<BenefitsProps> = ({ language }) => {
 
               <div className="mt-6 pt-4 border-t border-stone-200 flex items-center gap-2 text-sm font-bold text-stone-700">
                 <CheckCircle2 className="w-4 h-4 text-emerald-700" />
-                <span>{language === 'te' ? 'ధృవీకరించబడిన నిర్ణయ ప్రమాణం' : 'Verified Decision Metric'}</span>
+                <span>{t.whySmartMandi.verifiedMetric}</span>
               </div>
             </div>
           ))}

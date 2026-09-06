@@ -1,6 +1,12 @@
-export type CropType = 'Tomato' | 'Rice' | 'Cotton' | 'Chilli' | 'Maize' | 'Onion' | 'Potato' | 'Soybean' | 'Wheat' | 'Groundnut' | 'Tur' | 'Gram' | 'Grapes' | 'Mango' | 'Banana';
+export type CropType =
+  | 'Tomato' | 'Rice' | 'Cotton' | 'Chilli' | 'Maize' | 'Onion' | 'Potato' | 'Soybean' | 'Wheat' | 'Groundnut'
+  | 'Tur' | 'Gram' | 'Grapes' | 'Mango' | 'Banana' | 'Turmeric' | 'Sugarcane' | 'Jowar' | 'Bajra' | 'Ragi'
+  | 'Barley' | 'Mustard' | 'Sunflower' | 'Sesame' | 'Moong' | 'Urad' | 'Masoor' | 'Cabbage' | 'Cauliflower'
+  | 'Brinjal' | 'Okra' | 'Carrot' | 'Garlic' | 'Ginger' | 'Apple' | 'Orange';
 
-export type Language = 'en' | 'te';
+export type Language = 'en' | 'te' | 'hi' | 'mr';
+
+export type CropCategory = 'all' | 'vegetables' | 'fruits' | 'cereals' | 'pulses' | 'oilseeds' | 'commercial';
 
 export interface MandiMarket {
   id: string;

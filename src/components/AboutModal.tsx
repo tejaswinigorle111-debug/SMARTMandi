@@ -54,7 +54,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({
           {/* Problem Statement Card */}
           <div className="p-5 rounded-2xl bg-[#F0F4F0] border-2 border-[#DCE4DC]">
             <h4 className="font-black text-[#1B4332] text-sm uppercase tracking-wider mb-1.5">
-              Problem Statement
+              {t.aboutModal.problemStatementTitle}
             </h4>
             <p className="text-lg font-black text-stone-950">
               "{t.aboutModal.problemStatement}"
@@ -72,27 +72,27 @@ export const AboutModal: React.FC<AboutModalProps> = ({
             <div className="p-4 bg-[#F7F9F7] rounded-2xl border-2 border-stone-200 space-y-3 font-mono text-sm text-stone-950 font-bold">
               <div className="flex items-center gap-2 text-[#165B33] font-black">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#165B33]" />
-                <span>React Frontend (Interactive Decision Interface)</span>
+                <span>{t.aboutModal.archFrontend}</span>
               </div>
               <div className="pl-4 text-stone-600 font-bold">↓ REST JSON API</div>
               <div className="flex items-center gap-2 text-stone-900">
                 <span className="w-2.5 h-2.5 rounded-full bg-stone-700" />
-                <span>FastAPI REST Microservice</span>
+                <span>{t.aboutModal.archApi}</span>
               </div>
               <div className="pl-4 text-stone-600 font-bold">↓ Connection Pool</div>
               <div className="flex items-center gap-2 text-stone-900">
                 <span className="w-2.5 h-2.5 rounded-full bg-stone-700" />
-                <span>PostgreSQL Database</span>
+                <span>{t.aboutModal.archDb}</span>
               </div>
               <div className="pl-4 text-stone-600 font-bold">↓ Data Ingestion</div>
               <div className="flex items-center gap-2 text-stone-900">
                 <span className="w-2.5 h-2.5 rounded-full bg-stone-700" />
-                <span>National Agricultural Market (e-NAM / APMC) Feed</span>
+                <span>{t.aboutModal.archFeed}</span>
               </div>
               <div className="pl-4 text-stone-600 font-bold">↓ Decision Solver</div>
               <div className="flex items-center gap-2 text-[#165B33] font-black">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#165B33]" />
-                <span>Net Return Recommendation Engine</span>
+                <span>{t.aboutModal.archEngine}</span>
               </div>
             </div>
           </div>

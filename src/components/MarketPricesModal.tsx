@@ -18,6 +18,13 @@ export const MarketPricesModal: React.FC<MarketPricesModalProps> = ({
   const t = getTranslation(language);
   if (!isOpen) return null;
 
+  const getCropName = (crop: (typeof cropOptions)[0]) => {
+    if (language === 'te') return crop.labelTe;
+    if (language === 'hi') return crop.labelHi;
+    if (language === 'mr') return crop.labelMr;
+    return crop.labelEn;
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
       <div className="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-[#E8ECE8] p-6 sm:p-8">
@@ -47,7 +54,7 @@ export const MarketPricesModal: React.FC<MarketPricesModalProps> = ({
         <div className="my-5 p-4 rounded-2xl bg-[#F0F4F0] border-2 border-[#DCE4DC] text-sm text-[#1B4332] flex items-start gap-2.5 font-bold">
           <Info className="w-5 h-5 text-[#2D6A4F] shrink-0 mt-0.5" />
           <span>
-            <strong className="font-black">Sample Market Data Notice:</strong> The rates shown below are indicative benchmark prices gathered for demonstration and mandi decision support. Future mandi integration will connect via the regional e-NAM/APMC mandi gateway.
+            <strong className="font-black">{t.marketPricesModal.noticeTitle}: </strong>{t.marketPricesModal.noticeText}
           </span>
         </div>
 
@@ -56,11 +63,11 @@ export const MarketPricesModal: React.FC<MarketPricesModalProps> = ({
           <table className="w-full text-left border-collapse text-sm sm:text-base">
             <thead>
               <tr className="bg-[#F7F9F7] text-stone-900 text-sm font-black uppercase tracking-wider border-b-2 border-stone-200">
-                <th className="p-4">Mandi Yard</th>
-                <th className="p-4">Location</th>
+                <th className="p-4">{t.marketPricesModal.mandiCol}</th>
+                <th className="p-4">{t.marketPricesModal.locationCol}</th>
                 {cropOptions.map((c) => (
                   <th key={c.id} className="p-4 text-center">
-                    {c.id} (₹/kg)
+                    {getCropName(c)} (₹/{t.input.kgLabel})
                   </th>
                 ))}
               </tr>

@@ -13,13 +13,27 @@ import { getRecommendation } from './services/api';
 import { getTranslation } from './utils/translations';
 
 export default function App() {
-  const [language, setLanguage] = useState<Language>('en');
+  const [language, setLanguage] = useState<Language>(() => {
+    const saved = localStorage.getItem('smartmandi_language');
+    if (saved && (saved === 'en' || saved === 'te' || saved === 'hi' || saved === 'mr')) {
+      return saved as Language;
+    }
+    return 'en';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('smartmandi_language', language);
+    document.documentElement.lang = language;
+  }, [language]);
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // Active query state
   const [currentCrop, setCurrentCrop] = useState<CropType | ''>('');
   const [currentQuantity, setCurrentQuantity] = useState<number>(0);
   const [currentLocation, setCurrentLocation] = useState<string>('');
+  const [currentLatitude, setCurrentLatitude] = useState<number | undefined>(undefined);
+  const [currentLongitude, setCurrentLongitude] = useState<number | undefined>(undefined);
   const [marketResults, setMarketResults] = useState<CalculatedMarketResult[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -32,6 +46,8 @@ export default function App() {
     setCurrentCrop(data.crop);
     setCurrentQuantity(data.quantity);
     setCurrentLocation(data.location);
+    setCurrentLatitude(data.latitude);
+    setCurrentLongitude(data.longitude);
 
     try {
       setErrorMessage(null);
@@ -102,6 +118,8 @@ export default function App() {
             quantity={currentQuantity}
             crop={currentCrop}
             location={currentLocation}
+            latitude={currentLatitude}
+            longitude={currentLongitude}
             language={language}
           />
         )}

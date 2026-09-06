@@ -5,7 +5,11 @@ import { MarketComparison } from './MarketComparison';
 import { PriceArrivalIntelligence } from './PriceArrivalIntelligence';
 import { PriceComparisonChart } from './PriceComparisonChart';
 import { PriceTrendChart } from './PriceTrendChart';
+import { WhatIfComparison } from './WhatIfComparison';
+import { MapRouteView } from './MapRouteView';
+import { BestSellingWindow } from './BestSellingWindow';
 import { cropOptions } from '../data/demoMarkets';
+import { getTranslation } from '../utils/translations';
 import vegCropShadesImage from '../assets/images/veg_crop_shades_1788511659089.jpg';
 
 interface MarketResultsProps {
@@ -13,6 +17,8 @@ interface MarketResultsProps {
   quantity: number;
   crop: CropType;
   location: string;
+  latitude?: number;
+  longitude?: number;
   language: Language;
 }
 
@@ -21,20 +27,33 @@ export const MarketResults: React.FC<MarketResultsProps> = ({
   quantity,
   crop,
   location,
+  latitude,
+  longitude,
   language,
 }) => {
   if (!results || results.length === 0) return null;
 
   const recommendedMarket = results.find((r) => r.isRecommended) || results[0];
   const cropIcon = cropOptions.find((c) => c.id === crop)?.icon || '🌾';
-  const currentDateFormatted = new Intl.DateTimeFormat('en-IN', {
+  const localeMap: Record<Language, string> = {
+    en: 'en-IN',
+    te: 'te-IN',
+    hi: 'hi-IN',
+    mr: 'mr-IN',
+  };
+  const currentDateFormatted = new Intl.DateTimeFormat(localeMap[language] || 'en-IN', {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
   }).format(new Date());
 
+  const t = getTranslation(language);
   const cropData = cropOptions.find((c) => c.id === crop);
-  const cropDisplayName = language === 'te' ? (cropData?.labelTe || crop) : (cropData?.labelEn || crop);
+  const cropDisplayName =
+    language === 'te' ? (cropData?.labelTe || crop)
+    : language === 'hi' ? (cropData?.labelHi || cropData?.labelEn || crop)
+    : language === 'mr' ? (cropData?.labelMr || cropData?.labelEn || crop)
+    : (cropData?.labelEn || crop);
 
   return (
     <section
@@ -65,10 +84,10 @@ export const MarketResults: React.FC<MarketResultsProps> = ({
             </span>
             <div>
               <span className="text-sm font-black text-emerald-950 uppercase tracking-wide block">
-                {language === 'te' ? 'మీరు నమోదు చేసిన వివరాలు' : 'Your Calculated Query'}
+                {t.results.heading || 'Your Calculated Query'}
               </span>
               <h3 className="text-xl sm:text-2xl font-black text-stone-950">
-                {cropDisplayName} • {(quantity / 100).toLocaleString('en-IN')} {language === 'te' ? 'క్వింటాళ్లు' : 'quintals'}
+                {cropDisplayName} • {(quantity / 100).toLocaleString('en-IN')} {t.input.quintalsLabel}
               </h3>
             </div>
           </div>
@@ -76,14 +95,14 @@ export const MarketResults: React.FC<MarketResultsProps> = ({
           <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-sm text-stone-700">
             <div>
               <span className="text-stone-500 block font-bold text-xs uppercase tracking-wider">
-                {language === 'te' ? 'మీ ప్రాంతం' : 'Origin Location'}
+                {t.results.originLocation}
               </span>
               <span className="font-extrabold text-stone-950 text-base">{location}</span>
             </div>
             <div className="h-8 w-px bg-stone-300 hidden sm:block" />
             <div>
               <span className="text-stone-500 block font-bold text-xs uppercase tracking-wider">
-                {language === 'te' ? 'మార్కెట్ డేటా' : 'Market Data'}
+                {t.results.marketDataLabel}
               </span>
               <span className="font-extrabold text-stone-950 text-base">{currentDateFormatted}</span>
             </div>
@@ -97,8 +116,24 @@ export const MarketResults: React.FC<MarketResultsProps> = ({
             {/* Market Comparison Table */}
             <MarketComparison results={results} language={language} />
 
+            {/* What-If Comparison */}
+            <WhatIfComparison
+              results={results}
+              recommendedMarket={recommendedMarket}
+              language={language}
+            />
+
             {/* Price & Arrival Intelligence */}
             <PriceArrivalIntelligence results={results} language={language} />
+
+            {/* Map / Route View */}
+            <MapRouteView
+              latitude={latitude}
+              longitude={longitude}
+              recommendedMarket={recommendedMarket}
+              allMarkets={results}
+              language={language}
+            />
 
             {/* Charts Side-by-Side */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -115,6 +150,7 @@ export const MarketResults: React.FC<MarketResultsProps> = ({
               cropName={crop}
               language={language}
             />
+            <BestSellingWindow language={language} />
           </div>
         </div>
       </div>

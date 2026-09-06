@@ -15,17 +15,16 @@ export const MarketComparison: React.FC<MarketComparisonProps> = ({
   const t = getTranslation(language);
   const formatINR = (val: number) => `₹${val.toLocaleString('en-IN')}`;
   const isTe = language === 'te';
+  const scoreLabel = language === 'te' ? 'స్కోర్' : language === 'hi' ? 'स्कोर' : language === 'mr' ? 'स्कोर' : 'Score';
 
   return (
     <div className="bg-white rounded-2xl p-5 sm:p-8 shadow-sm border border-stone-200" id="market-comparison-card">
       <div className="mb-6">
         <h3 className="text-xl sm:text-2xl font-black text-stone-950 font-display">
-          {t.results.comparisonTitle || (isTe ? 'మార్కెట్ పోలిక పట్టిక' : 'Market Comparison Table')}
+          {t.results.comparisonTitle}
         </h3>
         <p className="text-stone-500 text-sm font-bold mt-1 max-w-2xl">
-          {isTe
-            ? 'రవాణా ఖర్చుల తర్వాత చేతికి వచ్చే నికర లాభం, దూరం మరియు ధరల ఆధారంగా మార్కెట్ల పోలిక.'
-            : 'Mandis compared using estimated net return, price, distance and transport cost.'}
+          {t.results.comparisonSub}
         </p>
       </div>
 
@@ -33,12 +32,13 @@ export const MarketComparison: React.FC<MarketComparisonProps> = ({
         <table className="w-full text-left border-collapse min-w-[600px]">
           <thead>
             <tr className="text-stone-700 text-xs sm:text-sm font-black border-b border-stone-200">
-              <th className="py-4 px-4 text-center w-12">#</th>
-              <th className="py-4 px-4">{isTe ? 'మండి పేరు' : 'Mandi Market'}</th>
-              <th className="py-4 px-4 text-center">{isTe ? 'నికర లాభం' : 'Net Return'}<br/><span className="text-stone-500 font-bold">(₹)</span></th>
-              <th className="py-4 px-4 text-center">{isTe ? 'దూరం' : 'Distance'}<br/><span className="text-stone-500 font-bold">(km)</span></th>
-              <th className="py-4 px-4 text-center">{isTe ? 'సమయం' : 'Est. Time'}</th>
-              <th className="py-4 px-4 text-center">{isTe ? 'తేడా' : 'Diff vs Best'}<br/><span className="text-stone-500 font-bold">(₹)</span></th>
+              <th className="py-4 px-4 text-center w-12">{t.results.tableHeaders.rank}</th>
+              <th className="py-4 px-4">{t.results.tableHeaders.market}</th>
+              <th className="py-4 px-4 text-center">{t.results.tableHeaders.net}<br/><span className="text-stone-500 font-bold">(₹)</span></th>
+              <th className="py-4 px-4 text-center">{t.results.tableHeaders.distance}<br/><span className="text-stone-500 font-bold">(km)</span></th>
+              <th className="py-4 px-4 text-center">{t.results.tableHeaders.time}</th>
+              <th className="py-4 px-4 text-center">{t.results.tableHeaders.score}<br/><span className="text-stone-500 font-bold">/100</span></th>
+              <th className="py-4 px-4 text-center">{t.results.tableHeaders.diff}<br/><span className="text-stone-500 font-bold">(₹)</span></th>
             </tr>
           </thead>
           <tbody className="text-sm sm:text-base font-bold text-stone-800">
@@ -68,7 +68,16 @@ export const MarketComparison: React.FC<MarketComparisonProps> = ({
                   </td>
                   <td className="py-4 px-4 text-center text-[#165B33] font-black">{formatINR(m.netReturn).replace('₹', '')}</td>
                   <td className="py-4 px-4 text-center">{m.distanceKm} km</td>
-                  <td className="py-4 px-4 text-center text-sm">{Math.floor(m.distanceKm * 1.5)} {isTe ? 'నిమి' : 'min'}</td>
+                  <td className="py-4 px-4 text-center text-sm">{Math.floor(m.distanceKm * 1.5)} {t.results.minUnit}</td>
+                  <td className="py-4 px-4 text-center">
+                    {m.smartMarketScore !== undefined ? (
+                      <span className={`text-sm font-black px-2 py-0.5 rounded-full ${
+                        (m.smartMarketScore || 0) >= 75 ? 'text-emerald-800 bg-emerald-100'
+                        : (m.smartMarketScore || 0) >= 50 ? 'text-amber-800 bg-amber-100'
+                        : 'text-stone-600 bg-stone-100'
+                      }`}>{m.smartMarketScore}</span>
+                    ) : <span className="text-stone-400">—</span>}
+                  </td>
                   <td className={`py-4 px-4 text-center ${!isBest ? 'text-rose-600 font-extrabold' : 'text-stone-400'}`}>
                     {diff}
                   </td>

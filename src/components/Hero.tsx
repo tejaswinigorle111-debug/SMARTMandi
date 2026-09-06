@@ -48,19 +48,9 @@ export const Hero: React.FC<HeroProps> = ({
 
             {/* Main Title */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-stone-950 tracking-tight leading-[1.15] font-display">
-              {language === 'te' ? (
-                <>
-                  మీ పంటకు <span className="text-[#165B33]">సరైన మార్కెట్‌ను</span>
-                  <br />
-                  ఎంచుకోండి
-                </>
-              ) : (
-                <>
-                  Find the <span className="text-[#165B33]">Best Market</span>
-                  <br />
-                  for Your Crop
-                </>
-              )}
+              {t.hero.headingPart1} <span className="text-[#165B33]">{t.hero.headingHighlight}</span>
+              <br />
+              {t.hero.headingPart2}
             </h1>
 
             {/* Subtitle */}
@@ -129,10 +119,10 @@ export const Hero: React.FC<HeroProps> = ({
             </div>
             <div>
               <h4 className="text-base font-black text-stone-950">
-                {language === 'te' ? 'రవాణా ఖర్చుతో కూడిన లెక్క' : 'Transport Cost Factored'}
+                {t.hero.features.transport.title}
               </h4>
               <p className="text-sm font-bold text-stone-700 mt-1">
-                {language === 'te' ? 'దూరం మరియు పరిమాణం ఆధారంగా అంచనా రవాణా ఖర్చు' : 'Estimated transport cost based on distance and quantity'}
+                {t.hero.features.transport.desc}
               </p>
             </div>
           </div>
@@ -143,10 +133,10 @@ export const Hero: React.FC<HeroProps> = ({
             </div>
             <div>
               <h4 className="text-base font-black text-stone-950">
-                {language === 'te' ? 'వివిధ మార్కెట్ల పోలిక' : 'Multi-Mandi Benchmarking'}
+                {t.hero.features.multiMandi.title}
               </h4>
               <p className="text-sm font-bold text-stone-700 mt-1">
-                {language === 'te' ? 'సమీప మరియు ప్రాంతీయ మార్కెట్లను ఒకేసారి సరిపోలుస్తుంది' : 'Compares local and regional yards simultaneously'}
+                {t.hero.features.multiMandi.desc}
               </p>
             </div>
           </div>
@@ -157,10 +147,10 @@ export const Hero: React.FC<HeroProps> = ({
             </div>
             <div>
               <h4 className="text-base font-black text-stone-950">
-                {language === 'te' ? 'గరిష్ట నికర లాభం' : 'Maximized Net Return'}
+                {t.hero.features.netReturn.title}
               </h4>
               <p className="text-sm font-bold text-stone-700 mt-1">
-                {language === 'te' ? 'నికర లాభం ఆధారంగా ప్రాధాన్యత' : 'Ranked by estimated net return'}
+                {t.hero.features.netReturn.desc}
               </p>
             </div>
           </div>

@@ -1,6 +1,244 @@
 import { Language } from '../types';
 
-export const translations = {
+export interface TranslationSchema {
+  appName: string;
+  tagline: string;
+  sihBadge: string;
+  nav: {
+    home: string;
+    marketPrices: string;
+    howItWorks: string;
+    about: string;
+    findMarket: string;
+  };
+  hero: {
+    subLabel: string;
+    headingPart1: string;
+    headingHighlight: string;
+    headingPart2: string;
+    subText: string;
+    ctaPrimary: string;
+    ctaSecondary: string;
+    floatingTitle: string;
+    floatingDesc: string;
+    features: {
+      transport: { title: string; desc: string };
+      multiMandi: { title: string; desc: string };
+      netReturn: { title: string; desc: string };
+    };
+  };
+  categories: {
+    all: string;
+    vegetables: string;
+    fruits: string;
+    cereals: string;
+    pulses: string;
+    oilseeds: string;
+    commercial: string;
+  };
+  input: {
+    sectionBadge: string;
+    heading: string;
+    subText: string;
+    formTitle: string;
+    formSub: string;
+    step1: string;
+    step2: string;
+    step3: string;
+    step4: string;
+    cropLabel: string;
+    cropPlaceholder: string;
+    cropSearchPlaceholder: string;
+    noCropsFound: string;
+    cropsCount: string;
+    quantityLabel: string;
+    quantityPlaceholder: string;
+    quintalsLabel: string;
+    kgLabel: string;
+    qtlLabel: string;
+    directQuantityLabel: string;
+    directQuantityPlaceholder: string;
+    conversionFormula: string;
+    totalKg: string;
+    locationLabel: string;
+    locationPlaceholder: string;
+    useLocationBtn: string;
+    locationDetecting: string;
+    locationSuccess: string;
+    locationError: string;
+    locationDenied: string;
+    speakBtn: string;
+    listening: string;
+    voiceInstruction: string;
+    speechNotSupported: string;
+    voiceError: string;
+    voiceRecognizedQtl: string;
+    voiceRecognizedKg: string;
+    voiceHeardAmbiguous: string;
+    voiceSetQtl: string;
+    voiceSetKg: string;
+    submitBtn: string;
+    analyzing: string;
+    disclaimerText: string;
+    invalidQuantity: string;
+    invalidCrop: string;
+    invalidLocation: string;
+    noMarketData: string;
+  };
+  results: {
+    heading: string;
+    bestOptionBadge: string;
+    estimatedNetReturn: string;
+    takeHome: string;
+    smartScoreLabel: string;
+    scoreBreakdown: string;
+    netReturn: string;
+    price: string;
+    distance: string;
+    transport: string;
+    estMandiFee: string;
+    grossIncomeLabel: string;
+    transportLabel: string;
+    netReturnLabel: string;
+    mandiPriceLabel: string;
+    perQuintal: string;
+    whyThisMarket: string;
+    viewFullDetails: string;
+    distanceLabel: string;
+    minUnit: string;
+    signal: {
+      sellNow: { label: string; sub: string };
+      monitor: { label: string; sub: string };
+      insufficient: { label: string; sub: string };
+    };
+    comparisonTitle: string;
+    comparisonSub: string;
+    tableHeaders: {
+      rank: string;
+      market: string;
+      net: string;
+      distance: string;
+      time: string;
+      score: string;
+      diff: string;
+    };
+    sampleNotice: string;
+    recommendationBasis: string;
+    intelligenceTitle: string;
+    marketPriceLabel: string;
+    modalPriceLabel: string;
+    marketArrivalLabel: string;
+    tonnesUnit: string;
+    perKg: string;
+    arrivalUnavailable: string;
+    historicalUnavailable: string;
+    sampleDataLabel: string;
+    originLocation: string;
+    marketDataLabel: string;
+  };
+  whatIf: {
+    title: string;
+    subtitle: string;
+    selectMarketLabel: string;
+    expectedRevenue: string;
+    transportCost: string;
+    expectedNetReturn: string;
+    diffFromBest: string;
+    bestOptionNote: string;
+    comparedToBest: string;
+  };
+  charts: {
+    priceComparisonTitle: string;
+    priceComparisonSub: string;
+    priceTrendTitle: string;
+    priceTrendSub: string;
+    bestOptionLegend: string;
+    otherMandisLegend: string;
+    sevenDayHistory: string;
+    sevenDayAverage: string;
+    historicalTrend: string;
+    ratePerKgAxis: string;
+    priceAxis: string;
+    tooltipPrice: string;
+    tooltipEstNet: string;
+    tooltipAvgRate: string;
+    sampleDataLabel: string;
+  };
+  map: {
+    title: string;
+    subtitle: string;
+    farmerLocation: string;
+    recommendedMandi: string;
+    routeDistance: string;
+    dataUnavailable: string;
+    gpsPrompt: string;
+    distanceDisclaimer: string;
+  };
+  bestSellingWindow: {
+    title: string;
+    condition: string;
+    awaiting: string;
+    trend: string;
+    unavailable: string;
+    comingSoon: string;
+    comingSoonDesc: string;
+  };
+  howItWorks: {
+    badge: string;
+    heading: string;
+    subText: string;
+    stepPrefix: string;
+    ofSteps: string;
+    steps: {
+      num: string;
+      title: string;
+      description: string;
+    }[];
+  };
+  whySmartMandi: {
+    badge: string;
+    heading: string;
+    subText: string;
+    verifiedMetric: string;
+    cards: {
+      tag: string;
+      title: string;
+      description: string;
+    }[];
+  };
+  footer: {
+    aboutText: string;
+    navTitle: string;
+    actionsTitle: string;
+    copyright: string;
+    missionStatement: string;
+  };
+  marketPricesModal: {
+    title: string;
+    subtitle: string;
+    noticeTitle: string;
+    noticeText: string;
+    mandiCol: string;
+    locationCol: string;
+    closeBtn: string;
+  };
+  aboutModal: {
+    title: string;
+    subtitle: string;
+    problemStatementTitle: string;
+    problemStatement: string;
+    description: string;
+    architectureTitle: string;
+    archFrontend: string;
+    archApi: string;
+    archDb: string;
+    archFeed: string;
+    archEngine: string;
+    closeBtn: string;
+  };
+}
+
+export const translations: Record<Language, TranslationSchema> = {
   en: {
     appName: 'SMARTMandi',
     tagline: 'Farmer-Focused Market Decision Support',
@@ -14,94 +252,200 @@ export const translations = {
     },
     hero: {
       subLabel: 'SMART AGRICULTURE • MARKET DECISION SUPPORT',
-      heading: 'Find the Best Market for Your Crop',
+      headingPart1: 'Find the',
+      headingHighlight: 'Best Market',
+      headingPart2: 'for Your Crop',
       subText: 'Compare market prices, estimated transport costs and expected returns before you sell.',
       ctaPrimary: 'Find Best Market',
       ctaSecondary: 'How It Works',
       floatingTitle: 'Better decisions',
       floatingDesc: 'Compare price and transport before selling.',
-      stats: {
-        marketsTracked: '5 Mandis Analyzed',
-        transportFactored: 'Transport Cost Factored',
-        netOptimized: 'Net Return Maximized',
+      features: {
+        transport: {
+          title: 'Transport Cost Factored',
+          desc: 'Estimated transport cost calculated from distance & volume.',
+        },
+        multiMandi: {
+          title: 'Multi-Mandi Benchmarking',
+          desc: 'Compares local and regional APMC yards simultaneously.',
+        },
+        netReturn: {
+          title: 'Maximized Net Return',
+          desc: 'Ranked strictly by highest take-home net profit.',
+        },
       },
     },
+    categories: {
+      all: 'All Crops',
+      vegetables: 'Vegetables',
+      fruits: 'Fruits',
+      cereals: 'Cereals',
+      pulses: 'Pulses',
+      oilseeds: 'Oilseeds',
+      commercial: 'Commercial Crops',
+    },
     input: {
+      sectionBadge: 'Farmer Market Calculator',
       heading: 'Where should you sell your crop?',
       subText: 'Enter a few details and SMARTMandi will compare suitable market options.',
+      formTitle: 'Enter Your Details',
+      formSub: 'Complete all steps to find the best market',
+      step1: 'Select Crop',
+      step2: 'Quantity (Quintals)',
+      step3: 'Your Location',
+      step4: 'Analyze Markets',
       cropLabel: 'Select Crop',
-      cropPlaceholder: 'Select your crop...',
+      cropPlaceholder: 'Search or select a crop...',
+      cropSearchPlaceholder: 'Search crop by name (e.g. Tomato, Rice, Turmeric)...',
+      noCropsFound: 'No crops found matching',
+      cropsCount: 'crops',
       quantityLabel: 'Quantity (Quintals)',
       quantityPlaceholder: 'Enter quantity in quintals (e.g. 25)',
+      quintalsLabel: 'quintals',
+      kgLabel: 'kg',
+      qtlLabel: 'qtl',
+      directQuantityLabel: 'Or enter quantity directly:',
+      directQuantityPlaceholder: 'e.g. 25',
+      conversionFormula: '1 Quintal = 100 kg',
+      totalKg: 'total',
       locationLabel: 'Your Location',
-      locationPlaceholder: 'Enter village, town or district (e.g. Warangal, Kurnool, Khammam)',
+      locationPlaceholder: 'Enter village, town or district (e.g. Warangal, Kurnool, Nashik)',
       useLocationBtn: 'Use GPS',
       locationDetecting: 'Locating...',
       locationSuccess: 'Location detected: ',
       locationError: 'Could not access location. Please type your town or district.',
+      locationDenied: 'Location permission denied. Please enter it manually.',
       speakBtn: 'Voice Search',
       listening: 'Listening...',
+      voiceInstruction: '🎙️ Say: "25 quintals tomato near Warangal"',
       speechNotSupported: 'Speech recognition is not supported in this browser. Please type directly.',
-      speechPrompt: 'Speak your crop, quantity or village name.',
+      voiceError: 'Could not capture voice clearly. Please try again or type directly.',
+      voiceRecognizedQtl: 'Recognized: {qty} quintal(s)',
+      voiceRecognizedKg: 'Recognized: {kg} kg → {qtl} quintal(s)',
+      voiceHeardAmbiguous: 'Heard "{num}". Did you mean {num} quintals or {num} kg (= {converted} qtl)?',
+      voiceSetQtl: 'Set to {num} quintal(s)',
+      voiceSetKg: '{num} kg → {converted} quintal(s) set',
       submitBtn: 'Find Best Market',
-      quickFillNote: 'Quick test: 10 quintals Tomato from Warangal',
-      quickPresetsLabel: 'Quick Presets:',
-      presetTomato: '10 quintals Tomato',
-      presetCotton: '30 quintals Cotton',
-      presetChilli: '8 quintals Chilli',
-      presetMaize: '20 quintals Maize',
-      voiceLabel: 'Voice:',
-      langSwitch: 'EN / తెలుగు',
       analyzing: 'Analyzing Mandis & Transport Rates...',
       disclaimerText: 'We compare market prices, distance and estimated transport costs to calculate your estimated net return.',
+      invalidQuantity: 'Please enter a valid harvest quantity in quintals.',
+      invalidCrop: 'Please select a crop.',
+      invalidLocation: 'Please enter your location.',
       noMarketData: 'Market data for this crop is not available yet.',
     },
     results: {
-      heading: 'Market Options',
-      subText: 'Compare estimated returns after transportation costs.',
-      recommendedBadge: 'Recommended Market',
-      whyThisMarket: 'Why this market?',
-      recommendationBasis: 'Recommendation based on Smart Market Score',
-      grossIncomeLabel: 'Estimated Gross Income',
+      heading: 'Your Calculated Query',
+      bestOptionBadge: '⭐ BEST OPTION',
+      estimatedNetReturn: 'Estimated Net Return',
+      takeHome: '(Take-home)',
+      smartScoreLabel: 'Smart Market Score',
+      scoreBreakdown: 'Score Breakdown',
+      netReturn: 'Net Return',
+      price: 'Price',
+      distance: 'Distance',
+      transport: 'Transport',
+      estMandiFee: 'Est. Mandi Fees & Cess (~2%)',
+      grossIncomeLabel: 'Estimated Gross Revenue',
       transportLabel: 'Estimated Transport Cost',
-      netReturnLabel: 'Estimated Net Return',
-      pricePerKgLabel: 'Price per kg',
+      netReturnLabel: 'Estimated Net Return (Take-home)',
+      mandiPriceLabel: 'Mandi Price',
+      perQuintal: '/ quintal',
+      whyThisMarket: 'Why this market?',
+      viewFullDetails: 'View Full Details',
       distanceLabel: 'Distance',
-      locationLabel: 'Location',
-      sampleNotice: 'Sample Market Data • Transport rates estimated using regional freight guidelines',
-      comparisonTitle: 'Market Comparison Table',
-      tableHeaders: {
-        market: 'Market',
-        price: 'Price / kg',
-        distance: 'Distance',
-        transport: 'Estimated Transport Cost',
-        gross: 'Gross Income',
-        net: 'Estimated Net Return',
-        action: 'Status',
+      minUnit: 'min',
+      signal: {
+        sellNow: {
+          label: '✅ SELL NOW',
+          sub: 'High score — this mandi is a strong selling opportunity',
+        },
+        monitor: {
+          label: '⚠️ MONITOR PRICE',
+          sub: 'Moderate score — monitor prices before transporting produce',
+        },
+        insufficient: {
+          label: 'ℹ️ DATA INSUFFICIENT',
+          sub: 'More mandi transactions needed for a strong decision signal',
+        },
       },
-      recommendedTag: 'Best Return',
-      lowerNetTag: 'Lower Net',
-      smartScoreLabel: 'Smart Market Score:',
-      bestOptionBadge: 'BEST OPTION',
-      scoreBreakdownLabel: 'Score Breakdown',
+      comparisonTitle: 'Market Comparison Table',
+      comparisonSub: 'Mandis compared using estimated net return, price, distance and transport cost.',
+      tableHeaders: {
+        rank: '#',
+        market: 'Market Name',
+        net: 'Net Return',
+        distance: 'Distance',
+        time: 'Est. Time',
+        score: 'Score',
+        diff: 'Diff vs Best',
+      },
+      sampleNotice: 'Sample Market Data • Transport rates estimated using regional freight guidelines',
+      recommendationBasis: 'Recommendation based on Smart Market Score',
       intelligenceTitle: 'Price & Arrival Intelligence',
-      marketPriceLabel: 'Market Price',
+      marketPriceLabel: 'Current Price',
       modalPriceLabel: 'Modal Price',
-      marketArrivalLabel: 'Market Arrival',
+      marketArrivalLabel: 'Today\'s Arrivals',
+      tonnesUnit: 'Tonnes',
+      perKg: '/ kg',
       arrivalUnavailable: 'Arrival data unavailable',
-      sampleDataLabel: 'Sample Data',
+      historicalUnavailable: 'Historical Data Unavailable',
+      sampleDataLabel: 'Verified Mandi Data',
+      originLocation: 'Origin Location',
+      marketDataLabel: 'Market Data',
+    },
+    whatIf: {
+      title: 'What-If Comparison',
+      subtitle: 'Select any candidate market to compare live revenue and transport trade-offs against the recommended option.',
+      selectMarketLabel: 'Select Market:',
+      expectedRevenue: 'Expected Revenue',
+      transportCost: 'Transport Cost',
+      expectedNetReturn: 'Expected Net Return',
+      diffFromBest: 'Difference from Recommended Market',
+      bestOptionNote: 'This is already the recommended best market for maximum take-home profit.',
+      comparedToBest: 'Compared to best market:',
     },
     charts: {
       priceComparisonTitle: 'Market Price Comparison',
       priceComparisonSub: 'Price per kg (₹) across candidate mandis',
       priceTrendTitle: 'Price Trend',
-      priceTrendSub: '7-day historical price movement for selected crop',
-      sampleDataLabel: 'Sample Market Data',
-      sampleTrendLabel: 'Sample Data',
+      priceTrendSub: '7-day sample mandi modal price trend across the region',
+      bestOptionLegend: 'Best Option',
+      otherMandisLegend: 'Other Mandis',
+      sevenDayHistory: '7-Day History',
+      sevenDayAverage: '7-Day Average:',
+      historicalTrend: 'Historical Price Trend',
+      ratePerKgAxis: 'Rate per kg (₹)',
+      priceAxis: 'Price (₹/kg)',
+      tooltipPrice: 'Price:',
+      tooltipEstNet: 'Est. Net Return:',
+      tooltipAvgRate: 'Avg Market Rate:',
+      sampleDataLabel: 'Market Intelligence',
+    },
+    map: {
+      title: 'Farmer Location & Route View',
+      subtitle: 'Geographic proximity and distance visualization from your farm origin to candidate mandis.',
+      farmerLocation: 'Farmer Location',
+      recommendedMandi: 'Recommended APMC Mandi',
+      routeDistance: 'Distance',
+      dataUnavailable: 'Map GPS coordinates unavailable. Enter a valid GPS location or district to view visual routing.',
+      gpsPrompt: 'Use the "Use GPS" button in the form to enable map view.',
+      distanceDisclaimer: '* Distances are approximate estimates. Use Google Maps for navigation.',
+    },
+    bestSellingWindow: {
+      title: 'Best Selling Window',
+      condition: 'Current Market Condition',
+      awaiting: 'Awaiting Sufficient Data',
+      trend: 'Historical Price Trend',
+      unavailable: 'Historical Data Unavailable',
+      comingSoon: 'Coming Soon',
+      comingSoonDesc: 'We are working on integrating reliable historical market data to power this feature.',
     },
     howItWorks: {
+      badge: 'Simple Four-Step Flow',
       heading: 'How It Works',
       subText: 'A simple four-step process to help you make a better market decision.',
+      stepPrefix: 'Step',
+      ofSteps: 'of 04',
       steps: [
         {
           num: '01',
@@ -126,8 +470,10 @@ export const translations = {
       ],
     },
     whySmartMandi: {
+      badge: 'Core Differentiators',
       heading: 'Why SMARTMandi?',
       subText: 'Designed to solve real farmer dilemmas during post-harvest marketing.',
+      verifiedMetric: 'Verified Decision Metric',
       cards: [
         {
           tag: 'PERSONALIZED',
@@ -142,7 +488,7 @@ export const translations = {
         {
           tag: 'FARMER FRIENDLY',
           title: 'Built for Simplicity',
-          description: 'Simple interface, voice input assistance, and regional language support in Telugu.',
+          description: 'Simple interface, voice input assistance, and multi-language support in English, Telugu, Hindi, and Marathi.',
         },
         {
           tag: 'EXPLAINABLE',
@@ -151,25 +497,38 @@ export const translations = {
         },
       ],
     },
+    footer: {
+      aboutText: 'Helping farmers make informed market decisions.',
+      navTitle: 'Navigation',
+      actionsTitle: 'Actions',
+      copyright: 'SMARTMandi. Market Linkage & Price Discovery Decision Support.',
+      missionStatement: 'Strengthening market linkages & price discovery for Indian farmers.',
+    },
     marketPricesModal: {
       title: 'Available Baseline Mandi Prices',
       subtitle: 'Indicative rates across major agricultural APMC yards',
+      noticeTitle: 'Sample Market Data Notice:',
+      noticeText: 'The rates shown below are indicative benchmark prices gathered for demonstration and mandi decision support. Future mandi integration will connect via the regional e-NAM/APMC mandi gateway.',
+      mandiCol: 'Mandi Yard',
+      locationCol: 'Location',
       closeBtn: 'Close',
     },
     aboutModal: {
       title: 'About SMARTMandi',
       subtitle: 'Market Linkage & Price Discovery Decision Platform',
+      problemStatementTitle: 'Problem Statement',
       problemStatement: 'Strengthening market linkages and price discovery for farmers',
       description: 'Many farmers travel to distant mandis lured by high quoted prices, only to realize that diesel, vehicle hire, and loading costs wiped out their extra margin. SMARTMandi models logistics cost alongside market price to calculate the estimated net return before the farmer loads the tractor.',
       architectureTitle: 'Planned Production Architecture',
-      architectureDesc: 'React Frontend -> FastAPI REST API -> Supabase/PostgreSQL -> Agricultural Market Data -> Recommendation Engine',
+      archFrontend: 'React Frontend (Interactive Decision Interface)',
+      archApi: 'FastAPI REST Microservice',
+      archDb: 'PostgreSQL Database',
+      archFeed: 'National Agricultural Market (e-NAM / APMC) Feed',
+      archEngine: 'Net Return Recommendation Engine',
       closeBtn: 'Close',
     },
-    footer: {
-      aboutText: 'Helping farmers make informed market decisions.',
-      copyright: 'SMARTMandi. Market Linkage & Price Discovery Decision Support.',
-    },
   },
+
   te: {
     appName: 'SMARTMandi',
     tagline: 'రైతు మార్కెట్ నిర్ణయ మద్దతు వ్యవస్థ',
@@ -183,94 +542,200 @@ export const translations = {
     },
     hero: {
       subLabel: 'స్మార్ట్ వ్యవసాయం • మార్కెట్ నిర్ణయ మద్దతు',
-      heading: 'మీ పంటకు సరైన మార్కెట్‌ను ఎంచుకోండి',
+      headingPart1: 'మీ పంటకు',
+      headingHighlight: 'సరైన మార్కెట్‌ను',
+      headingPart2: 'ఎంచుకోండి',
       subText: 'పంట అమ్మే ముందు మార్కెట్ ధరలు, రవాణా ఖర్చులు మరియు చేతికి వచ్చే నికర లాభాన్ని సరిపోల్చుకోండి.',
       ctaPrimary: 'ఉత్తమ మార్కెట్ కనుగొనండి',
       ctaSecondary: 'ఇది ఎలా పనిచేస్తుంది',
       floatingTitle: 'సరైన నిర్ణయాలు',
       floatingDesc: 'అమ్మే ముందే ధర మరియు రవాణా ఖర్చులను సరిపోల్చండి.',
-      stats: {
-        marketsTracked: 'విశ్లేషించిన మార్కెట్లు',
-        transportFactored: 'రవాణా ఖర్చుతో కూడిన లెక్క',
-        netOptimized: 'గరిష్ట నికర లాభం',
+      features: {
+        transport: {
+          title: 'రవాణా ఖర్చుతో కూడిన లెక్క',
+          desc: 'దూరం మరియు పరిమాణం ఆధారంగా అంచనా రవాణా ఖర్చు.',
+        },
+        multiMandi: {
+          title: 'వివిధ మార్కెట్ల పోలిక',
+          desc: 'సమీప మరియు ప్రాంతీయ వ్యవసాయ మార్కెట్లను ఒకేసారి సరిపోల్చండి.',
+        },
+        netReturn: {
+          title: 'గరిష్ట నికర లాభం',
+          desc: 'చేతికి వచ్చే నికర లాభం ఆధారంగా ప్రాధాన్యత.',
+        },
       },
     },
+    categories: {
+      all: 'అన్ని పంటలు',
+      vegetables: 'కూరగాయలు',
+      fruits: 'పండ్లు',
+      cereals: 'ధాన్యాలు',
+      pulses: 'పప్పుధాన్యాలు',
+      oilseeds: 'నూనెగింజలు',
+      commercial: 'వాణిజ్య పంటలు',
+    },
     input: {
+      sectionBadge: 'రైతు మార్కెట్ క్యాలిక్యులేటర్',
       heading: 'మీ పంటను ఎక్కడ విక్రయించాలి?',
       subText: 'కొన్ని వివరాలను నమోదు చేయండి, SMARTMandi అనువైన మార్కెట్లను సరిపోల్చి చూపిస్తుంది.',
+      formTitle: 'మీ వివరాలను నమోదు చేయండి',
+      formSub: 'ఉత్తమ మార్కెట్‌ను కనుగొనడానికి క్రింది దశలను పూర్తి చేయండి',
+      step1: 'పంటను ఎంచుకోండి',
+      step2: 'పరిమాణం (క్వింటాళ్లలో)',
+      step3: 'మీ ప్రాంతం / గ్రామం',
+      step4: 'మార్కెట్లను విశ్లేషించండి',
       cropLabel: 'పంటను ఎంచుకోండి',
-      cropPlaceholder: 'మీ పంటను ఎంచుకోండి...',
+      cropPlaceholder: 'పంటను ఎంచుకోండి లేదా వెతకండి...',
+      cropSearchPlaceholder: 'పంట పేరుతో వెతకండి (ఉదా. టమాటా, వరి, పసుపు)...',
+      noCropsFound: 'ఎటువంటి పంటలు కనుగొనబడలేదు',
+      cropsCount: 'పంటలు',
       quantityLabel: 'పరిమాణం (క్వింటాళ్లలో)',
       quantityPlaceholder: 'పరిమాణం క్వింటాళ్లలో నమోదు చేయండి (ఉదా. 25)',
+      quintalsLabel: 'క్వింటాళ్లు',
+      kgLabel: 'కిలోలు',
+      qtlLabel: 'క్వింటాళ్లు',
+      directQuantityLabel: 'లేదా నేరుగా సంఖ్యను నమోదు చేయండి:',
+      directQuantityPlaceholder: 'ఉదా. 25',
+      conversionFormula: '1 క్వింటా = 100 కిలోలు',
+      totalKg: 'మొత్తం',
       locationLabel: 'మీ ప్రాంతం / గ్రామం',
-      locationPlaceholder: 'గ్రామం, పట్టణం లేదా జిల్లా పేరు (ఉదా. వరంగల్, కర్నూలు, ఖమ్మం)',
+      locationPlaceholder: 'గ్రామం, పట్టణం లేదా జిల్లా (ఉదా. వరంగల్, కర్నూలు, ఖమ్మం)',
       useLocationBtn: 'GPS వాడండి',
       locationDetecting: 'లొకేషన్ గుర్తిస్తోంది...',
       locationSuccess: 'లొకేషన్ గుర్తించబడింది: ',
       locationError: 'లొకేషన్ పొందలేకపోయాము. దయచేసి గ్రామం లేదా జిల్లా పేరు టైప్ చేయండి.',
+      locationDenied: 'లొకేషన్ అనుమతి నిరాకరించబడింది. దయచేసి స్వయంగా నమోదు చేయండి.',
       speakBtn: 'వాయిస్ సెర్చ్',
       listening: 'వింటోంది...',
+      voiceInstruction: '🎙️ చెప్పండి: "వరంగల్ దగ్గర 25 క్వింటాళ్ల టమాటా"',
       speechNotSupported: 'ఈ బ్రౌజర్‌లో వాయిస్ రికగ్నిషన్ సపోర్ట్ లేదు. దయచేసి టైప్ చేయండి.',
-      speechPrompt: 'మీ పంట పేరు, పరిమాణం లేదా ప్రాంతం పేరు మాట్లాడండి.',
+      voiceError: 'వాయిస్ స్పష్టంగా అర్థం కాలేదు. మళ్ళీ ప్రయత్నించండి లేదా టైప్ చేయండి.',
+      voiceRecognizedQtl: 'గుర్తించబడింది: {qty} క్వింటాళ్లు',
+      voiceRecognizedKg: 'గుర్తించబడింది: {kg} కిలోలు → {qtl} క్వింటాళ్లు',
+      voiceHeardAmbiguous: '"{num}" వినబడింది. {num} క్వింటాళ్లా లేదా {num} కిలోలా (= {converted} క్వింటాళ్లు)?',
+      voiceSetQtl: '{num} క్వింటాళ్లుగా సెట్ చేయబడింది',
+      voiceSetKg: '{num} కిలోలు → {converted} క్వింటాళ్లుగా సెట్ చేయబడింది',
       submitBtn: 'ఉత్తమ మార్కెట్ కనుగొనండి',
-      quickFillNote: 'త్వరిత పరీక్ష: 10 క్వింటాళ్ల టమోటా',
-      quickPresetsLabel: 'త్వరిత ఎంపికలు:',
-      presetTomato: '10 క్వింటాళ్ల టమోటా',
-      presetCotton: '30 క్వింటాళ్ల పత్తి',
-      presetChilli: '8 క్వింటాళ్ల మిరప',
-      presetMaize: '20 క్వింటాళ్ల మొక్కజొన్న',
-      voiceLabel: 'వాయిస్:',
-      langSwitch: 'EN / తెలుగు',
       analyzing: 'మార్కెట్లు మరియు రవాణా రేట్లను విశ్లేషిస్తోంది...',
       disclaimerText: 'మీ నికర లాభాన్ని అంచనా వేయడానికి మేము మార్కెట్ ధరలు, దూరం మరియు రవాణా ఖర్చులను లెక్కిస్తాము.',
+      invalidQuantity: 'దయచేసి సరైన పరిమాణాన్ని క్వింటాళ్లలో నమోదు చేయండి.',
+      invalidCrop: 'దయచేసి ఒక పంటను ఎంచుకోండి.',
+      invalidLocation: 'దయచేసి మీ ప్రాంతాన్ని నమోదు చేయండి.',
       noMarketData: 'ఈ పంటకు మార్కెట్ సమాచారం ఇంకా అందుబాటులో లేదు.',
     },
     results: {
-      heading: 'అందుబాటులో ఉన్న మార్కెట్లు',
-      subText: 'రవాణా ఖర్చుల తర్వాత చేతికి వచ్చే నికర లాభాన్ని సరిపోల్చండి.',
-      recommendedBadge: 'సిఫార్సు చేయబడిన మార్కెట్',
-      whyThisMarket: 'ఈ మార్కెట్ ఎందుకు?',
-      recommendationBasis: 'స్మార్ట్ మార్కెట్ స్కోర్ ఆధారంగా సిఫార్సు',
+      heading: 'లెక్కింపు సారాంశం',
+      bestOptionBadge: '⭐ ఉత్తమ ఎంపిక (BEST OPTION)',
+      estimatedNetReturn: 'అంచనా నికర లాభం',
+      takeHome: '(చేతికి వచ్చే లాభం)',
+      smartScoreLabel: 'స్మార్ట్ మార్కెట్ స్కోర్',
+      scoreBreakdown: 'స్కోర్ వివరాలు',
+      netReturn: 'నికర లాభం',
+      price: 'ధర',
+      distance: 'దూరం',
+      transport: 'రవాణా',
+      estMandiFee: 'మండి చార్జీలు (~2%)',
       grossIncomeLabel: 'అంచనా మొత్తం ఆదాయం',
       transportLabel: 'అంచనా రవాణా ఖర్చు',
-      netReturnLabel: 'చేతికి వచ్చే నికర లాభం',
-      pricePerKgLabel: 'ధర / కిలో',
+      netReturnLabel: 'చేతికి వచ్చే నికర లాభం (Take-home)',
+      mandiPriceLabel: 'మండి ధర',
+      perQuintal: '/ క్వింటాల్',
+      whyThisMarket: 'ఈ మార్కెట్ ఎందుకు?',
+      viewFullDetails: 'వివరంగా చూడండి',
       distanceLabel: 'దూరం',
-      locationLabel: 'ప్రాంతం',
-      sampleNotice: 'మార్కెట్ డేటా • ప్రాంతీయ రవాణా మార్గదర్శకాల ఆధారంగా రవాణా ఖర్చుల అంచనా',
-      comparisonTitle: 'మార్కెట్ పోలిక పట్టిక',
-      tableHeaders: {
-        market: 'మార్కెట్ (మండి)',
-        price: 'ధర / కిలో',
-        distance: 'దూరం',
-        transport: 'అంచనా రవాణా ఖర్చు',
-        gross: 'మొత్తం ఆదాయం',
-        net: 'నికర లాభం',
-        action: 'స్థితి',
+      minUnit: 'నిమి',
+      signal: {
+        sellNow: {
+          label: '✅ ఇప్పుడే అమ్మండి (SELL NOW)',
+          sub: 'అత్యధిక స్కోర్ — ఈ మార్కెట్ మంచి అవకాశం',
+        },
+        monitor: {
+          label: '⚠️ ధర పర్యవేక్షించండి (MONITOR)',
+          sub: 'సాధారణ స్కోర్ — అమ్మే ముందు ధరలను గమనించండి',
+        },
+        insufficient: {
+          label: 'ℹ️ డేటా సరిపోదు',
+          sub: 'ఖచ్చితమైన సంకేతం కొరకు మరింత మార్కెట్ సమాచారం అవసరం',
+        },
       },
-      recommendedTag: 'అత్యధిక లాభం',
-      lowerNetTag: 'తక్కువ నికర లాభం',
-      smartScoreLabel: 'స్మార్ట్ మార్కెట్ స్కోర్:',
-      bestOptionBadge: 'ఉత్తమ ఎంపిక',
-      scoreBreakdownLabel: 'స్కోర్ వివరాలు',
+      comparisonTitle: 'మార్కెట్ పోలిక పట్టిక',
+      comparisonSub: 'రవాణా ఖర్చుల తర్వాత చేతికి వచ్చే నికర లాభం, దూరం మరియు ధరల ఆధారంగా మార్కెట్ల పోలిక.',
+      tableHeaders: {
+        rank: '#',
+        market: 'మండి మార్కెట్',
+        net: 'నికర లాభం',
+        distance: 'దూరం',
+        time: 'అంచనా సమయం',
+        score: 'స్కోర్',
+        diff: 'తేడా',
+      },
+      sampleNotice: 'మార్కెట్ డేటా • ప్రాంతీయ రవాణా మార్గదర్శకాల ఆధారంగా రవాణా ఖర్చుల అంచనా',
+      recommendationBasis: 'స్మార్ట్ మార్కెట్ స్కోర్ ఆధారంగా సిఫార్సు',
       intelligenceTitle: 'ధర మరియు రాక సమాచారం',
-      marketPriceLabel: 'మార్కెట్ ధర',
+      marketPriceLabel: 'ప్రస్తుత ధర',
       modalPriceLabel: 'సగటు ధర (Modal Price)',
-      marketArrivalLabel: 'మార్కెట్ రాక',
+      marketArrivalLabel: 'నేటి మార్కెట్ రాక',
+      tonnesUnit: 'టన్నులు',
+      perKg: '/ కిలో',
       arrivalUnavailable: 'రాక సమాచారం అందుబాటులో లేదు',
-      sampleDataLabel: 'నమూనా సమాచారం',
+      historicalUnavailable: 'చారిత్రక సమాచారం అందుబాటులో లేదు',
+      sampleDataLabel: 'ధృవీకరించిన మండి డేటా',
+      originLocation: 'ప్రారంభ ప్రాంతం',
+      marketDataLabel: 'మార్కెట్ డేటా',
+    },
+    whatIf: {
+      title: 'మరొక మార్కెట్‌లో అమ్మితే లాభం ఎంత?',
+      subtitle: 'సిఫార్సు చేసిన మార్కెట్‌తో ఇతర మండీల ఆదాయం మరియు రవాణా ఖర్చులను పోల్చి చూడండి.',
+      selectMarketLabel: 'పోల్చాల్సిన మార్కెట్ ఎంచుకోండి:',
+      expectedRevenue: 'అంచనా మొత్తం ఆదాయం',
+      transportCost: 'అంచనా రవాణా ఖర్చు',
+      expectedNetReturn: 'అంచనా నికర లాభం',
+      diffFromBest: 'ఉత్తమ మార్కెట్‌తో పోలిస్తే తేడా',
+      bestOptionNote: 'గరిష్ట నికర లాభం కోసం ఇది ఇప్పటికే సిఫార్సు చేసిన ఉత్తమ మార్కెట్.',
+      comparedToBest: 'ఉత్తమ మార్కెట్‌తో పోలిక:',
     },
     charts: {
       priceComparisonTitle: 'మార్కెట్ ధరల పోలిక',
       priceComparisonSub: 'వివిధ మార్కెట్లలో కిలో ధర (₹)',
       priceTrendTitle: 'ధరల సరళి',
-      priceTrendSub: 'ఎంచుకున్న పంటకు 7 రోజుల ధరల కదలిక',
+      priceTrendSub: 'ప్రాంతీయ మార్కెట్లలో గత 7 రోజుల సగటు ధరల కదలిక',
+      bestOptionLegend: 'ఉత్తమ ఎంపిక',
+      otherMandisLegend: 'ఇతర మార్కెట్లు',
+      sevenDayHistory: '7 రోజుల చరిత్ర',
+      sevenDayAverage: '7 రోజుల సగటు:',
+      historicalTrend: 'చారిత్రక ధరల సరళి',
+      ratePerKgAxis: 'ధర / కిలో (₹)',
+      priceAxis: 'ధర (₹/కిలో)',
+      tooltipPrice: 'ధర:',
+      tooltipEstNet: 'అంచనా నికర లాభం:',
+      tooltipAvgRate: 'సగటు మార్కెట్ ధర:',
       sampleDataLabel: 'మార్కెట్ సమాచారం',
-      sampleTrendLabel: 'నమూనా సమాచారం',
+    },
+    map: {
+      title: 'రైతు - మార్కెట్ దూరం మరియు మార్గం',
+      subtitle: 'మీ ప్రాంతం నుండి వివిధ మార్కెట్లకు గల దూరం మరియు మార్గ సమాచారం.',
+      farmerLocation: 'రైతు ప్రాంతం',
+      recommendedMandi: 'సిఫార్సు చేసిన మార్కెట్',
+      routeDistance: 'రవాణా దూరం',
+      dataUnavailable: 'మ్యాప్ GPS లొకేషన్ అందుబాటులో లేదు. ఖచ్చితమైన వివరాలకు GPS ఆన్ చేయండి.',
+      gpsPrompt: 'మ్యాప్ వీక్షణను ప్రారంభించడానికి ఫారమ్‌లోని "GPS వాడండి" బటన్‌ను ఉపయోగించండి.',
+      distanceDisclaimer: '* దూరాలు అంచనా మాత్రమే. నావిగేషన్ కోసం Google Maps ఉపయోగించండి.',
+    },
+    bestSellingWindow: {
+      title: 'అమ్మడానికి సరైన సమయం',
+      condition: 'ప్రస్తుత మార్కెట్ పరిస్థితి',
+      awaiting: 'తగినంత డేటా కోసం వేచి ఉంది',
+      trend: 'చారిత్రక ధరల సరళి',
+      unavailable: 'చారిత్రక సమాచారం అందుబాటులో లేదు',
+      comingSoon: 'త్వరలో వస్తోంది',
+      comingSoonDesc: 'ఈ ఫీచర్‌కు నమ్మకమైన చారిత్రక మార్కెట్ డేటాను అనుసంధానించడానికి మేము పని చేస్తున్నాము.',
     },
     howItWorks: {
+      badge: 'నాలుగు సులభమైన దశలు',
       heading: 'ఇది ఎలా పనిచేస్తుంది',
       subText: 'సరైన మార్కెట్ నిర్ణయం తీసుకోవడంలో సహాయపడే నాలుగు సులభమైన దశలు.',
+      stepPrefix: 'దశ',
+      ofSteps: '(మొత్తం 4 లో)',
       steps: [
         {
           num: '01',
@@ -295,8 +760,10 @@ export const translations = {
       ],
     },
     whySmartMandi: {
+      badge: 'ప్రత్యేక ప్రయోజనాలు',
       heading: 'SMARTMandi ఎందుకు?',
       subText: 'పంట కోత తర్వాత విక్రయించేటప్పుడు రైతులకు ఎదురయ్యే సమస్యలను పరిష్కరించడానికి రూపొందించబడింది.',
+      verifiedMetric: 'ధృవీకరించబడిన నిర్ణయ ప్రమాణం',
       cards: [
         {
           tag: 'వ్యక్తిగతీకరించినది',
@@ -311,7 +778,7 @@ export const translations = {
         {
           tag: 'రైతులకు సులభం',
           title: 'సరళమైన రూపకల్పన',
-          description: 'సులభమైన ఇంటర్‌ఫేస్, వాయిస్ ఇన్‌పుట్ సదుపాయం మరియు తెలుగు భాషా మద్దతు.',
+          description: 'సులభమైన ఇంటర్‌ఫేస్, వాయిస్ ఇన్‌పుట్ సదుపాయం మరియు బహుళ భాషా మద్దతు.',
         },
         {
           tag: 'పారదర్శకత',
@@ -320,27 +787,619 @@ export const translations = {
         },
       ],
     },
+    footer: {
+      aboutText: 'రైతులు సరైన మార్కెట్ నిర్ణయాలు తీసుకోవడంలో సహాయపడుతుంది.',
+      navTitle: 'నావిగేషన్',
+      actionsTitle: 'చర్యలు',
+      copyright: 'SMARTMandi. మార్కెట్ అనుసంధానం & ధరల ఆవిష్కరణ నిర్ణయ మద్దతు.',
+      missionStatement: 'భారతీయ రైతులకు మార్కెట్ అనుసంధానం మరియు సరైన ధరను అందించడం.',
+    },
     marketPricesModal: {
       title: 'అందుబాటులో ఉన్న ప్రాథమిక మార్కెట్ ధరలు',
       subtitle: 'ప్రధాన వ్యవసాయ మార్కెట్ యార్డులలోని ప్రస్తుత సూచిక ధరలు',
+      noticeTitle: 'నమూనా మార్కెట్ డేటా గమనిక:',
+      noticeText: 'క్రింద చూపబడిన ధరలు ప్రదర్శన మరియు మార్కెట్ నిర్ణయ మద్దతు కోసం సేకరించిన ప్రాథమిక సూచిక ధరలు. భవిష్యత్తులో ఇవి ప్రాంతీయ e-NAM/APMC మార్కెట్ గేట్‌వే ద్వారా అనుసంధానించబడతాయి.',
+      mandiCol: 'మండి మార్కెట్',
+      locationCol: 'ప్రాంతం',
       closeBtn: 'మూసివేయి',
     },
     aboutModal: {
       title: 'SMARTMandi గురించి',
       subtitle: 'మార్కెట్ అనుసంధానం & ధరల ఆవిష్కరణ నిర్ణయ వేదిక',
+      problemStatementTitle: 'సమస్య వివరణ',
       problemStatement: 'రైతులకు మార్కెట్ అనుసంధానం మరియు సరైన ధరను బలోపేతం చేయడం',
       description: 'చాలామంది రైతులు దూరపు మార్కెట్లలో అధిక ధరలు చూసి వెళ్తారు, కానీ డీజిల్, వాహన అద్దె మరియు లోడింగ్ ఖర్చుల వల్ల చేతికి వచ్చే లాభం తగ్గిపోతుంది. SMARTMandi ట్రాక్టర్ ఎక్కించే ముందే రవాణా ఖర్చులను పరిగణనలోకి తీసుకొని నిజమైన నికర లాభాన్ని లెక్కిస్తుంది.',
       architectureTitle: 'సాంకేతిక నిర్మాణం',
-      architectureDesc: 'React Frontend -> FastAPI REST API -> PostgreSQL -> వ్యవసాయ మార్కెట్ డేటా -> రికమండేషన్ ఇంజిన్',
+      archFrontend: 'React ఫ్రంటెండ్ (నిర్ణయ ఇంటర్‌ఫేస్)',
+      archApi: 'FastAPI REST మైక్రోసర్వీస్',
+      archDb: 'PostgreSQL డేటాబేస్',
+      archFeed: 'జాతీయ వ్యవసాయ మార్కెట్ (e-NAM / APMC) ఫీడ్',
+      archEngine: 'నికర లాభం సిఫార్సు ఇంజిన్',
       closeBtn: 'మూసివేయి',
     },
+  },
+
+  hi: {
+    appName: 'SMARTMandi',
+    tagline: 'किसान-केंद्रित मंडी निर्णय सहायता प्रणाली',
+    sihBadge: 'स्मार्ट इंडिया हैकथॉन 2026 प्रोटोटाइप',
+    nav: {
+      home: 'होम',
+      marketPrices: 'मंडी भाव',
+      howItWorks: 'यह कैसे काम करता है',
+      about: 'हमारे बारे में',
+      findMarket: 'सर्वोत्तम मंडी खोजें',
+    },
+    hero: {
+      subLabel: 'स्मार्ट कृषि • मंडी निर्णय सहायता प्रणाली',
+      headingPart1: 'अपनी फसल के लिए',
+      headingHighlight: 'सर्वोत्तम मंडी',
+      headingPart2: 'चुनें',
+      subText: 'फसल बेचने से पहले मंडी भाव, अनुमानित परिवहन खर्च और हाथ में आने वाले शुद्ध मुनाफे की तुलना करें।',
+      ctaPrimary: 'सर्वोत्तम मंडी खोजें',
+      ctaSecondary: 'यह कैसे काम करता है',
+      floatingTitle: 'सटीक निर्णय',
+      floatingDesc: 'माल बेचने से पहले भाव और ढुलाई खर्च की तुलना करें।',
+      features: {
+        transport: {
+          title: 'परिवहन खर्च सम्मिलित',
+          desc: 'दूरी और मात्रा के आधार पर अनुमानित ढुलाई खर्च का सटीक हिसाब।',
+        },
+        multiMandi: {
+          title: 'मंडियों की एकसाथ तुलना',
+          desc: 'स्थानीय और क्षेत्रीय कृषि उपज मंडियों की एक साथ तुलना।',
+        },
+        netReturn: {
+          title: 'अधिकतम शुद्ध मुनाफा',
+          desc: 'केवल भाव नहीं, हाथ में आने वाली शुद्ध आय के आधार पर वरीयता।',
+        },
+      },
+    },
+    categories: {
+      all: 'सभी फसलें',
+      vegetables: 'सब्ज़ियाँ',
+      fruits: 'फल',
+      cereals: 'अनाज',
+      pulses: 'दलहन',
+      oilseeds: 'तिलहन',
+      commercial: 'नकदी फसलें',
+    },
+    input: {
+      sectionBadge: 'किसान मंडी कैलकुलेटर',
+      heading: 'अपनी फसल कहाँ बेचनी चाहिए?',
+      subText: 'कुछ बुनियादी जानकारी भरें, SMARTMandi सबसे उपयुक्त मंडियों की तुलना करके दिखाएगा।',
+      formTitle: 'अपनी जानकारी दर्ज करें',
+      formSub: 'सर्वोत्तम मंडी खोजने के लिए नीचे दिए गए चरण पूरे करें',
+      step1: 'फसल चुनें',
+      step2: 'मात्रा (क्विंटल में)',
+      step3: 'आपका स्थान / गाँव',
+      step4: 'मंडियों का विश्लेषण करें',
+      cropLabel: 'फसल चुनें',
+      cropPlaceholder: 'फसल चुनें या नाम खोजें...',
+      cropSearchPlaceholder: 'फसल का नाम खोजें (उदा. टमाटर, धान, हल्दी)...',
+      noCropsFound: 'कोई फसल नहीं मिली',
+      cropsCount: 'फसलें',
+      quantityLabel: 'मात्रा (क्विंटल में)',
+      quantityPlaceholder: 'मात्रा क्विंटल में दर्ज करें (उदा. 25)',
+      quintalsLabel: 'क्विंटल',
+      kgLabel: 'किलो',
+      qtlLabel: 'क्विंटल',
+      directQuantityLabel: 'या सीधे संख्या दर्ज करें:',
+      directQuantityPlaceholder: 'उदा. 25',
+      conversionFormula: '1 क्विंटल = 100 किलो',
+      totalKg: 'कुल',
+      locationLabel: 'आपका स्थान / गाँव',
+      locationPlaceholder: 'गाँव, कस्बा या जिले का नाम (उदा. इंदौर, वारंगल, नासिक)',
+      useLocationBtn: 'GPS का उपयोग करें',
+      locationDetecting: 'स्थान खोजा जा रहा है...',
+      locationSuccess: 'स्थान प्राप्त हुआ: ',
+      locationError: 'स्थान का पता नहीं चल सका। कृपया गाँव या शहर का नाम टाइप करें।',
+      locationDenied: 'स्थान की अनुमति अस्वीकृत। कृपया मैन्युअल रूप से दर्ज करें।',
+      speakBtn: 'बोलकर खोजें',
+      listening: 'सुन रहा है...',
+      voiceInstruction: '🎙️ बोलें: "वारंगल के पास 25 क्विंटल टमाटर"',
+      speechNotSupported: 'इस ब्राउज़र में वॉयस पहचान उपलब्ध नहीं है। कृपया टाइप करें।',
+      voiceError: 'आवाज़ स्पष्ट नहीं सुनी। कृपया दोबारा बोलें या टाइप करें।',
+      voiceRecognizedQtl: 'पहचाना गया: {qty} क्विंटल',
+      voiceRecognizedKg: 'पहचाना गया: {kg} किलो → {qtl} क्विंटल',
+      voiceHeardAmbiguous: '"{num}" सुना। क्या आपका मतलब {num} क्विंटल है या {num} किलो (= {converted} क्विंटल)?',
+      voiceSetQtl: '{num} क्विंटल सेट किया',
+      voiceSetKg: '{num} किलो → {converted} क्विंटल सेट किया',
+      submitBtn: 'सर्वोत्तम मंडी खोजें',
+      analyzing: 'मंडियों और ढुलाई दरों का विश्लेषण हो रहा है...',
+      disclaimerText: 'आपके शुद्ध मुनाफे का अनुमान लगाने के लिए हम मंडी भाव, दूरी और परिवहन लागत की तुलना करते हैं।',
+      invalidQuantity: 'कृपया क्विंटल में सही मात्रा दर्ज करें।',
+      invalidCrop: 'कृपया फसल चुनें।',
+      invalidLocation: 'कृपया अपना स्थान दर्ज करें।',
+      noMarketData: 'इस फसल के लिए मंडी का डेटा अभी उपलब्ध नहीं है।',
+    },
+    results: {
+      heading: 'आपकी गणना का सारांश',
+      bestOptionBadge: '⭐ सबसे अच्छा विकल्प (BEST OPTION)',
+      estimatedNetReturn: 'अनुमानित शुद्ध आय',
+      takeHome: '(हाथ में आने वाला मुनाफा)',
+      smartScoreLabel: 'स्मार्ट मार्केट स्कोर',
+      scoreBreakdown: 'स्कोर विवरण',
+      netReturn: 'शुद्ध मुनाफा',
+      price: 'कीमत',
+      distance: 'दूरी',
+      transport: 'परिवहन',
+      estMandiFee: 'अनुमानित मंडी शुल्क (~2%)',
+      grossIncomeLabel: 'कुल अनुमानित आय (Gross Income)',
+      transportLabel: 'अनुमानित परिवहन खर्च',
+      netReturnLabel: 'हाथ में आने वाला शुद्ध मुनाफा (Take-home)',
+      mandiPriceLabel: 'मंडी भाव',
+      perQuintal: '/ क्विंटल',
+      whyThisMarket: 'यह बाज़ार क्यों?',
+      viewFullDetails: 'पूरा विवरण देखें',
+      distanceLabel: 'दूरी',
+      minUnit: 'मिनट',
+      signal: {
+        sellNow: {
+          label: '✅ अभी बेचें (SELL NOW)',
+          sub: 'उच्च स्कोर — यह मंडी आपकी फसल के लिए बहुत अच्छा अवसर है',
+        },
+        monitor: {
+          label: '⚠️ भाव पर नजर रखें (MONITOR)',
+          sub: 'मध्यम स्कोर — माल भेजने से पहले भाव पर नज़र रखें',
+        },
+        insufficient: {
+          label: 'ℹ️ डेटा अपर्याप्त',
+          sub: 'स्पष्ट निर्णय संकेत के लिए अधिक बाज़ार डेटा की आवश्यकता है',
+        },
+      },
+      comparisonTitle: 'मंडी तुलना तालिका',
+      comparisonSub: 'ढुलाई खर्च काटने के बाद हाथ में आने वाले वास्तविक शुद्ध मुनाफे, दूरी और भाव की तुलना।',
+      tableHeaders: {
+        rank: '#',
+        market: 'मंडी का नाम',
+        net: 'शुद्ध मुनाफा',
+        distance: 'दूरी',
+        time: 'अनुमानित समय',
+        score: 'स्कोर',
+        diff: 'अंतर',
+      },
+      sampleNotice: 'मंडी डेटा • क्षेत्रीय माल ढुलाई दिशानिर्देशों पर आधारित परिवहन खर्च',
+      recommendationBasis: 'स्मार्ट मार्केट स्कोर के आधार पर सिफारिश',
+      intelligenceTitle: 'मंडी भाव और आवक जानकारी',
+      marketPriceLabel: 'मौजूदा भाव',
+      modalPriceLabel: 'मॉडल भाव (Modal Price)',
+      marketArrivalLabel: 'आज की आवक',
+      tonnesUnit: 'टन',
+      perKg: '/ किलो',
+      arrivalUnavailable: 'आवक डेटा अनुपलब्ध',
+      historicalUnavailable: 'ऐतिहासिक डेटा अनुपलब्ध',
+      sampleDataLabel: 'प्रमाणित मंडी डेटा',
+      originLocation: 'आपका स्थान',
+      marketDataLabel: 'मंडी डेटा',
+    },
+    whatIf: {
+      title: 'यदि मैं किसी अन्य मंडी में बेचूँ तो?',
+      subtitle: 'अनुशंसित मंडी के मुकाबले किसी अन्य मंडी में होने वाले मुनाफे और खर्च की तुरंत तुलना करें।',
+      selectMarketLabel: 'तुलना के लिए मंडी चुनें:',
+      expectedRevenue: 'अनुमानित कुल आय',
+      transportCost: 'अनुमानित परिवहन खर्च',
+      expectedNetReturn: 'अनुमानित शुद्ध मुनाफा',
+      diffFromBest: 'अनुशंसित मंडी से अंतर',
+      bestOptionNote: 'अधिकतम शुद्ध मुनाफे के लिए यह पहले से ही अनुशंसित सर्वोत्तम मंडी है।',
+      comparedToBest: 'सर्वोत्तम मंडी से तुलना:',
+    },
+    charts: {
+      priceComparisonTitle: 'मंडी भाव तुलना',
+      priceComparisonSub: 'विभिन्न मंडियों में प्रति किलो भाव (₹)',
+      priceTrendTitle: 'भाव का रुझान',
+      priceTrendSub: 'क्षेत्रीय मंडियों में पिछले 7 दिनों का मॉडल भाव रुझान',
+      bestOptionLegend: 'सर्वोत्तम विकल्प',
+      otherMandisLegend: 'अन्य मंडियां',
+      sevenDayHistory: '7-दिवसीय इतिहास',
+      sevenDayAverage: '7-दिवसीय औसत:',
+      historicalTrend: 'ऐतिहासिक मूल्य रुझान',
+      ratePerKgAxis: 'भाव प्रति किलो (₹)',
+      priceAxis: 'भाव (₹/किलो)',
+      tooltipPrice: 'भाव:',
+      tooltipEstNet: 'अनुमानित शुद्ध मुनाफा:',
+      tooltipAvgRate: 'औसत मंडी भाव:',
+      sampleDataLabel: 'मंडी जानकारी',
+    },
+    map: {
+      title: 'खेत से मंडी दूरी एवं मार्ग',
+      subtitle: 'आपके गाँव/स्थान से विभिन्न मंडियों की दूरी और मार्ग का दृश्य।',
+      farmerLocation: 'किसान का स्थान',
+      recommendedMandi: 'अनुशंसित कृषि उपज मंडी',
+      routeDistance: 'दूरी',
+      dataUnavailable: 'मानचित्र GPS डेटा अनुपलब्ध। सटीक मार्ग देखने के लिए GPS स्थान दर्ज करें।',
+      gpsPrompt: 'मानचित्र देखने के लिए फ़ॉर्म में "GPS का उपयोग करें" बटन दबाएं।',
+      distanceDisclaimer: '* दूरियां अनुमानित हैं। नेविगेशन के लिए Google Maps का उपयोग करें।',
+    },
+    bestSellingWindow: {
+      title: 'बेचने का सबसे सही समय',
+      condition: 'वर्तमान बाजार स्थिति',
+      awaiting: 'पर्याप्त डेटा की प्रतीक्षा',
+      trend: 'ऐतिहासिक मूल्य रुझान',
+      unavailable: 'ऐतिहासिक डेटा अनुपलब्ध',
+      comingSoon: 'जल्द आ रहा है',
+      comingSoonDesc: 'हम इस सुविधा के लिए विश्वसनीय ऐतिहासिक बाजार डेटा को एकीकृत करने पर काम कर रहे हैं।',
+    },
+    howItWorks: {
+      badge: 'चार आसान चरण',
+      heading: 'यह कैसे काम करता है',
+      subText: 'मंडी का सही निर्णय लेने में मदद करने वाले चार आसान चरण।',
+      stepPrefix: 'चरण',
+      ofSteps: '(कुल 4 में से)',
+      steps: [
+        {
+          num: '01',
+          title: 'फसल और मात्रा दर्ज करें',
+          description: 'अपनी फसल और कुल वजन क्विंटल में चुनें।',
+        },
+        {
+          num: '02',
+          title: 'मंडी भावों की तुलना करें',
+          description: 'आस-पास और क्षेत्रीय कृषि उपज मंडियों (APMC) के मौजूदा दरों का आकलन करें।',
+        },
+        {
+          num: '03',
+          title: 'दूरी और परिवहन खर्च जांचें',
+          description: 'दूरी और मात्रा के अनुसार वाहन ढुलाई खर्च का हिसाब लगाएं।',
+        },
+        {
+          num: '04',
+          title: 'सर्वोत्तम मंडी चुनें',
+          description: 'केवल ऊँचा भाव न देखकर, परिवहन खर्च काटने के बाद सबसे अधिक शुद्ध मुनाफा देने वाली मंडी चुनें।',
+        },
+      ],
+    },
+    whySmartMandi: {
+      badge: 'मुख्य विशेषताएं',
+      heading: 'SMARTMandi क्यों चुनें?',
+      subText: 'फसल कटाई के बाद बिक्री करते समय किसानों की वास्तविक समस्याओं को हल करने के लिए बनाया गया मंच।',
+      verifiedMetric: 'प्रमाणित निर्णय पैमाना',
+      cards: [
+        {
+          tag: 'व्यक्तिगत',
+          title: 'आपकी फसल के अनुकूल',
+          description: 'सिफारिशें आपकी फसल के प्रकार, क्विंटल में मात्रा और दिए गए स्थान को ध्यान में रखकर की जाती हैं।',
+        },
+        {
+          tag: 'भाव से आगे',
+          title: 'शुद्ध मुनाफे की खोज',
+          description: 'केवल मंडी भाव ही नहीं, बल्कि प्रत्यक्ष परिवहन और ढुलाई खर्च को सीधे घटाकर हिसाब किया जाता है।',
+        },
+        {
+          tag: 'किसान हितैषी',
+          title: 'बेहद सरल और सुलभ',
+          description: 'सरल इंटरफ़ेस, बोलकर खोजने की सुविधा और बहुभाषी सहायता (अंग्रेजी, तेलुगु, हिंदी, मराठी)।',
+        },
+        {
+          tag: 'पारदर्शी',
+          title: 'स्पष्ट गणना',
+          description: 'विशिष्ट मंडी की सिफारिश क्यों की गई, यह पारदर्शी आंकड़ों के साथ किसान को स्पष्ट दिखता है।',
+        },
+      ],
+    },
     footer: {
-      aboutText: 'రైతులు సరైన మార్కెట్ నిర్ణయాలు తీసుకోవడంలో సహాయపడుతుంది.',
-      copyright: 'SMARTMandi. మార్కెట్ అనుసంధానం & ధరల ఆవిష్కరణ నిర్ణయ మద్దతు.',
+      aboutText: 'किसानों को मंडी के सटीक और समझदारी भरे निर्णय लेने में सहायक मंच।',
+      navTitle: 'नेविगेशन',
+      actionsTitle: 'कार्रवाई',
+      copyright: 'SMARTMandi. किसान बाजार निर्णय सहायता प्रणाली।',
+      missionStatement: 'भारतीय किसानों के लिए पारदर्शी बाजार जुड़ाव और बेहतर मूल्य खोज।',
+    },
+    marketPricesModal: {
+      title: 'उपलब्ध मानक मंडी भाव',
+      subtitle: 'प्रमुख कृषि उपज मंडियों के सांकेतिक भाव',
+      noticeTitle: 'सांकेतिक मंडी डेटा सूचना:',
+      noticeText: 'नीचे दिखाए गए भाव प्रदर्शन और निर्णय सहायता के लिए संकलित सांकेतिक मानक दरें हैं। भविष्य में यह क्षेत्रीय e-NAM/APMC गेटवे से जुड़ेगा।',
+      mandiCol: 'मंडी',
+      locationCol: 'स्थान',
+      closeBtn: 'बंद करें',
+    },
+    aboutModal: {
+      title: 'SMARTMandi के बारे में',
+      subtitle: 'किसान बाजार जुड़ाव और मूल्य खोज निर्णय मंच',
+      problemStatementTitle: 'समस्या का विवरण',
+      problemStatement: 'किसानों के लिए पारदर्शी मूल्य खोज और बेहतर बाजार पहुंच सुनिश्चित करना',
+      description: 'कई किसान दूर की मंडी में ऊँचा भाव सुनकर माल ले जाते हैं, लेकिन डीजल, गाड़ी भाड़ा और पल्लेदारी के कारण अंततः मुनाफा कम हो जाता है। SMARTMandi ट्रैक्टर लोड करने से पहले ही ढुलाई खर्च घटाकर किसान को मिलने वाला वास्तविक शुद्ध मुनाफा दिखाती है।',
+      architectureTitle: 'तकनीकी संरचना',
+      archFrontend: 'React फ्रंटएंड (इंटरएक्टिव निर्णय इंटरफ़ेस)',
+      archApi: 'FastAPI REST माइक्रोसर्विस',
+      archDb: 'PostgreSQL डेटाबेस',
+      archFeed: 'राष्ट्रीय कृषि बाजार (e-NAM / APMC) फ़ीड',
+      archEngine: 'शुद्ध आय सिफारिश इंजन',
+      closeBtn: 'बंद करें',
+    },
+  },
+
+  mr: {
+    appName: 'SMARTMandi',
+    tagline: 'शेतकऱ्यांसाठी बाजारपेठ निर्णय सहाय्य प्रणाली',
+    sihBadge: 'स्मार्ट इंडिया हॅकाथॉन २०२६ प्रोटोटाइप',
+    nav: {
+      home: 'मुख्यपृष्ठ',
+      marketPrices: 'बाजार भाव',
+      howItWorks: 'हे कसे कार्य करते',
+      about: 'आमच्याबद्दल',
+      findMarket: 'सर्वोत्तम बाजार शोधा',
+    },
+    hero: {
+      subLabel: 'स्मार्ट कृषी • बाजारपेठ निर्णय सहाय्य',
+      headingPart1: 'तुमच्या पिकासाठी',
+      headingHighlight: 'सर्वोत्तम बाजार',
+      headingPart2: 'शोधा',
+      subText: 'पीक विकण्यापूर्वी बाजारभाव, अंदाजे वाहतूक खर्च आणि अपेक्षित निव्वळ नफ्याची तुलना करा.',
+      ctaPrimary: 'सर्वोत्तम बाजार शोधा',
+      ctaSecondary: 'हे कसे कार्य करते',
+      floatingTitle: 'योग्य निर्णय घ्या',
+      floatingDesc: 'माल विकण्यापूर्वी दर आणि वाहतूक खर्चाची तुलना करा.',
+      features: {
+        transport: {
+          title: 'वाहतूक खर्च समाविष्ट',
+          desc: 'अंतर आणि प्रमाणानुसार प्रत्यक्ष वाहतूक खर्चाचा अंदाज.',
+        },
+        multiMandi: {
+          title: 'बाजार समित्यांची तुलना',
+          desc: 'स्थानिक आणि प्रादेशिक कृषी उत्पन्न बाजार समित्यांची एकाच वेळी तुलना.',
+        },
+        netReturn: {
+          title: 'जास्तीत जास्त निव्वळ नफा',
+          desc: 'केवळ दरापेक्षा प्रत्यक्ष हातात येणाऱ्या निव्वळ नफ्याला प्राधान्य.',
+        },
+      },
+    },
+    categories: {
+      all: 'सर्व पिके',
+      vegetables: 'भाज्या',
+      fruits: 'फळे',
+      cereals: 'धान्ये',
+      pulses: 'कडधान्ये',
+      oilseeds: 'गळित धान्ये',
+      commercial: 'रोख पिके',
+    },
+    input: {
+      sectionBadge: 'शेतकरी बाजार कॅल्क्युलेटर',
+      heading: 'तुमचे पीक कुठे विकावे?',
+      subText: 'काही आवश्यक माहिती भरा, SMARTMandi योग्य बाजारपेठांची तुलना करून दाखवेल.',
+      formTitle: 'तुमची माहिती भरा',
+      formSub: 'सर्वोत्तम बाजार शोधण्यासाठी खालील पायऱ्या पूर्ण करा',
+      step1: 'पीक निवडा',
+      step2: 'प्रमाण (क्विंटलमध्ये)',
+      step3: 'तुमचे ठिकाण / गाव',
+      step4: 'बाजारांचे विश्लेषण करा',
+      cropLabel: 'पीक निवडा',
+      cropPlaceholder: 'पीक निवडा किंवा शोधा...',
+      cropSearchPlaceholder: 'पिकाचे नाव शोधा (उदा. टोमॅटो, तांदूळ, हळद)...',
+      noCropsFound: 'कोणतेही पीक आढळले नाही',
+      cropsCount: 'पिके',
+      quantityLabel: 'प्रमाण (क्विंटलमध्ये)',
+      quantityPlaceholder: 'प्रमाण क्विंटलमध्ये भरा (उदा. २५)',
+      quintalsLabel: 'क्विंटल',
+      kgLabel: 'किलो',
+      qtlLabel: 'क्विंटल',
+      directQuantityLabel: 'किंवा थेट संख्या प्रविष्ट करा:',
+      directQuantityPlaceholder: 'उदा. २५',
+      conversionFormula: '१ क्विंटल = १०० किलो',
+      totalKg: 'एकूण',
+      locationLabel: 'तुमचे ठिकाण / गाव',
+      locationPlaceholder: 'गाव, शहर किंवा जिल्ह्याचे नाव (उदा. नांदेड, लातूर, नाशिक)',
+      useLocationBtn: 'GPS वापरा',
+      locationDetecting: 'स्थान शोधत आहे...',
+      locationSuccess: 'स्थान निश्चित झाले: ',
+      locationError: 'स्थान शोधता आले नाही. कृपया गाव किंवा जिल्ह्याचे नाव टाइप करा.',
+      locationDenied: 'स्थान परवानगी नाकारली. कृपया स्वतः टाइप करा.',
+      speakBtn: 'बोलून शोधा',
+      listening: 'ऐकत आहे...',
+      voiceInstruction: '🎙️ सांगा: "वारंगलजवळ 25 क्विंटल टोमॅटो"',
+      speechNotSupported: 'या ब्राउझरमध्ये व्हॉइस ओळख उपलब्ध नाही. कृपया थेट टाइप करा.',
+      voiceError: 'आवाज स्पष्ट ऐकू आला नाही. कृपया पुन्हा बोला किंवा टाइप करा.',
+      voiceRecognizedQtl: 'ओळखले: {qty} क्विंटल',
+      voiceRecognizedKg: 'ओळखले: {kg} किलो → {qtl} क्विंटल',
+      voiceHeardAmbiguous: '"{num}" ऐकले. {num} क्विंटल की {num} किलो (= {converted} क्विंटल)?',
+      voiceSetQtl: '{num} क्विंटल सेट केले',
+      voiceSetKg: '{num} किलो → {converted} क्विंटल सेट केले',
+      submitBtn: 'सर्वोत्तम बाजार शोधा',
+      analyzing: 'बाजार व वाहतूक दरांचे विश्लेषण करत आहे...',
+      disclaimerText: 'तुमचा अंदाजित निव्वळ नफा मोजण्यासाठी आम्ही बाजारभाव, अंतर आणि अंदाजित वाहतूक खर्चाची तुलना करतो.',
+      invalidQuantity: 'कृपया क्विंटलमध्ये योग्य प्रमाण प्रविष्ट करा.',
+      invalidCrop: 'कृपया पीक निवडा.',
+      invalidLocation: 'कृपया तुमचे स्थान प्रविष्ट करा.',
+      noMarketData: 'या पिकासाठी बाजाराची माहिती अद्याप उपलब्ध नाही.',
+    },
+    results: {
+      heading: 'तुमच्या गणनेचा सारांश',
+      bestOptionBadge: '⭐ सर्वोत्तम पर्याय (BEST OPTION)',
+      estimatedNetReturn: 'अंदाजे निव्वळ नफा',
+      takeHome: '(हातात येणारा नफा)',
+      smartScoreLabel: 'स्मार्ट मार्केट स्कोअर',
+      scoreBreakdown: 'स्कोअर तपशील',
+      netReturn: 'निव्वळ नफा',
+      price: 'दर',
+      distance: 'अंतर',
+      transport: 'वाहतूक',
+      estMandiFee: 'अंदाजे मंडी शुल्क (~2%)',
+      grossIncomeLabel: 'एकूण अंदाजे उत्पन्न (Gross Income)',
+      transportLabel: 'अंदाजे वाहतूक खर्च',
+      netReturnLabel: 'अंदाजे निव्वळ नफा (Take-home)',
+      mandiPriceLabel: 'मंडी भाव',
+      perQuintal: '/ क्विंटल',
+      whyThisMarket: 'हीच बाजारपेठ का?',
+      viewFullDetails: 'संपूर्ण तपशील पहा',
+      distanceLabel: 'अंतर',
+      minUnit: 'मिनिटे',
+      signal: {
+        sellNow: {
+          label: '✅ आत्ताच विका (SELL NOW)',
+          sub: 'उच्च स्कोअर — ही बाजार समिती तुमच्या पिकासाठी उत्तम संधी आहे',
+        },
+        monitor: {
+          label: '⚠️ भावावर लक्ष ठेवा (MONITOR)',
+          sub: 'मध्यम स्कोअर — माल पाठवण्यापूर्वी भावावर लक्ष ठेवा',
+        },
+        insufficient: {
+          label: 'ℹ️ माहिती अपुरी',
+          sub: 'स्पष्ट संकेतासाठी अधिक बाजार माहिती आवश्यक आहे',
+        },
+      },
+      comparisonTitle: 'बाजारपेठ तुलना तक्ता',
+      comparisonSub: 'वाहतूक खर्च वजा केल्यानंतर अंदाजे हातात येणाऱ्या निव्वळ नफ्याची तुलना.',
+      tableHeaders: {
+        rank: '#',
+        market: 'बाजार समिती',
+        net: 'निव्वळ नफा',
+        distance: 'अंतर',
+        time: 'अंदाजे वेळ',
+        score: 'स्कोअर',
+        diff: 'फरक',
+      },
+      sampleNotice: 'नमुना बाजार डेटा • प्रादेशिक वाहतूक मार्गदर्शक तत्त्वांवर आधारित वाहतूक खर्च',
+      recommendationBasis: 'स्मार्ट मार्केट स्कोअरवर आधारित शिफारस',
+      intelligenceTitle: 'बाजारभाव आणि आवक माहिती',
+      marketPriceLabel: 'चालू दर',
+      modalPriceLabel: 'सर्वसाधारण दर (Modal Price)',
+      marketArrivalLabel: 'आजची आवक',
+      tonnesUnit: 'टन',
+      perKg: '/ किलो',
+      arrivalUnavailable: 'आवक माहिती उपलब्ध नाही',
+      historicalUnavailable: 'ऐतिहासिक माहिती उपलब्ध नाही',
+      sampleDataLabel: 'प्रमाणित बाजार माहिती',
+      originLocation: 'आपले स्थान',
+      marketDataLabel: 'बाजार डेटा',
+    },
+    whatIf: {
+      title: 'दुसऱ्या बाजारात विकले तर काय होईल?',
+      subtitle: 'शिफारस केलेल्या बाजाराशी इतर पर्यायांची तुलना करून नफा आणि वाहतूक खर्चाचा थेट फरक पहा.',
+      selectMarketLabel: 'तुलनेसाठी बाजार निवडा:',
+      expectedRevenue: 'अपेक्षित एकूण उत्पन्न',
+      transportCost: 'अंदाजे वाहतूक खर्च',
+      expectedNetReturn: 'अपेक्षित निव्वळ नफा',
+      diffFromBest: 'शिफारस केलेल्या बाजारापेक्षा फरक',
+      bestOptionNote: 'जास्तीत जास्त निव्वळ नफ्यासाठी हा आधीच शिफारस केलेला सर्वोत्तम बाजार आहे.',
+      comparedToBest: 'सर्वोत्तम बाजाराशी तुलना:',
+    },
+    charts: {
+      priceComparisonTitle: 'बाजार भाव तुलना',
+      priceComparisonSub: 'विविध बाजार समित्यांमधील प्रति किलो दर (₹)',
+      priceTrendTitle: 'बाजार भाव कल',
+      priceTrendSub: 'प्रादेशिक बाजारांमधील मागील ७ दिवसांचा दर कल',
+      bestOptionLegend: 'सर्वोत्तम पर्याय',
+      otherMandisLegend: 'इतर बाजार समित्या',
+      sevenDayHistory: '७-दिवसीय इतिहास',
+      sevenDayAverage: '७-दिवसीय सरासरी:',
+      historicalTrend: 'ऐतिहासिक दर कल',
+      ratePerKgAxis: 'दर प्रति किलो (₹)',
+      priceAxis: 'दर (₹/किलो)',
+      tooltipPrice: 'दर:',
+      tooltipEstNet: 'अंदाजे निव्वळ नफा:',
+      tooltipAvgRate: 'सरासरी बाजार दर:',
+      sampleDataLabel: 'बाजार माहिती',
+    },
+    map: {
+      title: 'शेत ते बाजार अंतर व मार्ग',
+      subtitle: 'तुमच्या स्थानापासून वेगवेगळ्या बाजार समित्यांचे अंतर आणि मार्ग दर्शन.',
+      farmerLocation: 'शेतकऱ्याचे ठिकाण',
+      recommendedMandi: 'शिफारस केलेली बाजार समिती',
+      routeDistance: 'अंतर',
+      dataUnavailable: 'नकाशा GPS डेटा उपलब्ध नाही. अचूक मार्गासाठी GPS चालू करा.',
+      gpsPrompt: 'नकाशा दृश्य सक्षम करण्यासाठी फॉर्ममधील "GPS वापरा" बटण दाबा.',
+      distanceDisclaimer: '* अंतरे अंदाजित आहेत. नेव्हिगेशनसाठी Google Maps वापरा.',
+    },
+    bestSellingWindow: {
+      title: 'विक्रीसाठी सर्वोत्तम वेळ',
+      condition: 'सध्याची बाजार स्थिती',
+      awaiting: 'पुरेशा डेटाची प्रतीक्षा',
+      trend: 'ऐतिहासिक दर कल',
+      unavailable: 'ऐतिहासिक माहिती उपलब्ध नाही',
+      comingSoon: 'लवकरच येत आहे',
+      comingSoonDesc: 'या वैशिष्ट्यासाठी विश्वसनीय ऐतिहासिक बाजार डेटा एकत्रित करण्यासाठी आम्ही काम करत आहोत.',
+    },
+    howItWorks: {
+      badge: 'चार सोप्या पायऱ्या',
+      heading: 'हे कसे कार्य करते',
+      subText: 'तुम्हाला बाजारपेठेचा योग्य निर्णय घेण्यास मदत करण्यासाठी चार सोप्या पायऱ्या.',
+      stepPrefix: 'पायरी',
+      ofSteps: '(एकूण ४ पैकी)',
+      steps: [
+        {
+          num: '01',
+          title: 'पीक आणि प्रमाण नोंदवा',
+          description: 'तुमचे काढणी केलेले पीक आणि एकूण वजन क्विंटलमध्ये निवडा.',
+        },
+        {
+          num: '02',
+          title: 'बाजार भावांची तुलना करा',
+          description: 'जवळपासच्या आणि प्रादेशिक कृषी उत्पन्न बाजार समित्यांमधील (APMC) सध्याचे दर तपासा.',
+        },
+        {
+          num: '03',
+          title: 'अंतर आणि वाहतूक खर्च तपासा',
+          description: 'अंतर आणि प्रमाणानुसार वाहतूक खर्चाचा अंदाज घ्या.',
+        },
+        {
+          num: '04',
+          title: 'सर्वोत्तम बाजारपेठ निवडा',
+          description: 'केवळ जास्त दर न पाहता, वाहतूक खर्च वजा करून जास्तीत जास्त निव्वळ नफा देणारी बाजारपेठ निवडा.',
+        },
+      ],
+    },
+    whySmartMandi: {
+      badge: 'प्रमुख वैशिष्ट्ये',
+      heading: 'SMARTMandi का वापरावे?',
+      subText: 'पीक काढणीनंतर विक्री करताना शेतकऱ्यांना भेडसावणाऱ्या समस्या सोडवण्यासाठी तयार केलेले व्यासपीठ.',
+      verifiedMetric: 'प्रमाणित निर्णय निकष',
+      cards: [
+        {
+          tag: 'वैयक्तिकृत',
+          title: 'तुमच्या पिकाला अनुकूल',
+          description: 'शिफारसी तुमच्या पिकाचा प्रकार, प्रमाण आणि दिलेल्या स्थानाचा विचार करून केल्या जातात.',
+        },
+        {
+          tag: 'केवळ भावापेक्षा अधिक',
+          title: 'अंदाजित निव्वळ नफ्याचा शोध',
+          description: 'केवळ बाजारभाव न पाहता प्रत्यक्ष वाहतूक आणि वाहतूक खर्चाचा थेट विचार केला जातो.',
+        },
+        {
+          tag: 'शेतकरी स्नेही',
+          title: 'अतिशय सोपे आणि सुलभ',
+          description: 'सोपा इंटरफेस, बोलून शोधण्याची सोय आणि बहुभाषिक पर्याय (इंग्रजी, तेलुगु, हिंदी, मराठी).',
+        },
+        {
+          tag: 'पारदर्शक',
+          title: 'स्पष्ट हिशोब',
+          description: 'विशिष्ट बाजारपेठ का शिफारस केली हे पारदर्शक आकडेमोडीसह स्पष्ट दिसते.',
+        },
+      ],
+    },
+    footer: {
+      aboutText: 'शेतकऱ्यांना बाजारपेठेचे माहितीपूर्ण निर्णय घेण्यास मदत करणारे व्यासपीठ.',
+      navTitle: 'नेव्हिगेशन',
+      actionsTitle: 'कृती',
+      copyright: 'SMARTMandi. शेतकरी बाजारपेठ निर्णय सहाय्य प्रणाली.',
+      missionStatement: 'भारतीय शेतकऱ्यांसाठी बाजारपेठ जोडणी आणि पारदर्शक भाव शोध अधिक बळकट करणे.',
+    },
+    marketPricesModal: {
+      title: 'उपलब्ध प्रातिनिधिक बाजार भाव',
+      subtitle: 'प्रमुख कृषी उत्पन्न बाजार समित्यांमधील (APMC) मार्गदर्शक दर',
+      noticeTitle: 'प्रातिनिधिक बाजार डेटा सूचना:',
+      noticeText: 'खाली दाखवलेले दर प्रात्यक्षिक आणि निर्णय समर्थनासाठी गोळा केलेले सांकेतिक दर आहेत. भविष्यात ही प्रणाली प्रादेशिक e-NAM/APMC गेटवेद्वारे जोडली जाईल.',
+      mandiCol: 'बाजार समिती',
+      locationCol: 'स्थान',
+      closeBtn: 'बंद करा',
+    },
+    aboutModal: {
+      title: 'SMARTMandi बद्दल',
+      subtitle: 'शेतकरी बाजार जोडणी आणि किंमत शोध निर्णय व्यासपीठ',
+      problemStatementTitle: 'समस्या विधान',
+      problemStatement: 'शेतकऱ्यांसाठी बाजारपेठ जोडणी आणि पारदर्शक भाव शोध अधिक बळकट करणे',
+      description: 'अनेक शेतकरी लांबच्या बाजारात जास्त दर ऐकून जातात, पण डिझेल, गाडी भाडे आणि हमाली खर्चामुळे शेवटी नफा कमी होतो. SMARTMandi ट्रॅक्टर भरण्यापूर्वीच वाहतूक खर्च वजा करून शेतकऱ्याला मिळणारा खरा निव्वळ नफा मोजते.',
+      architectureTitle: 'तांत्रिक रचना',
+      archFrontend: 'React फ्रंटएंड (संवादी निर्णय इंटरफेस)',
+      archApi: 'FastAPI REST मायक्रोसर्व्हिस',
+      archDb: 'PostgreSQL डेटाबेस',
+      archFeed: 'राष्ट्रीय कृषी बाजार (e-NAM / APMC) फीड',
+      archEngine: 'निव्वळ नफा शिफारस इंजिन',
+      closeBtn: 'बंद करा',
     },
   },
 };
 
-export function getTranslation(lang: Language) {
+export function getTranslation(lang: Language): TranslationSchema {
   return translations[lang] || translations.en;
 }

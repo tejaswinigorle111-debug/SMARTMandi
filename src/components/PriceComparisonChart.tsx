@@ -66,10 +66,10 @@ export const PriceComparisonChart: React.FC<PriceComparisonChartProps> = ({
         padding: 12,
         cornerRadius: 8,
         callbacks: {
-          label: (context: any) => `Price: ₹${context.raw}/kg`,
+          label: (context: any) => `${t.charts.tooltipPrice} ₹${context.raw}/kg`,
           afterLabel: (context: any) => {
             const market = results[context.dataIndex];
-            return `Est. Net Return: ₹${market.netReturn.toLocaleString('en-IN')}`;
+            return `${t.charts.tooltipEstNet} ₹${market.netReturn.toLocaleString('en-IN')}`;
           },
         },
       },
@@ -87,7 +87,7 @@ export const PriceComparisonChart: React.FC<PriceComparisonChartProps> = ({
         },
         title: {
           display: true,
-          text: 'Rate per kg (₹)',
+          text: t.charts.ratePerKgAxis,
           font: { size: 13, weight: 'bold' as const },
           color: '#1C1F1C',
         },
@@ -111,13 +111,13 @@ export const PriceComparisonChart: React.FC<PriceComparisonChartProps> = ({
       <div>
         <div className="flex items-center justify-between gap-2 mb-1">
           <h4 className="text-xl font-black text-stone-950 font-display">
-            Market Price Comparison
+            {t.charts.priceComparisonTitle}
           </h4>
           <span className="text-xs font-black bg-stone-100 text-stone-800 px-3 py-1 rounded-md border border-stone-300">
-            Sample Data
+            {t.charts.sampleDataLabel}
           </span>
         </div>
-        <p className="text-sm font-bold text-stone-700 mb-4">Mandis compared by price per kg</p>
+        <p className="text-sm font-bold text-stone-700 mb-4">{t.charts.priceComparisonSub}</p>
       </div>
 
       <div className="h-60 w-full">
@@ -128,14 +128,14 @@ export const PriceComparisonChart: React.FC<PriceComparisonChartProps> = ({
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
             <span className="w-3 h-3 rounded-xs bg-[#165B33]" />
-            <span className="font-black text-stone-950">Best Option</span>
+            <span className="font-black text-stone-950">{t.charts.bestOptionLegend}</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="w-3 h-3 rounded-xs bg-[#74c69d]" />
-            <span className="font-bold text-stone-700">Other Mandis</span>
+            <span className="font-bold text-stone-700">{t.charts.otherMandisLegend}</span>
           </div>
         </div>
-        <span className="font-bold text-stone-600">Sample Data</span>
+        <span className="font-bold text-stone-600">{t.charts.sampleDataLabel}</span>
       </div>
     </div>
   );

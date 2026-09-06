@@ -44,11 +44,11 @@ export const PriceArrivalIntelligence: React.FC<PriceArrivalIntelligenceProps> =
                 ₹{bestMarket.pricePerKg}
               </span>
               <span className="text-sm font-bold text-stone-500 mb-1">
-                / kg
+                {t.results.perKg}
               </span>
             </div>
             <p className="text-xs text-stone-400 font-bold mt-1">
-              {t.results.modalPriceLabel || 'Modal Price'}
+              {t.results.modalPriceLabel}
             </p>
           </div>
         </div>
@@ -58,7 +58,7 @@ export const PriceArrivalIntelligence: React.FC<PriceArrivalIntelligenceProps> =
           <div className="flex items-center gap-2 mb-3">
             <Truck className="w-5 h-5 text-emerald-600" />
             <h4 className="font-bold text-stone-800 uppercase tracking-wide text-sm">
-              {t.results.marketArrivalLabel || 'Market Arrival'}
+              {t.results.marketArrivalLabel}
             </h4>
           </div>
           <div className="space-y-1">
@@ -70,7 +70,7 @@ export const PriceArrivalIntelligence: React.FC<PriceArrivalIntelligenceProps> =
                   {bestMarket.arrivalQuantity}
                 </span>
                 <span className="text-sm font-bold text-stone-500 mb-1">
-                  Tonnes
+                  {t.results.tonnesUnit}
                 </span>
               </div>
             ) : (
