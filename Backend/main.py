@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from data.markets import MARKETS
 from database import test_db_connection, verify_tables_exist
+from gov_data import fetch_live_markets, reverse_geocode
 
 
 app = FastAPI(
@@ -26,6 +27,8 @@ class RecommendationRequest(BaseModel):
     crop: str
     quantity: float
     location: str
+    latitude: float | None = None
+    longitude: float | None = None
 
 
 @app.get("/")
@@ -85,10 +88,17 @@ def government_data_health():
     return test_gov_data_api()
 
 
+@app.get("/location/reverse")
+def reverse_location(latitude: float, longitude: float):
+    return reverse_geocode(latitude, longitude)
+
+
 @app.get("/markets")
-def get_markets():
+def get_markets(crop: str | None = None):
+    markets, is_live = fetch_live_markets(crop)
     return {
-        "markets": MARKETS
+        "markets": markets,
+        "source": "data.gov.in" if is_live else "local-fallback",
     }
 
 
@@ -98,16 +108,17 @@ def recommend_market(request: RecommendationRequest):
     crop = request.crop.strip().lower()
     quantity = request.quantity
 
-    matching_markets = [
-        market
-        for market in MARKETS
-        if market["crop"].lower() == crop
-    ]
+    matching_markets, is_live = fetch_live_markets(
+        crop=crop,
+        location=request.location,
+        latitude=request.latitude,
+        longitude=request.longitude,
+    )
 
     if not matching_markets:
         return {
             "success": False,
-            "message": "No markets found for this crop."
+            "message": "Live nearby market data is unavailable for this location right now. Please try again shortly."
         }
 
     results = []
@@ -195,6 +206,7 @@ def recommend_market(request: RecommendationRequest):
         "crop": request.crop,
         "quantity_kg": quantity,
         "farmer_location": request.location,
+        "source": "data.gov.in" if is_live else "local-fallback",
         "recommended_market": best_market,
         "all_markets": results
     }

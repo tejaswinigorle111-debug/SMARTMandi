@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "backend": "cd Backend && venv\\Scripts\\python.exe -m uvicorn main:app --reload",
+    "backend": "cd Backend && python -m uvicorn main:app --reload",
     "start": "concurrently -k -n \"frontend,backend\" -c \"cyan,green\" \"npm run dev\" \"npm run backend\"",
     "build": "vite build",
     "preview": "vite preview",

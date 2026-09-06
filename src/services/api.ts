@@ -1,11 +1,19 @@
 import {
   CropType,
-  MandiMarket,
   FarmerInputData,
   CalculatedMarketResult,
+  MarketPriceRecord,
 } from '../types';
 
-const API_BASE_URL = 'http://127.0.0.1:8000';
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000').replace(/\/$/, '');
+
+export async function reverseGeocode(latitude: number, longitude: number): Promise<string> {
+  const query = new URLSearchParams({ latitude: String(latitude), longitude: String(longitude) });
+  const response = await fetch(`${API_BASE_URL}/location/reverse?${query}`);
+  if (!response.ok) throw new Error('Unable to resolve GPS location');
+  const result = await response.json();
+  return result.name || 'GPS location';
+}
 
 /**
  * Get markets from the FastAPI backend.
@@ -13,8 +21,9 @@ const API_BASE_URL = 'http://127.0.0.1:8000';
 export async function fetchMarkets(
   crop?: CropType,
   location?: string
-): Promise<MandiMarket[]> {
-  const response = await fetch(`${API_BASE_URL}/markets`);
+): Promise<MarketPriceRecord[]> {
+  const query = crop ? `?crop=${encodeURIComponent(crop)}` : '';
+  const response = await fetch(`${API_BASE_URL}/markets${query}`);
 
   if (!response.ok) {
     throw new Error('Failed to fetch markets');
@@ -46,6 +55,8 @@ export async function getRecommendation(
       crop: data.crop,
       quantity: data.quantity,
       location: data.location,
+      latitude: data.latitude,
+      longitude: data.longitude,
     }),
   });
 

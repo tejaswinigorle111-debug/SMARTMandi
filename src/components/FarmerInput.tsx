@@ -3,6 +3,7 @@ import { MapPin, Mic, MicOff, Search, Loader2 } from 'lucide-react';
 import { CropType, Language, FarmerInputData } from '../types';
 import { cropOptions } from '../data/demoMarkets';
 import { getTranslation } from '../utils/translations';
+import { reverseGeocode } from '../services/api';
 import vibrantHarvestImage from '../assets/images/vibrant_harvest_fields_1788514203779.jpg';
 
 interface FarmerInputProps {
@@ -43,14 +44,19 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
     setLocationStatus(t.input.locationDetecting || 'Detecting your location...');
 
     navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setIsLocating(false);
+      async (position) => {
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
         setLatitude(lat);
         setLongitude(lng);
 
-        const detectedName = `Lat: ${lat.toFixed(4)}, Lng: ${lng.toFixed(4)}`;
+        let detectedName = `GPS (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
+        try {
+          detectedName = await reverseGeocode(lat, lng);
+        } catch {
+          // Coordinates remain as a truthful fallback if reverse geocoding is unavailable.
+        }
+        setIsLocating(false);
         setLocation(detectedName);
         setLocationStatus(`${t.input.locationSuccess || 'Location acquired:'} ${detectedName}`);
       },

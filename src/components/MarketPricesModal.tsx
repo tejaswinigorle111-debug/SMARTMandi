@@ -1,7 +1,7 @@
 import React from 'react';
 import { X, TrendingUp, Info } from 'lucide-react';
-import { demoMarkets, cropOptions } from '../data/demoMarkets';
-import { Language } from '../types';
+import { fetchMarkets } from '../services/api';
+import { Language, MarketPriceRecord } from '../types';
 import { getTranslation } from '../utils/translations';
 
 interface MarketPricesModalProps {
@@ -16,6 +16,20 @@ export const MarketPricesModal: React.FC<MarketPricesModalProps> = ({
   language,
 }) => {
   const t = getTranslation(language);
+  const [markets, setMarkets] = React.useState<MarketPriceRecord[]>([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [loadError, setLoadError] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (!isOpen) return;
+    setIsLoading(true);
+    setLoadError(null);
+    fetchMarkets()
+      .then(setMarkets)
+      .catch(() => setLoadError('Live market prices are unavailable right now.'))
+      .finally(() => setIsLoading(false));
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
@@ -47,7 +61,7 @@ export const MarketPricesModal: React.FC<MarketPricesModalProps> = ({
         <div className="my-5 p-4 rounded-2xl bg-[#F0F4F0] border-2 border-[#DCE4DC] text-sm text-[#1B4332] flex items-start gap-2.5 font-bold">
           <Info className="w-5 h-5 text-[#2D6A4F] shrink-0 mt-0.5" />
           <span>
-            <strong className="font-black">Sample Market Data Notice:</strong> The rates shown below are indicative benchmark prices gathered for demonstration and mandi decision support. Future mandi integration will connect via the regional e-NAM/APMC mandi gateway.
+            <strong className="font-black">Live mandi price feed:</strong> Rates are loaded from the configured data.gov.in source when available, with local benchmark data used only if the feed is unavailable.
           </span>
         </div>
 
@@ -58,25 +72,25 @@ export const MarketPricesModal: React.FC<MarketPricesModalProps> = ({
               <tr className="bg-[#F7F9F7] text-stone-900 text-sm font-black uppercase tracking-wider border-b-2 border-stone-200">
                 <th className="p-4">Mandi Yard</th>
                 <th className="p-4">Location</th>
-                {cropOptions.map((c) => (
-                  <th key={c.id} className="p-4 text-center">
-                    {c.id} (₹/kg)
-                  </th>
-                ))}
+                <th className="p-4">Crop</th>
+                <th className="p-4 text-right">Modal Price (₹/kg)</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-stone-200">
-              {demoMarkets.map((m) => (
+              {isLoading && (
+                <tr><td colSpan={4} className="p-6 text-center font-bold">Loading live market prices...</td></tr>
+              )}
+              {!isLoading && markets.map((m) => (
                 <tr key={m.id} className="hover:bg-stone-50">
                   <td className="p-4 font-black text-stone-950">{m.name}</td>
                   <td className="p-4 text-stone-700 text-sm font-bold">{m.location}</td>
-                  {cropOptions.map((c) => (
-                    <td key={c.id} className="p-4 text-center font-black text-[#165B33] text-base">
-                      ₹{m.cropPrices[c.id]}
-                    </td>
-                  ))}
+                  <td className="p-4 text-stone-700 font-bold">{m.crop || Object.keys(m.cropPrices || {})[0] || 'Market price'}</td>
+                  <td className="p-4 text-right font-black text-[#165B33] text-base">₹{m.price_per_kg ?? Object.values(m.cropPrices || {})[0] ?? '-'}</td>
                 </tr>
               ))}
+              {!isLoading && markets.length === 0 && (
+                <tr><td colSpan={4} className="p-6 text-center font-bold">{loadError || 'No market prices available.'}</td></tr>
+              )}
             </tbody>
           </table>
         </div>
