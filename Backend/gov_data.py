@@ -39,7 +39,13 @@ def _geocode(query):
     try:
         response = requests.get(
             _GEOCODING_URL,
-            params={"name": query, "count": 1, "language": "en", "format": "json"},
+            params={
+                "name": query,
+                "count": 1,
+                "language": "en",
+                "format": "json",
+                "countryCode": "IN",
+            },
             timeout=5,
         )
         response.raise_for_status()
@@ -119,8 +125,8 @@ def fetch_live_markets(crop=None, location=None, latitude=None, longitude=None):
 
     origin = (latitude, longitude) if latitude is not None and longitude is not None else _geocode(location or "")
     origin_state = None
-    if latitude is not None and longitude is not None:
-        origin_state = reverse_geocode(latitude, longitude).get("state")
+    if origin:
+        origin_state = reverse_geocode(origin[0], origin[1]).get("state")
     if origin_state:
         params["filters[state]"] = origin_state
 

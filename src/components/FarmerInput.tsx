@@ -267,7 +267,7 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
                   <span className="w-6 h-6 rounded-full bg-emerald-100 text-[#165B33] text-sm flex items-center justify-center">1</span>
                   {t.input.cropLabel || 'Select Crop'}
                 </label>
-                <div className="grid grid-cols-3 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2.5">
                   {cropOptions.map((item) => {
                     const isSelected = crop === item.id;
                     return (
@@ -275,15 +275,15 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
                         key={item.id}
                         type="button"
                         onClick={() => setCrop(item.id as CropType)}
-                        className={`flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all cursor-pointer ${isSelected
+                        className={`flex min-h-[84px] flex-col items-center justify-center p-2 rounded-xl border-2 transition-all cursor-pointer ${isSelected
                             ? 'border-[#165B33] bg-[#E5F5E9] shadow-sm'
                             : 'border-stone-200 bg-white hover:border-[#82C394] hover:bg-stone-50'
                           }`}
                       >
-                        <span className="text-3xl mb-2">{item.icon}</span>
-                        <span className={`text-sm font-bold text-center ${isSelected ? 'text-[#165B33]' : 'text-stone-700'}`}>
+                        <span className="text-2xl leading-none mb-1">{item.icon}</span>
+                        <span className={`text-xs font-bold text-center leading-tight ${isSelected ? 'text-[#165B33]' : 'text-stone-700'}`}>
                           {language === 'te' ? item.labelTe : item.labelEn}<br />
-                          <span className="text-xs font-semibold opacity-80">
+                          <span className="text-[10px] font-semibold opacity-80">
                             ({language === 'te' ? item.labelEn : item.labelTe})
                           </span>
                         </span>
