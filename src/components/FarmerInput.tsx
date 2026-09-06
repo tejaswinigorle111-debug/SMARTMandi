@@ -329,7 +329,7 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
             {/* Sub-bar: Quick Test Presets on Left, Voice Input on Right */}
             <div className="pt-2 flex flex-wrap items-center justify-between gap-4">
               <div className="flex flex-wrap items-center gap-2.5">
-                <span className="text-sm font-black text-stone-900 mr-1">Quick Presets:</span>
+                <span className="text-sm font-black text-stone-900 mr-1">{t.input.quickPresetsLabel}</span>
                 <button
                   type="button"
                   onClick={() => handleQuickPreset('Tomato', '1000', 'Nashik, Maharashtra')}
@@ -339,7 +339,7 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
                       : 'bg-white border-stone-300 text-stone-800 hover:bg-stone-100'
                   }`}
                 >
-                  1,000 kg Tomato
+                  {t.input.presetTomato}
                 </button>
                 <button
                   type="button"
@@ -350,7 +350,7 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
                       : 'bg-white border-stone-300 text-stone-800 hover:bg-stone-100'
                   }`}
                 >
-                  3,000 kg Cotton
+                  {t.input.presetCotton}
                 </button>
                 <button
                   type="button"
@@ -361,7 +361,7 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
                       : 'bg-white border-stone-300 text-stone-800 hover:bg-stone-100'
                   }`}
                 >
-                  800 kg Chilli
+                  {t.input.presetChilli}
                 </button>
                 <button
                   type="button"
@@ -372,13 +372,13 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
                       : 'bg-white border-stone-300 text-stone-800 hover:bg-stone-100'
                   }`}
                 >
-                  2,000 kg Maize
+                  {t.input.presetMaize}
                 </button>
               </div>
 
               {/* Voice Input */}
               <div className="flex items-center gap-2.5">
-                <span className="text-sm font-black text-stone-900">Voice:</span>
+                <span className="text-sm font-black text-stone-900">{t.input.voiceLabel}</span>
                 <button
                   type="button"
                   onClick={handleToggleSpeech}
@@ -397,8 +397,8 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
                   ) : (
                     <>
                       <Mic className="w-4 h-4 text-emerald-700" />
-                      <span>Speak</span>
-                      <span className="text-stone-600 font-bold">EN / मराठी</span>
+                      <span>{t.input.speakBtn}</span>
+                      <span className="text-stone-600 font-bold">{t.input.langSwitch}</span>
                     </>
                   )}
                 </button>
@@ -416,17 +416,17 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
                 {isLoading ? (
                   <>
                     <Loader2 className="w-6 h-6 animate-spin text-emerald-200" />
-                    <span>Analyzing Mandis & Transport Rates...</span>
+                    <span>{t.input.analyzing}</span>
                   </>
                 ) : (
                   <>
                     <Search className="w-6 h-6 text-emerald-200" />
-                    <span>Find Best Market</span>
+                    <span>{t.input.submitBtn}</span>
                   </>
                 )}
               </button>
               <p className="text-center text-sm font-bold text-stone-700 mt-2.5">
-                We compare prices, transport distance and fuel cost to calculate your true net return
+                {t.input.disclaimerText}
               </p>
             </div>
           </form>

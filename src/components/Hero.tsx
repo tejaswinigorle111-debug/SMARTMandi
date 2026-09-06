@@ -104,7 +104,7 @@ export const Hero: React.FC<HeroProps> = ({
                   </span>
                 </div>
                 <p className="text-sm text-stone-800 leading-snug font-bold">
-                  Calculate true profits after transport costs before making mandi trips.
+                  Estimate net returns after transport costs before making mandi trips.
                 </p>
               </div>
             </div>
@@ -122,7 +122,7 @@ export const Hero: React.FC<HeroProps> = ({
                 Transport Cost Factored
               </h4>
               <p className="text-sm font-bold text-stone-700 mt-1">
-                Real fuel & freight calculated per quintal
+                Estimated transport cost based on distance and quantity
               </p>
             </div>
           </div>
@@ -147,10 +147,10 @@ export const Hero: React.FC<HeroProps> = ({
             </div>
             <div>
               <h4 className="text-base font-black text-stone-950">
-                Maximized Net Profit
+                Maximized Net Return
               </h4>
               <p className="text-sm font-bold text-stone-700 mt-1">
-                Guaranteed rank by take-home income
+                Ranked by estimated net return
               </p>
             </div>
           </div>

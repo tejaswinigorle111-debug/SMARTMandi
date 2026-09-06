@@ -22,7 +22,10 @@ export const MarketComparison: React.FC<MarketComparisonProps> = ({
           Market Comparison
         </h3>
         <p className="text-stone-700 text-sm sm:text-base font-bold mt-1">
-          Mandis ranked by Estimated Net Return (Highest take-home income at top)
+          Mandis compared using estimated net return, price, distance and transport cost.
+        </p>
+        <p className="text-stone-600 text-xs sm:text-sm font-semibold mt-1">
+          Overall recommendation is based on Smart Market Score, not net return alone.
         </p>
       </div>
 

@@ -84,8 +84,19 @@ export async function getRecommendation(
 
       whyRecommended:
         market.market === result.recommended_market.market
-          ? `This market is recommended because it provides the highest estimated net return after considering transportation cost.`
+          ? result.recommended_market.smart_market_explanation || `This market is recommended because it provides the highest estimated net return after considering transportation cost.`
           : undefined,
+
+      smartMarketScore: market.smart_market_score,
+      arrivalQuantity: market.arrival_quantity !== undefined ? market.arrival_quantity : null,
+      scoreBreakdown: market.score_breakdown
+        ? {
+            netReturnScore: market.score_breakdown.net_return_score,
+            priceScore: market.score_breakdown.price_score,
+            distanceScore: market.score_breakdown.distance_score,
+            transportScore: market.score_breakdown.transport_score,
+          }
+        : undefined,
     }));
 
   const recommended =

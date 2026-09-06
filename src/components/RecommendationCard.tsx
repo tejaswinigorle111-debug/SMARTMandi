@@ -33,7 +33,7 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
               <Trophy className="w-5 h-5 text-amber-300" />
             </div>
             <span className="text-base font-black text-[#165B33] uppercase tracking-wide">
-              Best Net Return Mandi
+              {t.results?.bestOptionBadge || 'BEST OPTION'}
             </span>
           </div>
           <ChevronRight className="w-6 h-6 text-[#165B33]" />
@@ -51,6 +51,46 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
 
         {/* Divider */}
         <div className="border-t-2 border-[#D2E7D8] my-4" />
+
+        {/* Score Section */}
+        {market.smartMarketScore !== undefined && (
+          <div className="mb-4 bg-emerald-50 rounded-xl p-4 border border-[#82C394]">
+            <div className="flex items-center justify-between mb-2">
+              <span className="font-black text-stone-900 text-lg uppercase tracking-wide">
+                {t.results?.smartScoreLabel || 'Smart Market Score:'}
+              </span>
+              <span className="text-2xl font-black text-[#165B33]">
+                {market.smartMarketScore}/100
+              </span>
+            </div>
+            
+            {market.scoreBreakdown && (
+              <div className="mt-3">
+                <h5 className="text-xs font-black text-stone-700 uppercase tracking-wider mb-2">
+                  {t.results?.scoreBreakdownLabel || 'Score Breakdown'}
+                </h5>
+                <div className="grid grid-cols-2 gap-2 text-sm font-bold text-stone-700">
+                  <div className="flex justify-between">
+                    <span>Net Return:</span>
+                    <span className="text-[#165B33]">{market.scoreBreakdown.netReturnScore}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Price:</span>
+                    <span className="text-[#165B33]">{market.scoreBreakdown.priceScore}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Distance:</span>
+                    <span className="text-[#165B33]">{market.scoreBreakdown.distanceScore}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Transport:</span>
+                    <span className="text-[#165B33]">{market.scoreBreakdown.transportScore}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Key Metrics Breakdown */}
         <div className="space-y-3 text-base">
@@ -88,7 +128,7 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
           </p>
           <div className="flex items-center gap-1.5 text-xs text-stone-700 mt-3 font-bold">
             <Info className="w-4 h-4 text-[#165B33] shrink-0" />
-            <span>Recommendation based on Net Return after transport costs</span>
+            <span>Recommendation based on Smart Market Score</span>
           </div>
         </div>
       </div>
@@ -110,7 +150,7 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
           </li>
           <li className="flex items-start gap-2.5">
             <span className="text-[#165B33] font-black text-base">•</span>
-            <span>A mandi with slightly lower rate often yields higher take-home profit if closer.</span>
+            <span>A mandi with a slightly lower rate may provide a higher estimated net return if it is closer.</span>
           </li>
           <li className="flex items-start gap-2.5">
             <span className="text-[#165B33] font-black text-base">•</span>

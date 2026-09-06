@@ -10,6 +10,7 @@ import { MarketPricesModal } from './components/MarketPricesModal';
 import { AboutModal } from './components/AboutModal';
 import { Language, CropType, CalculatedMarketResult, FarmerInputData } from './types';
 import { getRecommendation } from './services/api';
+import { getTranslation } from './utils/translations';
 
 export default function App() {
   const [language, setLanguage] = useState<Language>('en');
@@ -20,6 +21,7 @@ export default function App() {
   const [currentQuantity, setCurrentQuantity] = useState<number>(1000);
   const [currentLocation, setCurrentLocation] = useState<string>('Nashik, Maharashtra');
   const [marketResults, setMarketResults] = useState<CalculatedMarketResult[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Modals
   const [isPricesModalOpen, setIsPricesModalOpen] = useState<boolean>(false);
@@ -41,6 +43,7 @@ export default function App() {
     setCurrentLocation(data.location);
 
     try {
+      setErrorMessage(null);
       const response = await getRecommendation(data);
       setMarketResults(response.all);
 
@@ -54,6 +57,8 @@ export default function App() {
       }
     } catch (error) {
       console.error('Error calculating market recommendations:', error);
+      setMarketResults([]);
+      setErrorMessage(error instanceof Error ? error.message : 'No markets found');
     } finally {
       setIsLoading(false);
     }
@@ -108,6 +113,19 @@ export default function App() {
             location={currentLocation}
             language={language}
           />
+        )}
+
+        {/* Error Message for Missing Data */}
+        {errorMessage && (
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 mb-8" id="market-results-section">
+            <div className="bg-amber-50 border-l-4 border-amber-500 p-6 rounded-r-2xl shadow-sm flex items-start gap-3">
+              <span className="text-amber-600 text-xl">ℹ️</span>
+              <div>
+                <p className="text-amber-900 font-bold text-lg">{getTranslation(language).input.noMarketData}</p>
+                <p className="text-amber-700 font-medium text-sm mt-1">{errorMessage}</p>
+              </div>
+            </div>
+          </div>
         )}
 
         {/* How It Works (Four-Step Flow) */}

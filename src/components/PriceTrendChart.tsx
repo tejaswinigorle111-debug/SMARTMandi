@@ -118,7 +118,7 @@ export const PriceTrendChart: React.FC<PriceTrendChartProps> = ({
           </span>
         </div>
         <p className="text-sm font-bold text-stone-700 mb-4">
-          7-day mandi modal price trend across region
+          7-day sample mandi modal price trend across the region
         </p>
       </div>
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { CalculatedMarketResult, CropType, Language } from '../types';
 import { RecommendationCard } from './RecommendationCard';
 import { MarketComparison } from './MarketComparison';
+import { PriceArrivalIntelligence } from './PriceArrivalIntelligence';
 import { PriceComparisonChart } from './PriceComparisonChart';
 import { PriceTrendChart } from './PriceTrendChart';
 import { cropOptions } from '../data/demoMarkets';
@@ -76,7 +77,7 @@ export const MarketResults: React.FC<MarketResultsProps> = ({
             </div>
             <div className="h-8 w-px bg-stone-300 hidden sm:block" />
             <div>
-              <span className="text-stone-500 block font-bold text-xs uppercase tracking-wider">Market Benchmark Date</span>
+              <span className="text-stone-500 block font-bold text-xs uppercase tracking-wider">Sample Market Data</span>
               <span className="font-extrabold text-stone-950 text-base">{currentDateFormatted}</span>
             </div>
           </div>
@@ -88,6 +89,9 @@ export const MarketResults: React.FC<MarketResultsProps> = ({
           <div className="lg:col-span-8 space-y-6">
             {/* Market Comparison Table */}
             <MarketComparison results={results} language={language} />
+
+            {/* Price & Arrival Intelligence */}
+            <PriceArrivalIntelligence results={results} language={language} />
 
             {/* Charts Side-by-Side */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

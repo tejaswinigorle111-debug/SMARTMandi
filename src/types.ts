@@ -1,4 +1,4 @@
-export type CropType = 'Tomato' | 'Rice' | 'Cotton' | 'Chilli' | 'Maize';
+export type CropType = 'Tomato' | 'Rice' | 'Cotton' | 'Chilli' | 'Maize' | 'Onion' | 'Potato' | 'Soybean' | 'Wheat' | 'Groundnut' | 'Tur' | 'Gram' | 'Grapes' | 'Mango' | 'Banana';
 
 export type Language = 'en' | 'mr';
 
@@ -8,7 +8,7 @@ export interface MandiMarket {
   location: string;
   district: string;
   state: string;
-  cropPrices: Record<CropType, number>;
+  cropPrices: Partial<Record<CropType, number>>;
   distanceKm: number; // approximate base distance from reference center
   baseTransportFee: number;
   ratePerKm: number;
@@ -38,6 +38,14 @@ export interface CalculatedMarketResult {
   isRecommended: boolean;
   whyRecommended?: string;
   marketType: string;
+  arrivalQuantity?: number | null;
+  smartMarketScore?: number;
+  scoreBreakdown?: {
+    netReturnScore: number;
+    priceScore: number;
+    distanceScore: number;
+    transportScore: number;
+  };
 }
 
 export interface CropHistoricalTrend {
