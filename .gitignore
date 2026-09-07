@@ -4,11 +4,17 @@ dist/
 coverage/
 .DS_Store
 *.log
+*.env
+.env
+.env.*
 !.env.example
 
 Backend/venv/
 Backend/__pycache__/
 Backend/data/__pycache__/
 
+node_modules/
+dist/
 .vscode/
+.DS_Store
 Thumbs.db
