@@ -10,6 +10,7 @@ export interface TranslationSchema {
     howItWorks: string;
     about: string;
     findMarket: string;
+    registerBuyer: string;
   };
   hero: {
     subLabel: string;
@@ -236,7 +237,349 @@ export interface TranslationSchema {
     archEngine: string;
     closeBtn: string;
   };
+  buyerRegistration: BuyerRegistrationTranslations;
 }
+
+export interface BuyerRegistrationTranslations {
+  badge: string;
+  title: string;
+  subtitle: string;
+  backToHome: string;
+  heroBannerTitle: string;
+  heroBannerSub: string;
+  heroBannerCta: string;
+  sectionBasic: string;
+  sectionBasicDesc: string;
+  fullNameLabel: string;
+  fullNamePlaceholder: string;
+  businessNameLabel: string;
+  businessNamePlaceholder: string;
+  buyerTypeLabel: string;
+  buyerTypePlaceholder: string;
+  buyerTypes: {
+    wholesaler: string;
+    retailer: string;
+    processor: string;
+    exporter: string;
+    other: string;
+  };
+  sectionContact: string;
+  sectionContactDesc: string;
+  mobileLabel: string;
+  mobilePlaceholder: string;
+  emailLabel: string;
+  emailPlaceholder: string;
+  optionalBadge: string;
+  sectionLocation: string;
+  sectionLocationDesc: string;
+  stateLabel: string;
+  statePlaceholder: string;
+  districtLabel: string;
+  districtPlaceholder: string;
+  marketAreaLabel: string;
+  marketAreaPlaceholder: string;
+  businessAddressLabel: string;
+  businessAddressPlaceholder: string;
+  sectionCrops: string;
+  sectionCropsDesc: string;
+  preferredCropsLabel: string;
+  preferredCropsSub: string;
+  searchCropsPlaceholder: string;
+  selectedCount: string;
+  selectAll: string;
+  clearAll: string;
+  noCropsMatch: string;
+  sectionQuantity: string;
+  sectionQuantityDesc: string;
+  minQuantityLabel: string;
+  minQuantityPlaceholder: string;
+  maxQuantityLabel: string;
+  maxQuantityPlaceholder: string;
+  quantityUnitLabel: string;
+  units: {
+    kg: string;
+    quintal: string;
+    tonne: string;
+  };
+  sectionPricing: string;
+  sectionPricingDesc: string;
+  minPriceLabel: string;
+  minPricePlaceholder: string;
+  maxPriceLabel: string;
+  maxPricePlaceholder: string;
+  buyingFrequencyLabel: string;
+  buyingFrequencyPlaceholder: string;
+  frequencies: {
+    daily: string;
+    weekly: string;
+    monthly: string;
+    asNeeded: string;
+  };
+  submitBtn: string;
+  submittingBtn: string;
+  requiredFieldsNote: string;
+  validation: {
+    fullNameRequired: string;
+    businessNameRequired: string;
+    buyerTypeRequired: string;
+    mobileRequired: string;
+    mobileInvalid: string;
+    emailInvalid: string;
+    stateRequired: string;
+    districtRequired: string;
+    marketAreaRequired: string;
+    addressRequired: string;
+    cropsRequired: string;
+    minQtyPositive: string;
+    maxQtyMinConstraint: string;
+    minPriceNonNegative: string;
+    maxPriceMinConstraint: string;
+    frequencyRequired: string;
+    fixErrorsAlert: string;
+  };
+  confirmation: {
+    readyTitle: string;
+    backendNotice: string;
+    backendNoticeTe?: string;
+    summaryTitle: string;
+    buyerInfoLabel: string;
+    contactLabel: string;
+    locationLabel: string;
+    commoditiesLabel: string;
+    volumePriceLabel: string;
+    frequencyLabel: string;
+    frontendStateOnlyNotice: string;
+    registerAnotherBtn: string;
+    backToHomeBtn: string;
+  };
+}
+
+const enBuyerRegistration: BuyerRegistrationTranslations = {
+  badge: 'Smart India Hackathon Prototype • Buyer Onboarding',
+  title: 'Buyer Registration',
+  subtitle: 'Directly connect with local farmers and FPOs to procure quality agricultural produce at transparent prices.',
+  backToHome: 'Back to Home',
+  heroBannerTitle: 'Are You a Wholesale Buyer, Trader, or Food Processor?',
+  heroBannerSub: 'Directly source farm-fresh crops from registered farmers and FPOs with zero middlemen markups.',
+  heroBannerCta: 'Register as Buyer',
+  sectionBasic: 'Business & Basic Details',
+  sectionBasicDesc: 'Specify your trading firm name and legal buyer category',
+  fullNameLabel: 'Full Name',
+  fullNamePlaceholder: 'e.g. Rajesh Kumar',
+  businessNameLabel: 'Business / Firm Name',
+  businessNamePlaceholder: 'e.g. Sri Balaji Agro Traders',
+  buyerTypeLabel: 'Buyer Type',
+  buyerTypePlaceholder: 'Select your business type',
+  buyerTypes: {
+    wholesaler: 'Wholesaler',
+    retailer: 'Retailer',
+    processor: 'Processor',
+    exporter: 'Exporter',
+    other: 'Other',
+  },
+  sectionContact: 'Contact Information',
+  sectionContactDesc: 'Used for trade confirmations and dispatch coordination',
+  mobileLabel: 'Mobile Number',
+  mobilePlaceholder: '10-digit mobile number',
+  emailLabel: 'Email Address',
+  emailPlaceholder: 'e.g. buyer@example.com',
+  optionalBadge: 'Optional',
+  sectionLocation: 'Operational Location & Mandi',
+  sectionLocationDesc: 'Your primary procurement hub, target market yard, and facility address',
+  stateLabel: 'State',
+  statePlaceholder: 'Select State',
+  districtLabel: 'District',
+  districtPlaceholder: 'e.g. Guntur',
+  marketAreaLabel: 'Market / Area',
+  marketAreaPlaceholder: 'e.g. Guntur Mirchi Yard / Bowenpally',
+  businessAddressLabel: 'Business Address',
+  businessAddressPlaceholder: 'Shop / Warehouse No., Street, Landmark, Pincode',
+  sectionCrops: 'Commodity Requirements',
+  sectionCropsDesc: 'Select the agricultural commodities you procure (multiple selections allowed)',
+  preferredCropsLabel: 'Preferred Crops',
+  preferredCropsSub: 'Select one or more crops required for your trade',
+  searchCropsPlaceholder: 'Search crops by name...',
+  selectedCount: '{count} crops selected',
+  selectAll: 'Select All',
+  clearAll: 'Clear Selection',
+  noCropsMatch: 'No matching crops found',
+  sectionQuantity: 'Procurement Volume & Unit',
+  sectionQuantityDesc: 'Set your regular minimum and maximum volume capacity',
+  minQuantityLabel: 'Minimum Quantity Required',
+  minQuantityPlaceholder: 'e.g. 50',
+  maxQuantityLabel: 'Maximum Quantity Required',
+  maxQuantityPlaceholder: 'e.g. 500',
+  quantityUnitLabel: 'Quantity Unit',
+  units: {
+    kg: 'kg',
+    quintal: 'quintal',
+    tonne: 'tonne',
+  },
+  sectionPricing: 'Target Buying Price & Frequency',
+  sectionPricingDesc: 'Your procurement budget bounds and order repetition schedule',
+  minPriceLabel: 'Minimum Buying Price (₹)',
+  minPricePlaceholder: 'e.g. 25',
+  maxPriceLabel: 'Maximum Buying Price (₹)',
+  maxPricePlaceholder: 'e.g. 45',
+  buyingFrequencyLabel: 'Buying Frequency',
+  buyingFrequencyPlaceholder: 'Select procurement cycle',
+  frequencies: {
+    daily: 'Daily',
+    weekly: 'Weekly',
+    monthly: 'Monthly',
+    asNeeded: 'As Needed',
+  },
+  submitBtn: 'Register Buyer',
+  submittingBtn: 'Validating & Submitting...',
+  requiredFieldsNote: '* Marked fields are mandatory',
+  validation: {
+    fullNameRequired: 'Full Name is required.',
+    businessNameRequired: 'Business Name is required.',
+    buyerTypeRequired: 'Please select a buyer type.',
+    mobileRequired: 'Mobile number is required.',
+    mobileInvalid: 'Please enter a valid 10-digit mobile number.',
+    emailInvalid: 'Please enter a valid email address.',
+    stateRequired: 'State is required.',
+    districtRequired: 'District is required.',
+    marketAreaRequired: 'Market / Area is required.',
+    addressRequired: 'Business address is required.',
+    cropsRequired: 'Please select at least one preferred crop.',
+    minQtyPositive: 'Minimum quantity must be greater than zero.',
+    maxQtyMinConstraint: 'Maximum quantity cannot be less than minimum quantity.',
+    minPriceNonNegative: 'Minimum price cannot be negative.',
+    maxPriceMinConstraint: 'Maximum price cannot be less than minimum price.',
+    frequencyRequired: 'Please select a buying frequency.',
+    fixErrorsAlert: 'Please resolve the highlighted validation errors before submitting.',
+  },
+  confirmation: {
+    readyTitle: 'Buyer Registration Form is Ready',
+    backendNotice: 'Buyer registration form is ready. Backend registration will be connected next.',
+    summaryTitle: 'Submitted Registration Details',
+    buyerInfoLabel: 'Buyer & Business',
+    contactLabel: 'Contact Information',
+    locationLabel: 'Operational Location',
+    commoditiesLabel: 'Preferred Crops',
+    volumePriceLabel: 'Volume & Price Target',
+    frequencyLabel: 'Buying Frequency',
+    frontendStateOnlyNotice: 'Form data is held in local React state only. Backend registration will be connected next without storing to Supabase or calling external APIs.',
+    registerAnotherBtn: 'Register Another Buyer',
+    backToHomeBtn: 'Return to SMARTMandi Home',
+  },
+};
+
+const teBuyerRegistration: BuyerRegistrationTranslations = {
+  badge: 'స్మార్ట్ ఇండియా హ్యాకథాన్ 2026 ప్రోటోటైప్ • కొనుగోలుదారుల నమోదు',
+  title: 'కొనుగోలుదారుల నమోదు',
+  subtitle: 'రైతులు మరియు FPOల నుండి నేరుగా తాజా నాణ్యమైన వ్యవసాయ ఉత్పత్తులను పారదర్శక ధరలకు కొనుగోలు చేయడానికి నమోదు చేసుకోండి.',
+  backToHome: 'హోమ్‌కు తిరిగి వెళ్లండి',
+  heroBannerTitle: 'మీరు హోల్‌సేలర్, వ్యాపారి లేదా ప్రాసెసరా?',
+  heroBannerSub: 'మధ్యవర్తుల ప్రమేయం లేకుండా నేరుగా రైతుల నుండి నాణ్యమైన వ్యవసాయ ఉత్పత్తులను సేకరించండి.',
+  heroBannerCta: 'కొనుగోలుదారుగా నమోదు',
+  sectionBasic: 'వ్యాపార & ప్రాథమిక వివరాలు',
+  sectionBasicDesc: 'మీ సంస్థ పేరు మరియు కొనుగోలుదారు వర్గాన్ని నమోదు చేయండి',
+  fullNameLabel: 'పూర్తి పేరు',
+  fullNamePlaceholder: 'ఉదా. రమేష్ కుమార్',
+  businessNameLabel: 'వ్యాపార / సంస్థ పేరు',
+  businessNamePlaceholder: 'ఉదా. శ్రీ బాలాజీ ఆగ్రో ట్రేడర్స్',
+  buyerTypeLabel: 'కొనుగోలుదారు రకం',
+  buyerTypePlaceholder: 'కొనుగోలుదారు రకాన్ని ఎంచుకోండి',
+  buyerTypes: {
+    wholesaler: 'హోల్‌సేలర్ (మొత్తం కొనుగోలుదారు)',
+    retailer: 'రిటైలర్ (చిల్లర వ్యాపారి)',
+    processor: 'ప్రాసెసర్ (తయారీదారు / ప్రాసెసింగ్ యూనిట్)',
+    exporter: 'ఎగుమతిదారు (ఎక్స్‌పోర్టర్)',
+    other: 'ఇతర',
+  },
+  sectionContact: 'సంప్రదింపు సమాచారం',
+  sectionContactDesc: 'ఆర్డర్ ధృవీకరణ మరియు సమాచారం కోసం మొబైల్ వివరాలు',
+  mobileLabel: 'మొబైల్ నంబర్',
+  mobilePlaceholder: '10 అంకెల మొబైల్ నంబర్',
+  emailLabel: 'ఈమెయిల్ చిరునామా',
+  emailPlaceholder: 'ఉదా. buyer@example.com',
+  optionalBadge: 'ఐచ్ఛికం',
+  sectionLocation: 'కార్యాచరణ స్థానం & చిరునామా',
+  sectionLocationDesc: 'మీ వ్యాపార కేంద్రం, టార్గెట్ మార్కెట్ యార్డ్ మరియు చిరునామా',
+  stateLabel: 'రాష్ట్రం',
+  statePlaceholder: 'రాష్ట్రాన్ని ఎంచుకోండి',
+  districtLabel: 'జిల్లా',
+  districtPlaceholder: 'ఉదా. గుంటూరు',
+  marketAreaLabel: 'మార్కెట్ యార్డ్ / ప్రాంతం',
+  marketAreaPlaceholder: 'ఉదా. గుంటూరు మిర్చి యార్డ్ / బోయిన్‌పల్లి',
+  businessAddressLabel: 'పూర్తి వ్యాపార చిరునామా',
+  businessAddressPlaceholder: 'షాపు / గోడౌన్ నంబర్, వీధి, ల్యాండ్‌మార్క్, పిన్‌కోడ్',
+  sectionCrops: 'కావలసిన పంటలు / ఉత్పత్తులు',
+  sectionCropsDesc: 'మీరు కొనుగోలు చేయాలనుకుంటున్న పంటలను ఎంచుకోండి (బహుళ ఎంపిక సాధ్యం)',
+  preferredCropsLabel: 'ప్రాధాన్య పంటలు',
+  preferredCropsSub: 'మీ వ్యాపారానికి అవసరమైన ఒకటి లేదా అంతకంటే ఎక్కువ పంటలను ఎంచుకోండి',
+  searchCropsPlaceholder: 'పంట పేరుతో వెతకండి...',
+  selectedCount: '{count} పంటలు ఎంపిక చేయబడ్డాయి',
+  selectAll: 'అన్నీ ఎంచుకోండి',
+  clearAll: 'ఎంపిక తీసివేయి',
+  noCropsMatch: 'ఎలాంటి పంటలు కనుగొనబడలేదు',
+  sectionQuantity: 'కొనుగోలు పరిమాణం & కొలమానం',
+  sectionQuantityDesc: 'కనీస మరియు గరిష్ట అవసరమైన పరిమాణం పరిమితులు',
+  minQuantityLabel: 'కనీస పరిమాణం',
+  minQuantityPlaceholder: 'ఉదా. 50',
+  maxQuantityLabel: 'గరిష్ట పరిమాణం',
+  maxQuantityPlaceholder: 'ఉదా. 500',
+  quantityUnitLabel: 'కొలమానం (యూనిట్)',
+  units: {
+    kg: 'కిలోగ్రామ్ (కేజీ)',
+    quintal: 'క్వింటాల్',
+    tonne: 'టన్ను',
+  },
+  sectionPricing: 'ధర పరిమితి & కొనుగోలు తరచుదనం',
+  sectionPricingDesc: 'మీరు ఆమోదించగల ధర పరిధి మరియు కొనుగోలు కాలవ్యవధి',
+  minPriceLabel: 'కనీస కొనుగోలు ధర (₹)',
+  minPricePlaceholder: 'ఉదా. 25',
+  maxPriceLabel: 'గరిష్ట కొనుగోలు ధర (₹)',
+  maxPricePlaceholder: 'ఉదా. 45',
+  buyingFrequencyLabel: 'కొనుగోలు తరచుదనం',
+  buyingFrequencyPlaceholder: 'కొనుగోలు కాలవ్యవధిని ఎంచుకోండి',
+  frequencies: {
+    daily: 'రోజువారీ (డైలీ)',
+    weekly: 'వారానికి ఒకసారి (వీక్లీ)',
+    monthly: 'నెలకు ఒకసారి (మంత్లీ)',
+    asNeeded: 'అవసరాన్ని బట్టి (యాజ్ నీడెడ్)',
+  },
+  submitBtn: 'కొనుగోలుదారుగా నమోదు చేయండి',
+  submittingBtn: 'పరిశీలిస్తోంది...',
+  requiredFieldsNote: '* గుర్తించబడిన ఫీల్డ్‌లు తప్పనిసరి',
+  validation: {
+    fullNameRequired: 'పూర్తి పేరు నమోదు చేయడం తప్పనిసరి.',
+    businessNameRequired: 'వ్యాపార పేరు నమోదు చేయడం తప్పనిసరి.',
+    buyerTypeRequired: 'దయచేసి కొనుగోలుదారు రకాన్ని ఎంచుకోండి.',
+    mobileRequired: 'మొబైల్ నంబర్ నమోదు చేయడం తప్పనిసరి.',
+    mobileInvalid: 'దయచేసి సరైన 10 అంకెల మొబైల్ నంబర్‌ను నమోదు చేయండి.',
+    emailInvalid: 'దయచేసి సరైన ఈమెయిల్ చిరునామాను నమోదు చేయండి.',
+    stateRequired: 'రాష్ట్రాన్ని ఎంచుకోవడం తప్పనిసరి.',
+    districtRequired: 'జిల్లా పేరు నమోదు చేయడం తప్పనిసరి.',
+    marketAreaRequired: 'మార్కెట్ / ప్రాంతం నమోదు చేయడం తప్పనిసరి.',
+    addressRequired: 'వ్యాపార చిరునామా నమోదు చేయడం తప్పనిసరి.',
+    cropsRequired: 'కనీసం ఒక పంటను ఎంచుకోవాలి.',
+    minQtyPositive: 'కనీస పరిమాణం సున్నా కంటే ఎక్కువగా ఉండాలి.',
+    maxQtyMinConstraint: 'గరిష్ట పరిమాణం కనీస పరిమాణం కంటే తక్కువగా ఉండకూడదు.',
+    minPriceNonNegative: 'కనీస ధర ప్రతికూలంగా ఉండకూడదు.',
+    maxPriceMinConstraint: 'గరిష్ట ధర కనీస ధర కంటే తక్కువగా ఉండకూడదు.',
+    frequencyRequired: 'దయచేసి కొనుగోలు తరచుదనాన్ని ఎంచుకోండి.',
+    fixErrorsAlert: 'దయచేసి ఫారమ్‌లోని ఎర్రర్‌లను సరిదిద్ది మళ్లీ సమర్పించండి.',
+  },
+  confirmation: {
+    readyTitle: 'కొనుగోలుదారు నమోదు ఫారమ్ సిద్ధంగా ఉంది',
+    backendNotice: 'Buyer registration form is ready. Backend registration will be connected next.',
+    backendNoticeTe: 'కొనుగోలుదారు నమోదు ఫారమ్ సిద్ధంగా ఉంది. తదుపరి దశలో బ్యాకెండ్ నమోదు అనుసంధానం చేయబడుతుంది.',
+    summaryTitle: 'నమోదు చేయబడిన వివరాల సారాంశం',
+    buyerInfoLabel: 'కొనుగోలుదారు వివరాలు',
+    contactLabel: 'సంప్రదింపు సమాచారం',
+    locationLabel: 'స్థానం & చిరునామా',
+    commoditiesLabel: 'ఎంచుకున్న పంటలు',
+    volumePriceLabel: 'పరిమాణం & ధర పరిమితి',
+    frequencyLabel: 'కొనుగోలు తరచుదనం',
+    frontendStateOnlyNotice: 'గమనిక: ఈ డేటా కేవలం లోకల్ రియాక్ట్ స్టేట్‌లో మాత్రమే ఉంది. డేటాబేస్ లేదా సర్వర్‌కు పంపబడలేదు.',
+    registerAnotherBtn: 'మరొక కొనుగోలుదారుని నమోదు చేయండి',
+    backToHomeBtn: 'SMARTMandi హోమ్‌కు తిరిగి వెళ్లండి',
+  },
+};
 
 export const translations: Record<Language, TranslationSchema> = {
   en: {
@@ -249,6 +592,7 @@ export const translations: Record<Language, TranslationSchema> = {
       howItWorks: 'How It Works',
       about: 'About',
       findMarket: 'Find Best Market',
+      registerBuyer: 'Register as Buyer',
     },
     hero: {
       subLabel: 'SMART AGRICULTURE • MARKET DECISION SUPPORT',
@@ -527,6 +871,7 @@ export const translations: Record<Language, TranslationSchema> = {
       archEngine: 'Net Return Recommendation Engine',
       closeBtn: 'Close',
     },
+    buyerRegistration: enBuyerRegistration,
   },
 
   te: {
@@ -539,6 +884,7 @@ export const translations: Record<Language, TranslationSchema> = {
       howItWorks: 'ఇది ఎలా పనిచేస్తుంది',
       about: 'మా గురించి',
       findMarket: 'ఉత్తమ మార్కెట్ కనుగొనండి',
+      registerBuyer: 'కొనుగోలుదారుగా నమోదు',
     },
     hero: {
       subLabel: 'స్మార్ట్ వ్యవసాయం • మార్కెట్ నిర్ణయ మద్దతు',
@@ -817,6 +1163,7 @@ export const translations: Record<Language, TranslationSchema> = {
       archEngine: 'నికర లాభం సిఫార్సు ఇంజిన్',
       closeBtn: 'మూసివేయి',
     },
+    buyerRegistration: teBuyerRegistration,
   },
 
   hi: {
@@ -829,6 +1176,7 @@ export const translations: Record<Language, TranslationSchema> = {
       howItWorks: 'यह कैसे काम करता है',
       about: 'हमारे बारे में',
       findMarket: 'सर्वोत्तम मंडी खोजें',
+      registerBuyer: 'Register as Buyer',
     },
     hero: {
       subLabel: 'स्मार्ट कृषि • मंडी निर्णय सहायता प्रणाली',
@@ -1107,6 +1455,7 @@ export const translations: Record<Language, TranslationSchema> = {
       archEngine: 'शुद्ध आय सिफारिश इंजन',
       closeBtn: 'बंद करें',
     },
+    buyerRegistration: enBuyerRegistration,
   },
 
   mr: {
@@ -1119,6 +1468,7 @@ export const translations: Record<Language, TranslationSchema> = {
       howItWorks: 'हे कसे कार्य करते',
       about: 'आमच्याबद्दल',
       findMarket: 'सर्वोत्तम बाजार शोधा',
+      registerBuyer: 'Register as Buyer',
     },
     hero: {
       subLabel: 'स्मार्ट कृषी • बाजारपेठ निर्णय सहाय्य',
@@ -1397,6 +1747,7 @@ export const translations: Record<Language, TranslationSchema> = {
       archEngine: 'निव्वळ नफा शिफारस इंजिन',
       closeBtn: 'बंद करा',
     },
+    buyerRegistration: enBuyerRegistration,
   },
 };
 

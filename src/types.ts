@@ -110,3 +110,29 @@ export interface CropHistoricalTrend {
   averagePrice: number;
   trendDirection: 'up' | 'down' | 'stable';
 }
+
+export type BuyerType = 'Wholesaler' | 'Retailer' | 'Processor' | 'Exporter' | 'Other';
+
+export type QuantityUnit = 'kg' | 'quintal' | 'tonne';
+
+export type BuyingFrequency = 'Daily' | 'Weekly' | 'Monthly' | 'As Needed';
+
+export interface BuyerRegistrationFormData {
+  fullName: string;
+  businessName: string;
+  buyerType: BuyerType | '';
+  mobileNumber: string;
+  email: string;
+  state: string;
+  district: string;
+  marketArea: string;
+  businessAddress: string;
+  preferredCrops: string[];
+  minQuantity: string;
+  maxQuantity: string;
+  quantityUnit: QuantityUnit;
+  minPrice: string;
+  maxPrice: string;
+  buyingFrequency: BuyingFrequency | '';
+}
+
