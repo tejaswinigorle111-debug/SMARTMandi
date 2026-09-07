@@ -44,7 +44,7 @@ if os.path.exists(_ENV_PATH):
 
 def _cors_origins() -> list[str]:
     configured = os.environ.get("CORS_ORIGINS", "")
-    origins = [origin.strip() for origin in configured.split(",") if origin.strip()]
+    origins = [origin.strip().rstrip("/") for origin in configured.split(",") if origin.strip()]
     return origins or ["http://localhost:3000", "http://127.0.0.1:3000"]
 
 
