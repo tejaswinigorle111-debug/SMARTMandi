@@ -34,6 +34,7 @@ export const MarketComparison: React.FC<MarketComparisonProps> = ({
             <tr className="text-stone-700 text-xs sm:text-sm font-black border-b border-stone-200">
               <th className="py-4 px-4 text-center w-12">{t.results.tableHeaders.rank}</th>
               <th className="py-4 px-4">{t.results.tableHeaders.market}</th>
+<<<<<<< HEAD
               <th className="py-4 px-4 text-center">{t.results.marketPriceLabel}<br/><span className="text-stone-500 font-bold">(₹/kg)</span></th>
               <th className="py-4 px-4 text-center">{t.results.distance}<br/><span className="text-stone-500 font-bold">(km)</span></th>
               <th className="py-4 px-4 text-center">{t.results.transport}<br/><span className="text-stone-500 font-bold">(₹)</span></th>
@@ -41,6 +42,13 @@ export const MarketComparison: React.FC<MarketComparisonProps> = ({
               <th className="py-4 px-4 text-center">Other<br/><span className="text-stone-500 font-bold">(₹)</span></th>
               <th className="py-4 px-4 text-center">{t.results.netReturn}<br/><span className="text-stone-500 font-bold">(₹)</span></th>
               <th className="py-4 px-4 text-center">Freshness</th>
+=======
+              <th className="py-4 px-4 text-center">{t.results.tableHeaders.net}<br/><span className="text-stone-500 font-bold">(₹)</span></th>
+              <th className="py-4 px-4 text-center">{t.results.tableHeaders.distance}<br/><span className="text-stone-500 font-bold">(km)</span></th>
+              <th className="py-4 px-4 text-center">{t.results.tableHeaders.time}</th>
+              <th className="py-4 px-4 text-center">{t.results.tableHeaders.score}<br/><span className="text-stone-500 font-bold">/100</span></th>
+              <th className="py-4 px-4 text-center">{t.results.tableHeaders.diff}<br/><span className="text-stone-500 font-bold">(₹)</span></th>
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
             </tr>
           </thead>
           <tbody className="text-sm sm:text-base font-bold text-stone-800">
@@ -68,6 +76,7 @@ export const MarketComparison: React.FC<MarketComparisonProps> = ({
                   <td className="py-4 px-4 text-stone-900 font-black">
                      {m.name}
                   </td>
+<<<<<<< HEAD
                   <td className="py-4 px-4 text-center">₹{m.pricePerKg}/kg</td>
                   <td className="py-4 px-4 text-center">{m.distanceKm} km<br/><span className="text-xs text-stone-500">{m.distanceType || 'estimated'}</span></td>
                   <td className="py-4 px-4 text-center">{m.transportCost === undefined ? '—' : formatINR(m.transportCost)}</td>
@@ -75,6 +84,20 @@ export const MarketComparison: React.FC<MarketComparisonProps> = ({
                   <td className="py-4 px-4 text-center">{m.otherCost === undefined ? '—' : formatINR(m.otherCost)}</td>
                   <td className="py-4 px-4 text-center text-[#165B33] font-black">{formatINR(m.netRealization ?? m.netReturn).replace('₹', '')}</td>
                   <td className="py-4 px-4 text-center text-xs">{m.dataState === 'cached' ? 'Cached' : 'Live'}<br/>{m.lastUpdated ? new Date(m.lastUpdated).toLocaleDateString('en-IN') : '—'}</td>
+=======
+                  <td className="py-4 px-4 text-center text-[#165B33] font-black">{formatINR(m.netReturn).replace('₹', '')}</td>
+                  <td className="py-4 px-4 text-center">{m.distanceKm} km</td>
+                  <td className="py-4 px-4 text-center text-sm">{Math.floor(m.distanceKm * 1.5)} {t.results.minUnit}</td>
+                  <td className="py-4 px-4 text-center">
+                    {m.smartMarketScore !== undefined ? (
+                      <span className={`text-sm font-black px-2 py-0.5 rounded-full ${
+                        (m.smartMarketScore || 0) >= 75 ? 'text-emerald-800 bg-emerald-100'
+                        : (m.smartMarketScore || 0) >= 50 ? 'text-amber-800 bg-amber-100'
+                        : 'text-stone-600 bg-stone-100'
+                      }`}>{m.smartMarketScore}</span>
+                    ) : <span className="text-stone-400">—</span>}
+                  </td>
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
                   <td className={`py-4 px-4 text-center ${!isBest ? 'text-rose-600 font-extrabold' : 'text-stone-400'}`}>
                     {diff}
                   </td>
@@ -86,7 +109,11 @@ export const MarketComparison: React.FC<MarketComparisonProps> = ({
       </div>
 
       <div className="mt-6 pt-4 border-t border-stone-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-bold text-stone-500">
+<<<<<<< HEAD
         <p>{results[0]?.comparisonExplanation || t.results.sampleNotice}</p>
+=======
+        <p>{t.results.sampleNotice}</p>
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
         <p className="flex items-center gap-1">
           <span className="w-2 h-2 rounded-full bg-[#165B33]"></span> 
           {t.results.recommendationBasis}

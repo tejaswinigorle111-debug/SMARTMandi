@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import os
 from datetime import date
 
@@ -48,6 +49,16 @@ from auth import (
 )
 
 load_dotenv(os.path.join(os.path.dirname(__file__), ".env"), override=True)
+=======
+# pyrefly: ignore [missing-import]
+from fastapi import FastAPI
+# pyrefly: ignore [missing-import]
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from data.markets import MARKETS
+from database import test_db_connection, verify_tables_exist
+from gov_data import fetch_live_markets, reverse_geocode
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 
 
 app = FastAPI(
@@ -58,6 +69,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
+<<<<<<< HEAD
     allow_origins=[
         origin.strip()
         for origin in os.getenv(
@@ -66,6 +78,9 @@ app.add_middleware(
         ).split(",")
         if origin.strip()
     ],
+=======
+    allow_origins=["*"],
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -74,12 +89,17 @@ app.add_middleware(
 
 class RecommendationRequest(BaseModel):
     crop: str
+<<<<<<< HEAD
     quantity: float = Field(gt=0)
+=======
+    quantity: float
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
     location: str
     latitude: float | None = None
     longitude: float | None = None
 
 
+<<<<<<< HEAD
 class RegisterRequest(BaseModel):
     email: str | None = None
     phone: str | None = None
@@ -97,6 +117,8 @@ class RoleAssignmentRequest(BaseModel):
     role: str
 
 
+=======
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 @app.get("/")
 def home():
     return {
@@ -112,6 +134,7 @@ def health():
     }
 
 
+<<<<<<< HEAD
 @app.post("/auth/register", status_code=201)
 def register(request: RegisterRequest):
     user = register_user(
@@ -188,6 +211,8 @@ def farmer_listing_delete(listing_id: int, user=Depends(require_roles("FARMER", 
     return cancel_listing(listing_id, user)
 
 
+=======
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 @app.get("/db-health")
 def db_health():
     db_result = test_db_connection()
@@ -235,6 +260,7 @@ def reverse_location(latitude: float, longitude: float):
     return reverse_geocode(latitude, longitude)
 
 
+<<<<<<< HEAD
 @app.get("/location/resolve")
 def resolve_location(
     address: str | None = None,
@@ -362,6 +388,15 @@ def buyer_order_tracking(order_id: int, user=Depends(require_roles("BUYER"))):
 @app.post("/buyer/orders/{order_id}/reviews", status_code=201)
 def buyer_review_order(order_id: int, request: ReviewCreate, user=Depends(require_roles("BUYER"))):
     return create_review(order_id, request, user)
+=======
+@app.get("/markets")
+def get_markets(crop: str | None = None):
+    markets, is_live = fetch_live_markets(crop)
+    return {
+        "markets": markets,
+        "source": "data.gov.in" if is_live else "local-fallback",
+    }
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 
 
 @app.post("/recommend")
@@ -383,6 +418,7 @@ def recommend_market(request: RecommendationRequest):
             "message": "Live nearby market data is unavailable for this location right now. Please try again shortly."
         }
 
+<<<<<<< HEAD
     try:
         comparisons = compare_markets(matching_markets, quantity)
     except CostConfigurationError as error:
@@ -395,10 +431,27 @@ def recommend_market(request: RecommendationRequest):
 
     results = []
     for market in comparisons:
+=======
+    results = []
+
+    for market in matching_markets:
+
+        gross_income = market["price_per_kg"] * quantity
+
+        transport_cost = (
+            market["distance_km"]
+            * quantity
+            * market["transport_rate"]
+        )
+
+        net_return = gross_income - transport_cost
+
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
         results.append({
             "market": market["name"],
             "location": market["location"],
             "price_per_kg": market["price_per_kg"],
+<<<<<<< HEAD
             "crop": market["crop"],
             "minimum_price": market["minimum_price"],
             "maximum_price": market["maximum_price"],
@@ -423,6 +476,13 @@ def recommend_market(request: RecommendationRequest):
             "comparison_explanation": market["comparison_explanation"],
             "cost_inputs": market["cost_inputs"],
             "arrival_quantity": market.get("arrival_quantity"),
+=======
+            "distance_km": market["distance_km"],
+            "estimated_transport_cost": round(transport_cost, 2),
+            "gross_income": round(gross_income, 2),
+            "net_return": round(net_return, 2),
+            "arrival_quantity": market.get("arrival_quantity")
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
         })
 
     # Calculate max/min for scoring
@@ -472,6 +532,7 @@ def recommend_market(request: RecommendationRequest):
         }
         m["smart_market_score"] = round(overall_score, 1)
 
+<<<<<<< HEAD
     results.sort(key=lambda market: market["net_realization"], reverse=True)
 
     best_market = results[0]
@@ -488,15 +549,30 @@ def recommend_market(request: RecommendationRequest):
         "demand": None,
         "seasonal": None,
     })
+=======
+    results.sort(
+        key=lambda market: market["smart_market_score"],
+        reverse=True
+    )
+
+    best_market = results[0]
+    best_market["smart_market_explanation"] = "This market achieved the highest Smart Market Score by providing the most optimal balance of high net returns and favorable logistical factors."
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 
     return {
         "success": True,
         "crop": request.crop,
         "quantity_kg": quantity,
         "farmer_location": request.location,
+<<<<<<< HEAD
         "source": matching_markets[0].get("source") if matching_markets else None,
         "data_state": data_state,
         "recommended_market": best_market,
         "all_markets": results,
         "intelligence": intelligence,
+=======
+        "source": "data.gov.in" if is_live else "local-fallback",
+        "recommended_market": best_market,
+        "all_markets": results
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
     }

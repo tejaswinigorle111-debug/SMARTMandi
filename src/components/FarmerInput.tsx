@@ -12,7 +12,11 @@ import {
 import { CropType, Language, FarmerInputData, CropCategory } from '../types';
 import { cropOptions } from '../data/demoMarkets';
 import { getTranslation } from '../utils/translations';
+<<<<<<< HEAD
 import { resolveLocation, reverseGeocode } from '../services/api';
+=======
+import { reverseGeocode } from '../services/api';
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 import vibrantHarvestImage from '../assets/images/vibrant_harvest_fields_1788514203779.jpg';
 
 interface FarmerInputProps {
@@ -32,9 +36,12 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
   const [crop, setCrop] = useState<CropType | ''>('');
   const [quantity, setQuantity] = useState<string>('');
   const [location, setLocation] = useState<string>('');
+<<<<<<< HEAD
   const [pincode, setPincode] = useState<string>('');
   const [district, setDistrict] = useState<string>('');
   const [state, setState] = useState<string>('');
+=======
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
   const [latitude, setLatitude] = useState<number | undefined>(undefined);
   const [longitude, setLongitude] = useState<number | undefined>(undefined);
 
@@ -358,7 +365,11 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
     }
   };
 
+<<<<<<< HEAD
   const handleSubmit = async (e: React.FormEvent) => {
+=======
+  const handleSubmit = (e: React.FormEvent) => {
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
     e.preventDefault();
     const parsedQty = parseFloat(quantity);
     if (!parsedQty || parsedQty <= 0) {
@@ -371,12 +382,17 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
       return;
     }
 
+<<<<<<< HEAD
     const manualLocation = [location.trim(), pincode.trim(), district.trim(), state.trim()].filter(Boolean).join(', ');
     if (!manualLocation) {
+=======
+    if (!location.trim()) {
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
       alert(t.input.invalidLocation);
       return;
     }
 
+<<<<<<< HEAD
     let resolvedLatitude = latitude;
     let resolvedLongitude = longitude;
     if (resolvedLatitude === undefined || resolvedLongitude === undefined) {
@@ -405,6 +421,14 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
       location: manualLocation,
       latitude: resolvedLatitude,
       longitude: resolvedLongitude,
+=======
+    onCalculate({
+      crop,
+      quantity: parsedQty * 100, // Convert Quintals to Kg for calculations
+      location: location.trim(),
+      latitude,
+      longitude,
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
     });
   };
 
@@ -940,12 +964,15 @@ export const FarmerInput: React.FC<FarmerInputProps> = ({
                   {locationStatus}
                 </p>
               )}
+<<<<<<< HEAD
 
               <div className="mt-3 grid gap-3 sm:grid-cols-3">
                 <label className="text-sm font-black text-stone-700">Pincode<input value={pincode} onChange={(event) => setPincode(event.target.value.replace(/\D/g, '').slice(0, 6))} inputMode="numeric" maxLength={6} className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5" /></label>
                 <label className="text-sm font-black text-stone-700">District<input value={district} onChange={(event) => setDistrict(event.target.value)} className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5" /></label>
                 <label className="text-sm font-black text-stone-700">State<input value={state} onChange={(event) => setState(event.target.value)} className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5" /></label>
               </div>
+=======
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
             </div>
 
             {/* 4. ANALYZE MARKETS */}

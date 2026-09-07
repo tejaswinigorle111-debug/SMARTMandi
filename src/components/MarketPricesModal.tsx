@@ -1,6 +1,10 @@
 import React from 'react';
 import { X, TrendingUp, Info } from 'lucide-react';
+<<<<<<< HEAD
 import { getMarketPrices } from '../services/api';
+=======
+import { fetchMarkets } from '../services/api';
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 import { Language, MarketPriceRecord } from '../types';
 import { getTranslation } from '../utils/translations';
 
@@ -19,14 +23,18 @@ export const MarketPricesModal: React.FC<MarketPricesModalProps> = ({
   const [markets, setMarkets] = React.useState<MarketPriceRecord[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [loadError, setLoadError] = React.useState<string | null>(null);
+<<<<<<< HEAD
   const [dataState, setDataState] = React.useState<'live' | 'cached' | 'unavailable'>('unavailable');
   const [dataSource, setDataSource] = React.useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = React.useState<string | null>(null);
+=======
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 
   React.useEffect(() => {
     if (!isOpen) return;
     setIsLoading(true);
     setLoadError(null);
+<<<<<<< HEAD
     getMarketPrices()
       .then((result) => {
         setMarkets(result.records);
@@ -36,6 +44,11 @@ export const MarketPricesModal: React.FC<MarketPricesModalProps> = ({
         setLoadError(result.message || null);
       })
       .catch(() => setLoadError('Live market data is temporarily unavailable.'))
+=======
+    fetchMarkets()
+      .then(setMarkets)
+      .catch(() => setLoadError('Live market prices are unavailable right now.'))
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
       .finally(() => setIsLoading(false));
   }, [isOpen]);
 
@@ -67,6 +80,7 @@ export const MarketPricesModal: React.FC<MarketPricesModalProps> = ({
           </button>
         </div>
 
+<<<<<<< HEAD
         <div className="my-5 grid gap-3 sm:grid-cols-3">
           <div className={`rounded-xl border-2 p-3 ${dataState === 'live' ? 'border-emerald-200 bg-emerald-50' : dataState === 'cached' ? 'border-amber-200 bg-amber-50' : 'border-stone-200 bg-stone-50'}`}>
             <p className="text-[11px] font-black uppercase tracking-wider text-stone-500">Data status</p>
@@ -82,6 +96,8 @@ export const MarketPricesModal: React.FC<MarketPricesModalProps> = ({
           </div>
         </div>
 
+=======
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
         {/* Disclaimer */}
         <div className="my-5 p-4 rounded-2xl bg-[#F0F4F0] border-2 border-[#DCE4DC] text-sm text-[#1B4332] flex items-start gap-2.5 font-bold">
           <Info className="w-5 h-5 text-[#2D6A4F] shrink-0 mt-0.5" />
@@ -98,7 +114,11 @@ export const MarketPricesModal: React.FC<MarketPricesModalProps> = ({
                 <th className="p-4">{t.marketPricesModal.mandiCol}</th>
                 <th className="p-4">{t.marketPricesModal.locationCol}</th>
                 <th className="p-4">{t.input.cropLabel}</th>
+<<<<<<< HEAD
                 <th className="p-4 text-right">Min / max / modal</th>
+=======
+                <th className="p-4 text-right">{t.results.marketPriceLabel} (₹/{t.input.kgLabel})</th>
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
               </tr>
             </thead>
             <tbody className="divide-y divide-stone-200">
@@ -110,6 +130,7 @@ export const MarketPricesModal: React.FC<MarketPricesModalProps> = ({
                   <td className="p-4 font-black text-stone-950">{m.name}</td>
                   <td className="p-4 text-stone-700 text-sm font-bold">{m.location}</td>
                   <td className="p-4 text-stone-700 font-bold">{m.crop || Object.keys(m.cropPrices || {})[0] || 'Market price'}</td>
+<<<<<<< HEAD
                   <td className="p-4 text-right font-black text-[#165B33] text-base">
                     {m.minimum_price === null || m.minimum_price === undefined ? '—' : `₹${m.minimum_price}`} / {m.maximum_price === null || m.maximum_price === undefined ? '—' : `₹${m.maximum_price}`} / {m.modal_price === null || m.modal_price === undefined ? '—' : `₹${m.modal_price}`}<span className="block text-xs text-stone-500">{m.unit || 'official unit'}</span>
                   </td>
@@ -117,6 +138,13 @@ export const MarketPricesModal: React.FC<MarketPricesModalProps> = ({
               ))}
               {!isLoading && markets.length === 0 && (
                 <tr><td colSpan={4} className="p-6 text-center font-bold">{loadError || 'Live market data is temporarily unavailable.'}</td></tr>
+=======
+                  <td className="p-4 text-right font-black text-[#165B33] text-base">₹{m.price_per_kg ?? Object.values(m.cropPrices || {})[0] ?? '-'}</td>
+                </tr>
+              ))}
+              {!isLoading && markets.length === 0 && (
+                <tr><td colSpan={4} className="p-6 text-center font-bold">{loadError || 'No market prices available.'}</td></tr>
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
               )}
             </tbody>
           </table>

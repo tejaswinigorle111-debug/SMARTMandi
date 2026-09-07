@@ -1,5 +1,9 @@
 import React from 'react';
+<<<<<<< HEAD
 import { CalculatedMarketResult, CropType, Language, MarketIntelligence } from '../types';
+=======
+import { CalculatedMarketResult, CropType, Language } from '../types';
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 import { RecommendationCard } from './RecommendationCard';
 import { MarketComparison } from './MarketComparison';
 import { PriceArrivalIntelligence } from './PriceArrivalIntelligence';
@@ -8,7 +12,10 @@ import { PriceTrendChart } from './PriceTrendChart';
 import { WhatIfComparison } from './WhatIfComparison';
 import { MapRouteView } from './MapRouteView';
 import { BestSellingWindow } from './BestSellingWindow';
+<<<<<<< HEAD
 import { MarketIntelligenceCard } from './MarketIntelligenceCard';
+=======
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 import { cropOptions } from '../data/demoMarkets';
 import { getTranslation } from '../utils/translations';
 import vegCropShadesImage from '../assets/images/veg_crop_shades_1788511659089.jpg';
@@ -21,7 +28,10 @@ interface MarketResultsProps {
   latitude?: number;
   longitude?: number;
   language: Language;
+<<<<<<< HEAD
   intelligence?: MarketIntelligence | null;
+=======
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 }
 
 export const MarketResults: React.FC<MarketResultsProps> = ({
@@ -32,7 +42,10 @@ export const MarketResults: React.FC<MarketResultsProps> = ({
   latitude,
   longitude,
   language,
+<<<<<<< HEAD
   intelligence,
+=======
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 }) => {
   if (!results || results.length === 0) return null;
 
@@ -57,7 +70,10 @@ export const MarketResults: React.FC<MarketResultsProps> = ({
     : language === 'hi' ? (cropData?.labelHi || cropData?.labelEn || crop)
     : language === 'mr' ? (cropData?.labelMr || cropData?.labelEn || crop)
     : (cropData?.labelEn || crop);
+<<<<<<< HEAD
   const dataState = recommendedMarketDataState(results);
+=======
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 
   return (
     <section
@@ -110,6 +126,7 @@ export const MarketResults: React.FC<MarketResultsProps> = ({
               </span>
               <span className="font-extrabold text-stone-950 text-base">{currentDateFormatted}</span>
             </div>
+<<<<<<< HEAD
             <div>
               <span className="text-stone-500 block font-bold text-xs uppercase tracking-wider">Data status</span>
               <span className="font-extrabold text-stone-950 text-base">{dataState === 'cached' ? 'CACHED DATA' : 'LIVE DATA'}</span>
@@ -122,6 +139,8 @@ export const MarketResults: React.FC<MarketResultsProps> = ({
               <span className="text-stone-500 block font-bold text-xs uppercase tracking-wider">Last updated</span>
               <span className="font-extrabold text-stone-950 text-base">{recommendedMarket.lastUpdated ? new Date(recommendedMarket.lastUpdated).toLocaleString('en-IN') : 'Unavailable'}</span>
             </div>
+=======
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
           </div>
         </div>
 
@@ -129,7 +148,10 @@ export const MarketResults: React.FC<MarketResultsProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Left Column (8 cols on large screens): Market Comparison Table & Charts */}
           <div className="lg:col-span-8 space-y-6">
+<<<<<<< HEAD
             {intelligence && <MarketIntelligenceCard intelligence={intelligence} />}
+=======
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
             {/* Market Comparison Table */}
             <MarketComparison results={results} language={language} />
 
@@ -174,7 +196,10 @@ export const MarketResults: React.FC<MarketResultsProps> = ({
     </section>
   );
 };
+<<<<<<< HEAD
 
 function recommendedMarketDataState(results: CalculatedMarketResult[]): 'live' | 'cached' {
   return results.some((result) => result.dataState === 'cached') ? 'cached' : 'live';
 }
+=======
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c

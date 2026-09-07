@@ -2,7 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Globe, Menu, X, TrendingUp, ChevronDown, Check } from 'lucide-react';
 import { Language } from '../types';
 import { getTranslation } from '../utils/translations';
+<<<<<<< HEAD
 import { AuthUser } from '../services/auth';
+=======
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 import smartMandiLogo from '../assets/images/smartmandi_logo_1788515902109.jpg';
 
 interface NavbarProps {
@@ -11,9 +14,12 @@ interface NavbarProps {
   onOpenMarketPrices: () => void;
   onOpenAbout: () => void;
   onScrollToInput: () => void;
+<<<<<<< HEAD
   user: AuthUser | null;
   onOpenAuth: () => void;
   onLogout: () => Promise<void>;
+=======
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 }
 
 export const languages: { code: Language; name: string; native: string }[] = [
@@ -29,9 +35,12 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenMarketPrices,
   onOpenAbout,
   onScrollToInput,
+<<<<<<< HEAD
   user,
   onOpenAuth,
   onLogout,
+=======
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
@@ -182,6 +191,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
             </div>
 
+<<<<<<< HEAD
             {user ? (
               <button
                 type="button"
@@ -200,6 +210,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
             )}
 
+=======
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
             {/* Primary Action Button */}
             <button
               type="button"
@@ -286,6 +298,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           <div className="pt-2 border-t border-stone-200">
+<<<<<<< HEAD
             {user ? (
               <button
                 type="button"
@@ -306,6 +319,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 Sign in
               </button>
             )}
+=======
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
             <button
               type="button"
               onClick={() => handleNavClick(onScrollToInput)}

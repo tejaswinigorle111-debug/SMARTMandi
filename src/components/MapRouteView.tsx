@@ -101,6 +101,7 @@ export const MapRouteView: React.FC<MapRouteViewProps> = ({
                           </span>
                         )}
                       </p>
+<<<<<<< HEAD
                       <div>
                         <p className="mt-1 text-[11px] font-bold text-stone-500">
                           {market.crop || 'Crop unavailable'} · Min {market.minimumPrice ?? '—'} · Max {market.maximumPrice ?? '—'} · Modal {market.modalPrice ?? '—'} {market.priceUnit || ''}
@@ -120,13 +121,23 @@ export const MapRouteView: React.FC<MapRouteViewProps> = ({
                         Directions
                       </a>
                     )}
+=======
+                      <span className="text-xs font-bold text-stone-500 bg-white border border-stone-200 px-2 py-0.5 rounded-full">
+                        {mt.routeDistance}: {market.distanceKm} km
+                      </span>
+                    </div>
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
                   </div>
                 </div>
               ))}
             </div>
 
             <p className="text-[10px] font-bold text-stone-400 text-center">
+<<<<<<< HEAD
               Straight-line distance uses GPS coordinates. Road distance appears only when Routes API data is available.
+=======
+              {mt.distanceDisclaimer || '* Distances are approximate estimates. Use Google Maps for navigation.'}
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
             </p>
           </div>
         )}

@@ -27,6 +27,7 @@ export interface MarketPriceRecord {
   name: string;
   location: string;
   crop?: string;
+<<<<<<< HEAD
   commodity?: string;
   market?: string;
   state?: string;
@@ -40,6 +41,8 @@ export interface MarketPriceRecord {
   source?: string | null;
   last_updated?: string | null;
   data_state?: 'live' | 'cached' | 'unavailable';
+=======
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
   price_per_kg?: number;
   cropPrices?: Partial<Record<CropType, number>>;
 }
@@ -74,6 +77,7 @@ export interface CalculatedMarketResult {
     distanceScore: number;
     transportScore: number;
   };
+<<<<<<< HEAD
   dataState?: 'live' | 'cached';
   source?: string;
   lastUpdated?: string | null;
@@ -102,6 +106,8 @@ export interface MarketIntelligence {
   uncertainty: string;
   insights: string[];
   data_availability: Record<string, 'available' | 'insufficient' | 'unavailable'>;
+=======
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 }
 
 export interface CropHistoricalTrend {

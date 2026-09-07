@@ -24,7 +24,11 @@ export const PriceArrivalIntelligence: React.FC<PriceArrivalIntelligenceProps> =
           {t.results.intelligenceTitle || 'Price & Arrival Intelligence'}
         </h3>
         <span className="text-xs font-bold bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full uppercase tracking-wider">
+<<<<<<< HEAD
           {bestMarket.dataState === 'cached' ? 'Cached Data' : 'Live Data'}
+=======
+          {t.results.sampleDataLabel || 'Sample Data'}
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
         </span>
       </div>
 

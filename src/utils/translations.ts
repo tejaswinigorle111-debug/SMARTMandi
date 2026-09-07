@@ -379,7 +379,11 @@ export const translations: Record<Language, TranslationSchema> = {
         score: 'Score',
         diff: 'Diff vs Best',
       },
+<<<<<<< HEAD
       sampleNotice: 'Official market data • Transport estimates are calculated separately',
+=======
+      sampleNotice: 'Sample Market Data • Transport rates estimated using regional freight guidelines',
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
       recommendationBasis: 'Recommendation based on Smart Market Score',
       intelligenceTitle: 'Price & Arrival Intelligence',
       marketPriceLabel: 'Current Price',
@@ -408,7 +412,11 @@ export const translations: Record<Language, TranslationSchema> = {
       priceComparisonTitle: 'Market Price Comparison',
       priceComparisonSub: 'Price per kg (₹) across candidate mandis',
       priceTrendTitle: 'Price Trend',
+<<<<<<< HEAD
       priceTrendSub: 'Official historical price series will appear when available',
+=======
+      priceTrendSub: '7-day sample mandi modal price trend across the region',
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
       bestOptionLegend: 'Best Option',
       otherMandisLegend: 'Other Mandis',
       sevenDayHistory: '7-Day History',
@@ -507,8 +515,13 @@ export const translations: Record<Language, TranslationSchema> = {
     marketPricesModal: {
       title: 'Available Baseline Mandi Prices',
       subtitle: 'Indicative rates across major agricultural APMC yards',
+<<<<<<< HEAD
       noticeTitle: 'Official market data:',
       noticeText: 'Rates are displayed only when retrieved from the configured official government resource or clearly marked as cached data. If retrieval fails, no prices are shown.',
+=======
+      noticeTitle: 'Sample Market Data Notice:',
+      noticeText: 'The rates shown below are indicative benchmark prices gathered for demonstration and mandi decision support. Future mandi integration will connect via the regional e-NAM/APMC mandi gateway.',
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
       mandiCol: 'Mandi Yard',
       locationCol: 'Location',
       closeBtn: 'Close',
@@ -669,7 +682,11 @@ export const translations: Record<Language, TranslationSchema> = {
         score: 'స్కోర్',
         diff: 'తేడా',
       },
+<<<<<<< HEAD
       sampleNotice: 'అధికారిక మార్కెట్ డేటా • రవాణా అంచనాలు విడిగా లెక్కించబడతాయి',
+=======
+      sampleNotice: 'మార్కెట్ డేటా • ప్రాంతీయ రవాణా మార్గదర్శకాల ఆధారంగా రవాణా ఖర్చుల అంచనా',
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
       recommendationBasis: 'స్మార్ట్ మార్కెట్ స్కోర్ ఆధారంగా సిఫార్సు',
       intelligenceTitle: 'ధర మరియు రాక సమాచారం',
       marketPriceLabel: 'ప్రస్తుత ధర',
@@ -797,8 +814,13 @@ export const translations: Record<Language, TranslationSchema> = {
     marketPricesModal: {
       title: 'అందుబాటులో ఉన్న ప్రాథమిక మార్కెట్ ధరలు',
       subtitle: 'ప్రధాన వ్యవసాయ మార్కెట్ యార్డులలోని ప్రస్తుత సూచిక ధరలు',
+<<<<<<< HEAD
       noticeTitle: 'అధికారిక మార్కెట్ డేటా:',
       noticeText: 'ధరలు అధికారిక ప్రభుత్వ వనరు నుండి పొందినప్పుడు మాత్రమే చూపబడతాయి. పొందడం విఫలమైతే ధరలు చూపించబడవు.',
+=======
+      noticeTitle: 'నమూనా మార్కెట్ డేటా గమనిక:',
+      noticeText: 'క్రింద చూపబడిన ధరలు ప్రదర్శన మరియు మార్కెట్ నిర్ణయ మద్దతు కోసం సేకరించిన ప్రాథమిక సూచిక ధరలు. భవిష్యత్తులో ఇవి ప్రాంతీయ e-NAM/APMC మార్కెట్ గేట్‌వే ద్వారా అనుసంధానించబడతాయి.',
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
       mandiCol: 'మండి మార్కెట్',
       locationCol: 'ప్రాంతం',
       closeBtn: 'మూసివేయి',
@@ -959,7 +981,11 @@ export const translations: Record<Language, TranslationSchema> = {
         score: 'स्कोर',
         diff: 'अंतर',
       },
+<<<<<<< HEAD
       sampleNotice: 'आधिकारिक मंडी डेटा • परिवहन अनुमान अलग से गणना किए जाते हैं',
+=======
+      sampleNotice: 'मंडी डेटा • क्षेत्रीय माल ढुलाई दिशानिर्देशों पर आधारित परिवहन खर्च',
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
       recommendationBasis: 'स्मार्ट मार्केट स्कोर के आधार पर सिफारिश',
       intelligenceTitle: 'मंडी भाव और आवक जानकारी',
       marketPriceLabel: 'मौजूदा भाव',
@@ -1087,8 +1113,13 @@ export const translations: Record<Language, TranslationSchema> = {
     marketPricesModal: {
       title: 'उपलब्ध मानक मंडी भाव',
       subtitle: 'प्रमुख कृषि उपज मंडियों के सांकेतिक भाव',
+<<<<<<< HEAD
       noticeTitle: 'आधिकारिक मंडी डेटा:',
       noticeText: 'भाव केवल कॉन्फ़िगर किए गए आधिकारिक सरकारी स्रोत से प्राप्त होने पर दिखाए जाते हैं। प्राप्ति विफल होने पर भाव नहीं दिखाए जाते।',
+=======
+      noticeTitle: 'सांकेतिक मंडी डेटा सूचना:',
+      noticeText: 'नीचे दिखाए गए भाव प्रदर्शन और निर्णय सहायता के लिए संकलित सांकेतिक मानक दरें हैं। भविष्य में यह क्षेत्रीय e-NAM/APMC गेटवे से जुड़ेगा।',
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
       mandiCol: 'मंडी',
       locationCol: 'स्थान',
       closeBtn: 'बंद करें',
@@ -1249,7 +1280,11 @@ export const translations: Record<Language, TranslationSchema> = {
         score: 'स्कोअर',
         diff: 'फरक',
       },
+<<<<<<< HEAD
       sampleNotice: 'अधिकृत बाजार डेटा • वाहतूक अंदाज स्वतंत्रपणे मोजले जातात',
+=======
+      sampleNotice: 'नमुना बाजार डेटा • प्रादेशिक वाहतूक मार्गदर्शक तत्त्वांवर आधारित वाहतूक खर्च',
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
       recommendationBasis: 'स्मार्ट मार्केट स्कोअरवर आधारित शिफारस',
       intelligenceTitle: 'बाजारभाव आणि आवक माहिती',
       marketPriceLabel: 'चालू दर',
@@ -1377,8 +1412,13 @@ export const translations: Record<Language, TranslationSchema> = {
     marketPricesModal: {
       title: 'उपलब्ध प्रातिनिधिक बाजार भाव',
       subtitle: 'प्रमुख कृषी उत्पन्न बाजार समित्यांमधील (APMC) मार्गदर्शक दर',
+<<<<<<< HEAD
       noticeTitle: 'अधिकृत बाजार डेटा:',
       noticeText: 'दर केवळ कॉन्फिगर केलेल्या अधिकृत सरकारी स्रोताकडून मिळाल्यावर दाखवले जातात. डेटा मिळाला नाही तर दर दाखवले जात नाहीत.',
+=======
+      noticeTitle: 'प्रातिनिधिक बाजार डेटा सूचना:',
+      noticeText: 'खाली दाखवलेले दर प्रात्यक्षिक आणि निर्णय समर्थनासाठी गोळा केलेले सांकेतिक दर आहेत. भविष्यात ही प्रणाली प्रादेशिक e-NAM/APMC गेटवेद्वारे जोडली जाईल.',
+>>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
       mandiCol: 'बाजार समिती',
       locationCol: 'स्थान',
       closeBtn: 'बंद करा',
