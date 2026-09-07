@@ -48,6 +48,9 @@ def _cors_origins() -> list[str]:
     return origins or ["http://localhost:3000", "http://127.0.0.1:3000"]
 
 
+_LOCAL_DEV_ORIGIN_REGEX = r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$"
+
+
 app = FastAPI(
     title="SMARTMandi API",
     description="Market decision support system for farmers",
@@ -57,6 +60,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=_cors_origins(),
+    allow_origin_regex=_LOCAL_DEV_ORIGIN_REGEX,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

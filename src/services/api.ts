@@ -182,10 +182,22 @@ export async function getRecommendation(
         const recommended = allResults.find((m) => m.isRecommended) || allResults[0];
         return { recommended, all: allResults, intelligence: result.intelligence };
       }
+
+      throw new Error(
+        result.message ||
+          'No fresh nearby market prices were found for this crop and location.'
+      );
     }
+
+    const errorBody = await response.json().catch(() => ({}));
+    throw new Error(
+      errorBody.detail ||
+        errorBody.message ||
+        `Market recommendation failed (${response.status}).`
+    );
   } catch (e) {
     console.warn('Live market recommendation is unavailable.', e);
+    if (e instanceof Error) throw e;
+    throw new Error('Unable to load market recommendations.');
   }
-
-  throw new Error('Live market data is currently unavailable. Please try again later.');
 }
