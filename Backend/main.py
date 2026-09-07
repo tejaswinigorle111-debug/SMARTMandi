@@ -66,6 +66,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/debug-cors")
+def debug_cors():
+    return {
+        "cors_origins": _cors_origins(),
+        "environment_value": os.environ.get("CORS_ORIGINS"),
+    }
+
+
 
 class RecommendationRequest(BaseModel):
     crop: str
