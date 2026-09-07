@@ -9,11 +9,9 @@ Backend/venv/
 Backend/__pycache__/
 Backend/data/__pycache__/
 
-node_modules/
-dist/
-
-
+# Secrets — never commit real keys
+.env
+Backend/.env
 
 .vscode/
-.DS_Store
 Thumbs.db

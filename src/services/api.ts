@@ -125,25 +125,31 @@ export async function getRecommendation(
       if (result.success && result.all_markets && result.all_markets.length > 0) {
         const allResults: CalculatedMarketResult[] = result.all_markets.map(
           (market: any, index: number) => ({
-            id: String(index + 1),
-            name: market.market,
+            id: String(market.id || index + 1),
+            name: market.market || market.name,
             location: market.location,
-            district: '',
-            state: 'Regional Mandi',
+            district: market.district || '',
+            state: market.state || 'Regional Mandi',
             pricePerKg: market.price_per_kg,
             distanceKm: market.distance_km,
-            transportCost: market.estimated_transport_cost,
+            transportCost:
+              market.estimated_transport_cost ?? market.transport_cost ?? 0,
             grossIncome: market.gross_income,
-            netReturn: market.net_return,
-            isRecommended: market.market === result.recommended_market.market,
+            netReturn: market.net_return ?? market.net_realization ?? 0,
+            isRecommended:
+              (market.market || market.name) ===
+              (result.recommended_market.market || result.recommended_market.name),
             marketType: 'APMC Yard',
             whyRecommended:
-              market.market === result.recommended_market.market
+              (market.market || market.name) ===
+              (result.recommended_market.market || result.recommended_market.name)
                 ? result.recommended_market.smart_market_explanation ||
+                  market.comparison_explanation ||
                   `This market provides the highest estimated net return after considering transportation cost.`
                 : undefined,
             smartMarketScore: market.smart_market_score,
-            arrivalQuantity: market.arrival_quantity !== undefined ? market.arrival_quantity : null,
+            arrivalQuantity:
+              market.arrival_quantity !== undefined ? market.arrival_quantity : null,
             scoreBreakdown: market.score_breakdown
               ? {
                   netReturnScore: market.score_breakdown.net_return_score,
@@ -152,14 +158,14 @@ export async function getRecommendation(
                   transportScore: market.score_breakdown.transport_score,
                 }
               : undefined,
-            dataState: market.data_state,
-            source: market.source,
-            lastUpdated: market.last_updated,
+            dataState: market.data_state || result.data_state,
+            source: market.source || result.source,
+            lastUpdated: market.last_updated || market.date || result.last_updated,
             straightLineDistanceKm: market.straight_line_distance_km,
             roadDistanceKm: market.road_distance_km,
             distanceType: market.distance_type,
             directionsUrl: market.directions_url,
-            crop: market.crop,
+            crop: market.crop || market.commodity,
             minimumPrice: market.minimum_price,
             maximumPrice: market.maximum_price,
             modalPrice: market.modal_price,
@@ -167,7 +173,7 @@ export async function getRecommendation(
             storageCost: market.storage_cost,
             platformFee: market.platform_fee,
             otherCost: market.other_cost,
-            netRealization: market.net_realization,
+            netRealization: market.net_realization ?? market.net_return,
             calculationState: market.calculation_state,
             comparisonExplanation: market.comparison_explanation,
           })

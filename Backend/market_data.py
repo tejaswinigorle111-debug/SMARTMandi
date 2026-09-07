@@ -1,19 +1,23 @@
 import os
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 import requests
 from dotenv import load_dotenv
 
+from location_service import geocode_location, location_distance, reverse_geocode_location
+from market_comparison import load_cost_configuration
 
 
 _ENV_PATH = os.path.join(os.path.dirname(__file__), ".env")
 _DATA_GOV_RESOURCE_URL = "https://api.data.gov.in/resource"
 _DATA_GOV_SOURCE = "data.gov.in"
+_DEFAULT_RESOURCE_ID = "9ef84268-d588-465a-a308-a864a43d0070"
 _HEADERS = {
     "User-Agent": "SMARTMandi/1.0 official agricultural data client",
     "Accept": "application/json",
 }
+_GEOCODE_CACHE: dict[str, tuple[float, float] | None] = {}
 
 
 class MarketDataService:
@@ -26,11 +30,31 @@ class MarketDataService:
     def _load_config(self) -> tuple[str | None, str | None, str | None]:
         if os.path.exists(_ENV_PATH):
             load_dotenv(dotenv_path=_ENV_PATH, override=True)
+        resource_id = (os.environ.get("DATA_GOV_RESOURCE_ID") or "").strip() or _DEFAULT_RESOURCE_ID
         return (
             os.environ.get("DATA_GOV_API_KEY"),
-            os.environ.get("DATA_GOV_RESOURCE_ID"),
-            os.environ.get("DATA_GOV_PRICE_UNIT"),
+            resource_id,
+            os.environ.get("DATA_GOV_PRICE_UNIT") or "INR/quintal",
         )
+
+    @staticmethod
+    def _nearby_radius_km() -> float:
+        try:
+            configured = float(os.environ.get("MAX_NEARBY_MARKET_DISTANCE_KM", "100"))
+            return configured if configured > 0 else 100.0
+        except (TypeError, ValueError):
+            return 100.0
+
+    @staticmethod
+    def _max_price_age_days() -> int | None:
+        raw = os.environ.get("MAX_PRICE_AGE_DAYS", "7")
+        if raw is None or not str(raw).strip():
+            return 7
+        try:
+            value = int(raw)
+            return value if value > 0 else None
+        except (TypeError, ValueError):
+            return 7
 
     @staticmethod
     def _cache_key(crop: str | None, state: str | None, district: str | None) -> str:
@@ -43,6 +67,54 @@ class MarketDataService:
             return number if number >= 0 else None
         except (TypeError, ValueError):
             return None
+
+    @staticmethod
+    def _parse_price_date(value: Any) -> datetime | None:
+        if value is None:
+            return None
+        text = str(value).strip()
+        if not text:
+            return None
+        for fmt in ("%d/%m/%Y", "%Y-%m-%d", "%d-%m-%Y", "%d.%m.%Y"):
+            try:
+                return datetime.strptime(text, fmt).replace(tzinfo=timezone.utc)
+            except ValueError:
+                continue
+        try:
+            return datetime.fromisoformat(text.replace("Z", "+00:00"))
+        except ValueError:
+            return None
+
+    def _is_fresh(self, record: dict[str, Any]) -> bool:
+        max_age = self._max_price_age_days()
+        if max_age is None:
+            return True
+        price_date = self._parse_price_date(record.get("date") or record.get("last_updated"))
+        if price_date is None:
+            return True
+        cutoff = datetime.now(timezone.utc) - timedelta(days=max_age)
+        return price_date >= cutoff
+
+    def _geocode_cached(self, query: str) -> tuple[float, float] | None:
+        key = query.strip().lower()
+        if not key:
+            return None
+        if key in _GEOCODE_CACHE:
+            return _GEOCODE_CACHE[key]
+        result = geocode_location(query)
+        coordinates = (
+            (float(result["latitude"]), float(result["longitude"]))
+            if result
+            else None
+        )
+        _GEOCODE_CACHE[key] = coordinates
+        return coordinates
+
+    def _transport_rate(self) -> float:
+        try:
+            return load_cost_configuration().transport_rate_per_km_per_kg
+        except Exception:
+            return 0.05
 
     def _normalise_record(self, record: dict[str, Any], index: int, price_unit: str) -> dict[str, Any] | None:
         commodity = (record.get("commodity") or record.get("crop") or "").strip()
@@ -69,6 +141,9 @@ class MarketDataService:
             minimum_price_per_kg = minimum_price
             maximum_price_per_kg = maximum_price
 
+        if price_per_kg is None or price_per_kg <= 0:
+            return None
+
         return {
             "id": f"live-{index}",
             "crop": commodity,
@@ -79,6 +154,7 @@ class MarketDataService:
             "state": state,
             "district": district,
             "date": date_value,
+            "price_date": date_value,
             "minimum_price": minimum_price,
             "maximum_price": maximum_price,
             "modal_price": modal_price,
@@ -238,6 +314,76 @@ class MarketDataService:
             result["message"] = "Live market details are temporarily unavailable."
         return result
 
+    def test_connection(self) -> dict[str, Any]:
+        """Health check against the configured data.gov.in resource. Never returns the API key."""
+        api_key, resource_id, _price_unit = self._load_config()
+        if not api_key:
+            return {
+                "success": False,
+                "status": "unconfigured",
+                "message": "DATA_GOV_API_KEY is missing in Backend/.env",
+            }
+        if not resource_id:
+            return {
+                "success": False,
+                "status": "unconfigured",
+                "message": "DATA_GOV_RESOURCE_ID is missing in Backend/.env",
+            }
+
+        try:
+            response = requests.get(
+                f"{_DATA_GOV_RESOURCE_URL}/{resource_id}",
+                params={
+                    "api-key": api_key,
+                    "format": "json",
+                    "limit": 5,
+                    "filters[state]": "Maharashtra",
+                },
+                headers=_HEADERS,
+                timeout=(5, 30),
+            )
+            if response.status_code != 200:
+                return {
+                    "success": False,
+                    "status": "error",
+                    "http_status_code": response.status_code,
+                    "message": f"data.gov.in API returned an error status: {response.status_code}",
+                }
+
+            data = response.json()
+            records = data.get("records", [])
+            sample_summary = {}
+            if records:
+                sample_summary = {
+                    "market": records[0].get("market"),
+                    "commodity": records[0].get("commodity"),
+                    "modal_price": records[0].get("modal_price"),
+                    "arrival_date": records[0].get("arrival_date"),
+                }
+            return {
+                "success": True,
+                "status": "healthy",
+                "resource_id": resource_id,
+                "records_received": len(records),
+                "total_available_in_dataset": data.get("total", "unknown"),
+                "sample_fields_available": list(records[0].keys()) if records else [],
+                "sample_record_summary": sample_summary,
+                "message": "Successfully connected to data.gov.in API.",
+            }
+        except requests.exceptions.Timeout:
+            return {
+                "success": False,
+                "status": "error",
+                "message": "Connection to data.gov.in API timed out.",
+            }
+        except requests.exceptions.RequestException as error:
+            return {
+                "success": False,
+                "status": "error",
+                "exception_class": error.__class__.__name__,
+                "message": "Failed to connect to data.gov.in API.",
+            }
+
     def getNearbyMarketPrices(
         self,
         *,
@@ -246,12 +392,119 @@ class MarketDataService:
         latitude: float | None = None,
         longitude: float | None = None,
     ) -> dict[str, Any]:
-        state = None
-        records_result = self.getMarketPrices(crop=crop, state=state)
-        if records_result["data_state"] == "unavailable":
-            return records_result
+        """Fetch official prices and keep only markets within the configured radius."""
+        origin: tuple[float, float] | None = None
+        origin_state: str | None = None
 
-        return records_result
+        if latitude is not None and longitude is not None:
+            origin = (float(latitude), float(longitude))
+            origin_state = reverse_geocode_location(origin[0], origin[1]).get("state")
+        elif location and location.strip():
+            geocoded = geocode_location(location.strip())
+            if geocoded:
+                origin = (float(geocoded["latitude"]), float(geocoded["longitude"]))
+                origin_state = reverse_geocode_location(origin[0], origin[1]).get("state")
+
+        prices = self.getMarketPrices(crop=crop, state=origin_state)
+        if prices["data_state"] == "unavailable":
+            return prices
+
+        # If state filter returned nothing, retry without state (still distance-filter later).
+        records = list(prices["records"])
+        if not records and origin_state:
+            fallback = self.getMarketPrices(crop=crop)
+            if fallback["records"]:
+                prices = fallback
+                records = list(fallback["records"])
+
+        if not origin:
+            fresh = [item for item in records if self._is_fresh(item)]
+            for item in fresh:
+                item["data_state"] = prices["data_state"]
+                item["transport_rate"] = self._transport_rate()
+            return {
+                **prices,
+                "records": fresh,
+                "message": prices.get("message")
+                or (
+                    None
+                    if fresh
+                    else "Unable to resolve farmer location for nearby market filtering."
+                ),
+            }
+
+        radius = self._nearby_radius_km()
+        transport_rate = self._transport_rate()
+        nearby: list[dict[str, Any]] = []
+
+        for item in records:
+            if not self._is_fresh(item):
+                continue
+            district = item.get("district") or ""
+            state = item.get("state") or ""
+            market_name = item.get("market") or item.get("name") or ""
+            query = ", ".join(
+                part for part in (market_name, district, state, "India") if part
+            )
+            coordinates = self._geocode_cached(query)
+            if coordinates is None and district:
+                coordinates = self._geocode_cached(f"{district}, {state}, India")
+            if coordinates is None:
+                continue
+
+            distance = location_distance(
+                origin[0], origin[1], coordinates[0], coordinates[1]
+            )
+            straight_line = distance["straight_line_distance_km"]
+            if straight_line is None or straight_line > radius:
+                continue
+
+            enriched = dict(item)
+            enriched.update(
+                {
+                    "latitude": coordinates[0],
+                    "longitude": coordinates[1],
+                    "distance_km": straight_line,
+                    "straight_line_distance_km": straight_line,
+                    "road_distance_km": distance.get("road_distance_km"),
+                    "distance_type": distance.get("distance_type", "straight-line"),
+                    "transport_rate": transport_rate,
+                    "data_state": prices["data_state"],
+                    "directions_url": (
+                        "https://www.google.com/maps/dir/?api=1"
+                        f"&origin={origin[0]},{origin[1]}"
+                        f"&destination={coordinates[0]},{coordinates[1]}"
+                        "&travelmode=driving"
+                    ),
+                }
+            )
+            nearby.append(enriched)
+
+        nearby.sort(
+            key=lambda market: market.get("road_distance_km")
+            if market.get("road_distance_km") is not None
+            else market["distance_km"]
+        )
+
+        if not nearby:
+            return {
+                "records": [],
+                "source": prices.get("source"),
+                "data_state": "unavailable",
+                "last_updated": prices.get("last_updated"),
+                "message": (
+                    f"No fresh official market prices found within {radius:.0f} km "
+                    "for this crop and location."
+                ),
+            }
+
+        return {
+            "records": nearby,
+            "source": _DATA_GOV_SOURCE,
+            "data_state": prices["data_state"],
+            "last_updated": prices.get("last_updated"),
+            "message": prices.get("message"),
+        }
 
 
 market_data_service = MarketDataService()
