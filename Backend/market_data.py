@@ -419,19 +419,12 @@ class MarketDataService:
                 records = list(fallback["records"])
 
         if not origin:
-            fresh = [item for item in records if self._is_fresh(item)]
-            for item in fresh:
-                item["data_state"] = prices["data_state"]
-                item["transport_rate"] = self._transport_rate()
             return {
-                **prices,
-                "records": fresh,
-                "message": prices.get("message")
-                or (
-                    None
-                    if fresh
-                    else "Unable to resolve farmer location for nearby market filtering."
-                ),
+                "records": [],
+                "source": prices.get("source"),
+                "data_state": "unavailable",
+                "last_updated": prices.get("last_updated"),
+                "message": "Unable to resolve farmer location for nearby market filtering.",
             }
 
         radius = self._nearby_radius_km()
@@ -483,13 +476,6 @@ class MarketDataService:
         candidates.sort(key=lambda market: market["distance_km"])
         nearby = [item for item in candidates if item["distance_km"] <= radius]
 
-        # If nothing is inside the radius, still return the closest few so the
-        # farmer gets usable official prices instead of an empty screen.
-        expanded = False
-        if not nearby and candidates:
-            nearby = candidates[:5]
-            expanded = True
-
         if not nearby:
             return {
                 "records": [],
@@ -519,19 +505,12 @@ class MarketDataService:
             else market["straight_line_distance_km"]
         )
 
-        message = prices.get("message")
-        if expanded:
-            message = (
-                f"No markets were found within {radius:.0f} km. "
-                "Showing the closest official prices available for this crop."
-            )
-
         return {
             "records": nearby,
             "source": _DATA_GOV_SOURCE,
             "data_state": prices["data_state"],
             "last_updated": prices.get("last_updated"),
-            "message": message,
+            "message": prices.get("message"),
         }
 
 
