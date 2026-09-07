@@ -32,3 +32,15 @@ Open the frontend at http://localhost:3000. API at http://127.0.0.1:8000.
 - `GET /health`
 - `GET /government-data-health`
 - `GET /db-health` (when `DATABASE_URL` is set)
+
+## Transaction enablement
+
+After the initial platform migrations, apply `Backend/migrations/004_transaction_enablement.sql` to enable buyer demand, structured quality inspections, offer decisions and counteroffers, shipment assignment, warehouse bookings, payment transitions, disputes, immutable transaction events, and realized-profit records.
+
+The authenticated API routes are available under `/buyer/demands`, `/farmer/offers`, `/listings/{id}/quality-inspections`, `/orders/{id}/shipments`, `/warehouses/bookings`, `/payments/{id}/transition`, `/orders/{id}/disputes`, `/audit`, and `/farmer/orders/{id}/profit`.
+
+Apply `Backend/migrations/005_marketplace_growth.sql` next to enable buyer verification documents, FPO pooled lots and farmer settlements, demand-to-listing matching, and market-alert records. SMS, WhatsApp, email, and payment-provider delivery require provider credentials and webhooks; the database stores their delivery and provider-reference states without exposing secrets in the frontend.
+
+Apply `Backend/migrations/006_warehouse_operations.sql` after that to enable warehouse-manager booking approval, live inventory capacity, receiving, location movement, spoilage reporting, and partial or complete stock release tracking.
+
+Keep `.env` and `Backend/.env` local. If either file was ever committed, remove it from Git tracking and rotate every credential inside it before deployment.

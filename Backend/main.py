@@ -35,6 +35,55 @@ from farmer import (
 from location_service import geocode_location, location_distance, reverse_geocode_location
 from market_comparison import CostConfigurationError, compare_markets
 from market_data import market_data_service
+from marketplace_growth import (
+    AlertCreate,
+    PooledLotCreate,
+    VerificationDecision,
+    VerificationDocumentCreate,
+    create_market_alert,
+    create_pooled_lot,
+    list_market_alerts,
+    list_pooled_lots,
+    match_demands,
+    review_verification,
+    submit_verification,
+)
+from transaction import (
+    DemandCreate,
+    DisputeCreate,
+    DisputeDecision,
+    OfferDecision,
+    PaymentTransition,
+    ProfitCreate,
+    QualityInspectionCreate,
+    ShipmentAssignment,
+    WarehouseBookingCreate,
+    book_warehouse,
+    create_buyer_demand,
+    create_shipment,
+    decide_dispute,
+    decide_offer,
+    inspect_listing,
+    list_audit_events,
+    list_buyer_demands,
+    open_dispute,
+    record_profit,
+    transition_payment,
+)
+from warehouse import (
+    BookingDecision,
+    InventoryMovement,
+    InventoryReceive,
+    ReleaseInventory,
+    SpoilageReport,
+    decide_booking,
+    list_warehouse_bookings,
+    move_inventory,
+    receive_inventory,
+    release_inventory,
+    report_spoilage,
+    warehouse_capacity,
+)
 
 
 _ENV_PATH = os.path.join(os.path.dirname(__file__), ".env")
@@ -364,3 +413,28 @@ app.add_api_route("/buyer/listings/{listing_id}/orders", create_order, methods=[
 app.add_api_route("/buyer/orders", list_orders, methods=["GET"])
 app.add_api_route("/buyer/orders/{order_id}/tracking", get_order_tracking, methods=["GET"])
 app.add_api_route("/buyer/orders/{order_id}/reviews", create_review, methods=["POST"])
+app.add_api_route("/buyer/demands", create_buyer_demand, methods=["POST"])
+app.add_api_route("/demands", list_buyer_demands, methods=["GET"])
+app.add_api_route("/listings/{listing_id}/quality-inspections", inspect_listing, methods=["POST"])
+app.add_api_route("/farmer/offers/{offer_id}/decision", decide_offer, methods=["POST"])
+app.add_api_route("/orders/{order_id}/shipments", create_shipment, methods=["POST"])
+app.add_api_route("/warehouses/bookings", book_warehouse, methods=["POST"])
+app.add_api_route("/payments/{payment_id}/transition", transition_payment, methods=["POST"])
+app.add_api_route("/orders/{order_id}/disputes", open_dispute, methods=["POST"])
+app.add_api_route("/disputes/{dispute_id}/decision", decide_dispute, methods=["POST"])
+app.add_api_route("/audit/{entity_type}/{entity_id}", list_audit_events, methods=["GET"])
+app.add_api_route("/farmer/orders/{order_id}/profit", record_profit, methods=["POST"])
+app.add_api_route("/buyer/verification-documents", submit_verification, methods=["POST"])
+app.add_api_route("/admin/verification-documents/{document_id}", review_verification, methods=["POST"])
+app.add_api_route("/fpo/lots", create_pooled_lot, methods=["POST"])
+app.add_api_route("/fpo/lots", list_pooled_lots, methods=["GET"])
+app.add_api_route("/market-matches", match_demands, methods=["GET"])
+app.add_api_route("/alerts", create_market_alert, methods=["POST"])
+app.add_api_route("/alerts", list_market_alerts, methods=["GET"])
+app.add_api_route("/warehouses/capacity", warehouse_capacity, methods=["GET"])
+app.add_api_route("/warehouses/bookings", list_warehouse_bookings, methods=["GET"])
+app.add_api_route("/warehouses/bookings/{booking_id}/decision", decide_booking, methods=["POST"])
+app.add_api_route("/warehouses/inventory/receive", receive_inventory, methods=["POST"])
+app.add_api_route("/warehouses/inventory/{inventory_id}/move", move_inventory, methods=["POST"])
+app.add_api_route("/warehouses/inventory/{inventory_id}/spoilage", report_spoilage, methods=["POST"])
+app.add_api_route("/warehouses/inventory/{inventory_id}/release", release_inventory, methods=["POST"])

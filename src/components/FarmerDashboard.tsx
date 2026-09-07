@@ -6,6 +6,7 @@ import { MarketPriceRecord } from '../types';
 import {
   cancelFarmerListing,
   createFarmerListing,
+  decideFarmerOffer,
   FarmerDashboardData,
   FarmerListing,
   getFarmerDashboard,
@@ -142,6 +143,24 @@ export const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ onAuthExpired 
     } catch (statusError) { setError(statusError instanceof Error ? statusError.message : 'Unable to update listing'); }
   };
 
+  const decideOffer = async (offerId: number, action: 'ACCEPT' | 'REJECT' | 'COUNTER', quantity?: number, price?: number) => {
+    try {
+      setError(null);
+      await decideFarmerOffer(offerId, action, { quantity_kg: quantity, price_per_kg: price });
+      setNotice(action === 'ACCEPT' ? 'Offer accepted and order created.' : action === 'REJECT' ? 'Offer rejected.' : 'Counteroffer sent to the buyer.');
+      await loadDashboard();
+    } catch (decisionError) {
+      setError(decisionError instanceof Error ? decisionError.message : 'Unable to update offer');
+    }
+  };
+
+  const counterOffer = async (offer: FarmerDashboardData['offers'][number]) => {
+    const quantity = Number(window.prompt('Counter quantity (kg)', String(offer.quantity)));
+    const price = Number(window.prompt('Counter price per kg', String(offer.offered_price_per_kg)));
+    if (!Number.isFinite(quantity) || !Number.isFinite(price) || quantity <= 0 || price <= 0) return;
+    await decideOffer(offer.id, 'COUNTER', quantity, price);
+  };
+
   const recommendFor = async (listing: FarmerListing) => {
     if (!dashboard || !['kg', 'quintal', 'tonne'].includes(listing.unit)) {
       setError('Market recommendation requires a listing measured in kg, quintal, or tonne.');
@@ -219,7 +238,7 @@ export const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ onAuthExpired 
             { title: 'Logistics', icon: <Truck className="h-5 w-5" />, rows: dashboard.logistics.map((item) => `Order #${item.order_id} · ${item.status}`) },
             { title: 'Reviews', icon: <Star className="h-5 w-5" />, rows: dashboard.reviews.map((item) => `${item.rating}/5 · ${item.reviewer_name}`) },
             { title: 'Notifications', icon: <Bell className="h-5 w-5" />, rows: dashboard.notifications.map((item) => item.title) },
-          ].map((section) => <div key={section.title} className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm"><div className="mb-3 flex items-center gap-2"><span className="text-[#2D6A4F]">{section.icon}</span><h3 className="font-black">{section.title}</h3></div>{section.rows.length === 0 ? <p className="text-sm font-bold text-stone-400">No records yet.</p> : <ul className="space-y-2 text-sm font-bold text-stone-700">{section.rows.slice(0, 5).map((row, index) => <li key={`${section.title}-${index}`} className="border-b border-stone-100 pb-2">{row}</li>)}</ul>}</div>)}
+          ].map((section) => <div key={section.title} className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm"><div className="mb-3 flex items-center gap-2"><span className="text-[#2D6A4F]">{section.icon}</span><h3 className="font-black">{section.title}</h3></div>{section.title === 'Offers' ? dashboard.offers.length === 0 ? <p className="text-sm font-bold text-stone-400">No records yet.</p> : <ul className="space-y-3 text-sm font-bold text-stone-700">{dashboard.offers.slice(0, 5).map((offer) => <li key={offer.id} className="border-b border-stone-100 pb-3"><p>{offer.commodity} · {offer.buyer_name}</p><p className="text-xs text-stone-500">{offer.quantity} kg · ₹{offer.offered_price_per_kg}/kg · {offer.status}</p>{offer.status === 'PENDING' && <div className="mt-2 flex flex-wrap gap-2"><button type="button" onClick={() => void decideOffer(offer.id, 'ACCEPT')} className="rounded-lg bg-[#165B33] px-2.5 py-1.5 text-xs font-black text-white">Accept</button><button type="button" onClick={() => void counterOffer(offer)} className="rounded-lg border border-amber-600 px-2.5 py-1.5 text-xs font-black text-amber-800">Counter</button><button type="button" onClick={() => void decideOffer(offer.id, 'REJECT')} className="rounded-lg border border-rose-300 px-2.5 py-1.5 text-xs font-black text-rose-700">Reject</button></div>}</li>)}</ul> : section.rows.length === 0 ? <p className="text-sm font-bold text-stone-400">No records yet.</p> : <ul className="space-y-2 text-sm font-bold text-stone-700">{section.rows.slice(0, 5).map((row, index) => <li key={`${section.title}-${index}`} className="border-b border-stone-100 pb-2">{row}</li>)}</ul>}</div>)}
         </div>
       </div>
     </section>

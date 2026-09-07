@@ -4,7 +4,10 @@ dist/
 coverage/
 .DS_Store
 *.log
+.env
+Backend/.env
 !.env.example
+!Backend/.env.example
 
 Backend/venv/
 Backend/__pycache__/

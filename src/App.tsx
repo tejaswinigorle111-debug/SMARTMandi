@@ -12,6 +12,9 @@ import { AuthModal } from './components/AuthModal';
 import { FarmerDashboard } from './components/FarmerDashboard';
 import { BuyerMarketplace } from './components/BuyerMarketplace';
 import { BuyerRegistration } from './components/BuyerRegistration';
+import { TransactionCenter } from './components/TransactionCenter';
+import { MarketplaceGrowthCenter } from './components/MarketplaceGrowthCenter';
+import { WarehouseCenter } from './components/WarehouseCenter';
 import { Language, CropType, CalculatedMarketResult, FarmerInputData, MarketIntelligence } from './types';
 import { getRecommendation } from './services/api';
 import { AuthUser, getCurrentUser, hasRole, logout } from './services/auth';
@@ -184,6 +187,10 @@ export default function App() {
                 }}
               />
             )}
+
+            {currentUser && <TransactionCenter user={currentUser} />}
+            {currentUser && <MarketplaceGrowthCenter user={currentUser} />}
+            {currentUser && <WarehouseCenter user={currentUser} />}
             {/* Farmer Input Section */}
             <FarmerInput
               language={language}

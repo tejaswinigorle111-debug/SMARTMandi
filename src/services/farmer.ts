@@ -77,3 +77,14 @@ export async function cancelFarmerListing(id: number) {
     method: 'DELETE',
   });
 }
+
+export async function decideFarmerOffer(
+  id: number,
+  action: 'ACCEPT' | 'REJECT' | 'COUNTER',
+  values: { quantity_kg?: number; price_per_kg?: number; note?: string } = {},
+) {
+  return authenticatedRequest<{ id: number; status: string; order_id?: number }>(`/farmer/offers/${id}/decision`, {
+    method: 'POST',
+    body: JSON.stringify({ action, ...values }),
+  });
+}
