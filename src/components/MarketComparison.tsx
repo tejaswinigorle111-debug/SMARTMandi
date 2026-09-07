@@ -41,6 +41,7 @@ export const MarketComparison: React.FC<MarketComparisonProps> = ({
               <th className="py-4 px-4 text-center">Other<br/><span className="text-stone-500 font-bold">(₹)</span></th>
               <th className="py-4 px-4 text-center">{t.results.netReturn}<br/><span className="text-stone-500 font-bold">(₹)</span></th>
               <th className="py-4 px-4 text-center">Freshness</th>
+              <th className="py-4 px-4 text-center">Difference<br/><span className="text-stone-500 font-bold">(₹)</span></th>
             </tr>
           </thead>
           <tbody className="text-sm sm:text-base font-bold text-stone-800">

@@ -5,7 +5,8 @@ from typing import Any
 import requests
 from dotenv import load_dotenv
 
-from location_service import geocode_location, location_distance, reverse_geocode_location
+from location import distance_km
+from location_service import geocode_location, reverse_geocode_location, road_route
 from market_comparison import load_cost_configuration
 
 
@@ -435,30 +436,29 @@ class MarketDataService:
 
         radius = self._nearby_radius_km()
         transport_rate = self._transport_rate()
-        nearby: list[dict[str, Any]] = []
+        candidates: list[dict[str, Any]] = []
 
         for item in records:
             if not self._is_fresh(item):
                 continue
-            district = item.get("district") or ""
-            state = item.get("state") or ""
-            market_name = item.get("market") or item.get("name") or ""
-            query = ", ".join(
-                part for part in (market_name, district, state, "India") if part
-            )
-            coordinates = self._geocode_cached(query)
-            if coordinates is None and district:
+            district = (item.get("district") or "").strip()
+            state = (item.get("state") or "").strip()
+            market_name = (item.get("market") or item.get("name") or "").strip()
+
+            # Prefer district geocoding — APMC market names often fail free geocoders.
+            coordinates = None
+            if district:
                 coordinates = self._geocode_cached(f"{district}, {state}, India")
+            if coordinates is None and market_name:
+                coordinates = self._geocode_cached(
+                    f"{market_name}, {state}, India"
+                )
             if coordinates is None:
                 continue
 
-            distance = location_distance(
+            straight_line = distance_km(
                 origin[0], origin[1], coordinates[0], coordinates[1]
             )
-            straight_line = distance["straight_line_distance_km"]
-            if straight_line is None or straight_line > radius:
-                continue
-
             enriched = dict(item)
             enriched.update(
                 {
@@ -466,8 +466,8 @@ class MarketDataService:
                     "longitude": coordinates[1],
                     "distance_km": straight_line,
                     "straight_line_distance_km": straight_line,
-                    "road_distance_km": distance.get("road_distance_km"),
-                    "distance_type": distance.get("distance_type", "straight-line"),
+                    "road_distance_km": None,
+                    "distance_type": "straight-line",
                     "transport_rate": transport_rate,
                     "data_state": prices["data_state"],
                     "directions_url": (
@@ -478,13 +478,17 @@ class MarketDataService:
                     ),
                 }
             )
-            nearby.append(enriched)
+            candidates.append(enriched)
 
-        nearby.sort(
-            key=lambda market: market.get("road_distance_km")
-            if market.get("road_distance_km") is not None
-            else market["distance_km"]
-        )
+        candidates.sort(key=lambda market: market["distance_km"])
+        nearby = [item for item in candidates if item["distance_km"] <= radius]
+
+        # If nothing is inside the radius, still return the closest few so the
+        # farmer gets usable official prices instead of an empty screen.
+        expanded = False
+        if not nearby and candidates:
+            nearby = candidates[:5]
+            expanded = True
 
         if not nearby:
             return {
@@ -493,17 +497,41 @@ class MarketDataService:
                 "data_state": "unavailable",
                 "last_updated": prices.get("last_updated"),
                 "message": (
-                    f"No fresh official market prices found within {radius:.0f} km "
-                    "for this crop and location."
+                    f"No fresh official market prices found near this location "
+                    f"for this crop (searched within {radius:.0f} km)."
                 ),
             }
+
+        # Optionally refine the top markets with road distance when Google is configured.
+        for item in nearby[:8]:
+            route = road_route(
+                origin[0], origin[1], item["latitude"], item["longitude"]
+            )
+            if not route:
+                continue
+            item["road_distance_km"] = route["distance_km"]
+            item["distance_km"] = route["distance_km"]
+            item["distance_type"] = "road"
+
+        nearby.sort(
+            key=lambda market: market.get("road_distance_km")
+            if market.get("road_distance_km") is not None
+            else market["straight_line_distance_km"]
+        )
+
+        message = prices.get("message")
+        if expanded:
+            message = (
+                f"No markets were found within {radius:.0f} km. "
+                "Showing the closest official prices available for this crop."
+            )
 
         return {
             "records": nearby,
             "source": _DATA_GOV_SOURCE,
             "data_state": prices["data_state"],
             "last_updated": prices.get("last_updated"),
-            "message": prices.get("message"),
+            "message": message,
         }
 
 
