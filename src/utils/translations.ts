@@ -355,7 +355,7 @@ export interface BuyerRegistrationTranslations {
 }
 
 const enBuyerRegistration: BuyerRegistrationTranslations = {
-  badge: 'Smart India Hackathon Prototype • Buyer Onboarding',
+
   title: 'Buyer Registration',
   subtitle: 'Directly connect with local farmers and FPOs to procure quality agricultural produce at transparent prices.',
   backToHome: 'Back to Home',
@@ -468,7 +468,7 @@ const enBuyerRegistration: BuyerRegistrationTranslations = {
 };
 
 const teBuyerRegistration: BuyerRegistrationTranslations = {
-  badge: 'స్మార్ట్ ఇండియా హ్యాకథాన్ 2026 ప్రోటోటైప్ • కొనుగోలుదారుల నమోదు',
+
   title: 'కొనుగోలుదారుల నమోదు',
   subtitle: 'రైతులు మరియు FPOల నుండి నేరుగా తాజా నాణ్యమైన వ్యవసాయ ఉత్పత్తులను పారదర్శక ధరలకు కొనుగోలు చేయడానికి నమోదు చేసుకోండి.',
   backToHome: 'హోమ్‌కు తిరిగి వెళ్లండి',
