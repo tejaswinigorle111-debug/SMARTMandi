@@ -355,7 +355,7 @@ export interface BuyerRegistrationTranslations {
 }
 
 const enBuyerRegistration: BuyerRegistrationTranslations = {
-
+  badge: 'BUYER REGISTRATION',
   title: 'Buyer Registration',
   subtitle: 'Directly connect with local farmers and FPOs to procure quality agricultural produce at transparent prices.',
   backToHome: 'Back to Home',
@@ -468,7 +468,7 @@ const enBuyerRegistration: BuyerRegistrationTranslations = {
 };
 
 const teBuyerRegistration: BuyerRegistrationTranslations = {
-
+  badge: 'కొనుగోలుదారు నమోదు',
   title: 'కొనుగోలుదారుల నమోదు',
   subtitle: 'రైతులు మరియు FPOల నుండి నేరుగా తాజా నాణ్యమైన వ్యవసాయ ఉత్పత్తులను పారదర్శక ధరలకు కొనుగోలు చేయడానికి నమోదు చేసుకోండి.',
   backToHome: 'హోమ్‌కు తిరిగి వెళ్లండి',
