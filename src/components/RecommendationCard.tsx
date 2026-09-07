@@ -11,14 +11,10 @@ function getDecisionSignal(score: number | undefined): 'sellNow' | 'monitor' | '
   return 'insufficient';
 }
 
-<<<<<<< HEAD
-=======
 /** Estimated mandi fee ≈ 2% of gross income (APMC standard) */
 function estimatedMandiFee(grossIncome: number): number {
   return Math.round(grossIncome * 0.02);
 }
-
->>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 interface RecommendationCardProps {
   market: CalculatedMarketResult;
   quantity: number;
@@ -38,10 +34,7 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
   const score = market.smartMarketScore;
   const breakdown = market.scoreBreakdown;
   const signalKey = getDecisionSignal(score);
-<<<<<<< HEAD
-=======
   const mandiFee = estimatedMandiFee(market.grossIncome);
->>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 
   // Score colour
   const scoreColor =
@@ -78,10 +71,7 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
 
   // Data-driven explanation builder in active language
   const buildWhyExplanation = (): string => {
-<<<<<<< HEAD
     if (market.comparisonExplanation) return market.comparisonExplanation;
-=======
->>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
     const parts: string[] = [];
     if (language === 'te') {
       parts.push(`ఈ మండిలో మీ అంచనా నికర లాభం ${formatINR(market.netReturn)}, ఇది సరిపోల్చిన అన్ని మార్కెట్లలో అత్యధికం.`);
@@ -215,7 +205,6 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
               <span>- {formatINR(market.transportCost)}</span>
             </div>
             <div className="flex justify-between items-center text-sm sm:text-base font-bold text-stone-700 pb-2.5 border-b border-stone-200">
-<<<<<<< HEAD
               <span>Storage cost</span>
               <span>- {market.storageCost === undefined ? 'Unavailable' : formatINR(market.storageCost)}</span>
             </div>
@@ -226,10 +215,6 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
             <div className="flex justify-between items-center text-sm sm:text-base font-bold text-stone-700 pb-2.5 border-b border-stone-200">
               <span>Other charges</span>
               <span>- {market.otherCost === undefined ? 'Unavailable' : formatINR(market.otherCost)}</span>
-=======
-              <span>{t.results.estMandiFee}</span>
-              <span>- {formatINR(mandiFee)}</span>
->>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
             </div>
             <div className="flex justify-between items-center bg-amber-50 p-3 rounded-lg border border-amber-200">
               <span className="text-sm sm:text-base font-black text-stone-900">
@@ -244,11 +229,7 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
               <span className="text-[#165B33] bg-emerald-100 p-1 rounded-md">
                 {t.results.mandiPriceLabel}
               </span>
-<<<<<<< HEAD
               <span>₹{market.pricePerKg} / kg</span>
-=======
-              <span>₹{market.pricePerKg * 100} {t.results.perQuintal}</span>
->>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
             </div>
             <div className="flex items-center gap-2">
               <span className="text-[#165B33] bg-emerald-100 p-1 rounded-md">

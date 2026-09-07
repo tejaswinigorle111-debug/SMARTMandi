@@ -8,17 +8,12 @@ import { Benefits } from './components/Benefits';
 import { Footer } from './components/Footer';
 import { MarketPricesModal } from './components/MarketPricesModal';
 import { AboutModal } from './components/AboutModal';
-<<<<<<< HEAD
 import { AuthModal } from './components/AuthModal';
 import { FarmerDashboard } from './components/FarmerDashboard';
 import { BuyerMarketplace } from './components/BuyerMarketplace';
 import { Language, CropType, CalculatedMarketResult, FarmerInputData, MarketIntelligence } from './types';
 import { getRecommendation } from './services/api';
 import { AuthUser, getCurrentUser, hasRole, logout } from './services/auth';
-=======
-import { Language, CropType, CalculatedMarketResult, FarmerInputData } from './types';
-import { getRecommendation } from './services/api';
->>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 import { getTranslation } from './utils/translations';
 
 export default function App() {
@@ -44,24 +39,18 @@ export default function App() {
   const [currentLatitude, setCurrentLatitude] = useState<number | undefined>(undefined);
   const [currentLongitude, setCurrentLongitude] = useState<number | undefined>(undefined);
   const [marketResults, setMarketResults] = useState<CalculatedMarketResult[]>([]);
-<<<<<<< HEAD
   const [marketIntelligence, setMarketIntelligence] = useState<MarketIntelligence | null>(null);
-=======
->>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Modals
   const [isPricesModalOpen, setIsPricesModalOpen] = useState<boolean>(false);
   const [isAboutModalOpen, setIsAboutModalOpen] = useState<boolean>(false);
-<<<<<<< HEAD
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
 
   useEffect(() => {
     getCurrentUser().then(setCurrentUser);
   }, []);
-=======
->>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 
   const handleCalculation = async (data: FarmerInputData, shouldScroll = true) => {
     setIsLoading(true);
@@ -75,10 +64,7 @@ export default function App() {
       setErrorMessage(null);
       const response = await getRecommendation(data);
       setMarketResults(response.all);
-<<<<<<< HEAD
       setMarketIntelligence(response.intelligence || null);
-=======
->>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 
       if (shouldScroll) {
         setTimeout(() => {
@@ -91,10 +77,7 @@ export default function App() {
     } catch (error) {
       console.error('Error calculating market recommendations:', error);
       setMarketResults([]);
-<<<<<<< HEAD
       setMarketIntelligence(null);
-=======
->>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
       setErrorMessage(error instanceof Error ? error.message : 'No markets found');
     } finally {
       setIsLoading(false);
@@ -124,15 +107,12 @@ export default function App() {
         onOpenMarketPrices={() => setIsPricesModalOpen(true)}
         onOpenAbout={() => setIsAboutModalOpen(true)}
         onScrollToInput={scrollToInput}
-<<<<<<< HEAD
         user={currentUser}
         onOpenAuth={() => setIsAuthModalOpen(true)}
         onLogout={async () => {
           await logout();
           setCurrentUser(null);
         }}
-=======
->>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
       />
 
       <main className="flex-1">
@@ -143,7 +123,6 @@ export default function App() {
           onHowItWorksClick={scrollToHowItWorks}
         />
 
-<<<<<<< HEAD
         {hasRole(currentUser, ['FARMER', 'FPO']) && (
           <FarmerDashboard
             onAuthExpired={() => {
@@ -163,9 +142,6 @@ export default function App() {
             }}
           />
         )}
-
-=======
->>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
         {/* Farmer Input Section */}
         <FarmerInput
           language={language}
@@ -183,10 +159,7 @@ export default function App() {
             latitude={currentLatitude}
             longitude={currentLongitude}
             language={language}
-<<<<<<< HEAD
             intelligence={marketIntelligence}
-=======
->>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
           />
         )}
 
@@ -231,15 +204,12 @@ export default function App() {
         onClose={() => setIsAboutModalOpen(false)}
         language={language}
       />
-<<<<<<< HEAD
 
       <AuthModal
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
         onAuthenticated={setCurrentUser}
       />
-=======
->>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
     </div>
   );
 }

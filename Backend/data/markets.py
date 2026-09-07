@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-"""Legacy compatibility export; official market data comes from MarketDataService."""
-
-MARKETS = []
-=======
 MARKETS = [
     # Tomato Markets
     {
@@ -241,4 +236,3 @@ MARKETS = [
         "transport_rate": 0.05
     }
 ]
->>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c

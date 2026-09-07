@@ -3,15 +3,11 @@ import {
   FarmerInputData,
   CalculatedMarketResult,
   MarketPriceRecord,
-<<<<<<< HEAD
   MarketIntelligence,
-=======
->>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 } from '../types';
 
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000').replace(/\/$/, '');
 
-<<<<<<< HEAD
 export interface MarketDataResponse {
   records: MarketPriceRecord[];
   source: string | null;
@@ -19,9 +15,6 @@ export interface MarketDataResponse {
   last_updated: string | null;
   message?: string | null;
 }
-
-=======
->>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 export async function reverseGeocode(latitude: number, longitude: number): Promise<string> {
   const query = new URLSearchParams({ latitude: String(latitude), longitude: String(longitude) });
   const response = await fetch(`${API_BASE_URL}/location/reverse?${query}`);
@@ -30,7 +23,6 @@ export async function reverseGeocode(latitude: number, longitude: number): Promi
   return result.name || 'GPS location';
 }
 
-<<<<<<< HEAD
 export async function resolveLocation(input: {
   address?: string;
   pincode?: string;
@@ -61,46 +53,6 @@ export async function calculateDistance(
   const result = await response.json();
   return result.straight_line_distance_km;
 }
-=======
-export const CROP_BASE_PRICES: Record<CropType, number> = {
-  Tomato: 26,
-  Rice: 34,
-  Cotton: 77,
-  Chilli: 188,
-  Maize: 24,
-  Onion: 25,
-  Potato: 22,
-  Soybean: 48,
-  Wheat: 28,
-  Groundnut: 65,
-  Tur: 110,
-  Gram: 60,
-  Grapes: 80,
-  Mango: 70,
-  Banana: 20,
-  Turmeric: 145,
-  Sugarcane: 4,
-  Jowar: 32,
-  Bajra: 26,
-  Ragi: 38,
-  Barley: 22,
-  Mustard: 55,
-  Sunflower: 52,
-  Sesame: 135,
-  Moong: 88,
-  Urad: 82,
-  Masoor: 72,
-  Cabbage: 18,
-  Cauliflower: 24,
-  Brinjal: 28,
-  Okra: 32,
-  Carrot: 30,
-  Garlic: 160,
-  Ginger: 120,
-  Apple: 110,
-  Orange: 45,
-};
->>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 
 /**
  * Get markets from the FastAPI backend.
@@ -109,7 +61,6 @@ export async function fetchMarkets(
   crop?: CropType,
   location?: string
 ): Promise<MarketPriceRecord[]> {
-<<<<<<< HEAD
   const result = await getMarketPrices(crop, location);
   return result.records;
 }
@@ -118,14 +69,11 @@ export async function getMarketPrices(
   crop?: CropType,
   location?: string
 ): Promise<MarketDataResponse> {
-=======
->>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
   try {
     const query = crop ? `?crop=${encodeURIComponent(crop)}` : '';
     const response = await fetch(`${API_BASE_URL}/markets${query}`);
     if (response.ok) {
       const data = await response.json();
-<<<<<<< HEAD
       return {
         records: data.markets || [],
         source: data.source || null,
@@ -144,33 +92,18 @@ export async function getMarketPrices(
     last_updated: null,
     message: 'Live market data is temporarily unavailable.',
   };
-=======
-      return data.markets || [];
-    }
-  } catch (err) {
-    console.warn('Backend fetchMarkets unreachable, using local benchmarks.');
-  }
-  return [];
->>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 }
 
 /**
  * Send farmer details to FastAPI and get
-<<<<<<< HEAD
  * the recommended market from live government market data.
-=======
- * the recommended market. Includes reliable fallback calculation.
->>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
  */
 export async function getRecommendation(
   data: FarmerInputData
 ): Promise<{
   recommended: CalculatedMarketResult | null;
   all: CalculatedMarketResult[];
-<<<<<<< HEAD
   intelligence?: MarketIntelligence;
-=======
->>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 }> {
   try {
     const response = await fetch(`${API_BASE_URL}/recommend`, {
@@ -219,7 +152,6 @@ export async function getRecommendation(
                   transportScore: market.score_breakdown.transport_score,
                 }
               : undefined,
-<<<<<<< HEAD
             dataState: market.data_state,
             source: market.source,
             lastUpdated: market.last_updated,
@@ -238,13 +170,10 @@ export async function getRecommendation(
             netRealization: market.net_realization,
             calculationState: market.calculation_state,
             comparisonExplanation: market.comparison_explanation,
-=======
->>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
           })
         );
 
         const recommended = allResults.find((m) => m.isRecommended) || allResults[0];
-<<<<<<< HEAD
         return { recommended, all: allResults, intelligence: result.intelligence };
       }
     }
@@ -253,82 +182,4 @@ export async function getRecommendation(
   }
 
   throw new Error('Live market data is currently unavailable. Please try again later.');
-=======
-        return { recommended, all: allResults };
-      }
-    }
-  } catch (e) {
-    console.info('Backend unavailable or crop pending in DB, calculating regional benchmark solution.');
-  }
-
-  // Fallback dynamic calculation for all crops
-  const basePrice = CROP_BASE_PRICES[data.crop] || 25;
-  const qty = data.quantity;
-  const candidateMandis = [
-    { name: `${data.location || 'Local'} APMC Market`, loc: `${data.location || 'Nearby'}, APMC`, dist: 28, priceFactor: 1.02, rate: 0.045 },
-    { name: 'Central Grain & Produce Mandi', loc: 'Central Regional Yard', dist: 55, priceFactor: 1.08, rate: 0.05 },
-    { name: 'District Commercial Yard', loc: 'District Headquarters', dist: 42, priceFactor: 1.04, rate: 0.048 },
-    { name: 'Metro Terminal Mandi', loc: 'State Agriculture Yard', dist: 85, priceFactor: 1.15, rate: 0.055 },
-    { name: 'Sub-Division Agro Yard', loc: 'Local Sub-Mandi', dist: 18, priceFactor: 0.98, rate: 0.042 },
-  ];
-
-  const calculated = candidateMandis.map((m, idx) => {
-    const pricePerKg = Math.round(basePrice * m.priceFactor * 10) / 10;
-    const grossIncome = Math.round(pricePerKg * qty);
-    const transportCost = Math.round(m.dist * qty * m.rate);
-    const netReturn = grossIncome - transportCost;
-    return {
-      id: String(idx + 1),
-      name: m.name,
-      location: m.loc,
-      district: '',
-      state: 'Regional APMC',
-      pricePerKg,
-      distanceKm: m.dist,
-      transportCost,
-      grossIncome,
-      netReturn,
-      marketType: 'APMC Mandi',
-      arrivalQuantity: Math.round(25 + idx * 12),
-      isRecommended: false,
-    };
-  });
-
-  calculated.sort((a, b) => b.netReturn - a.netReturn);
-  calculated[0].isRecommended = true;
-
-  const bestNet = calculated[0].netReturn;
-  const bestPrice = Math.max(...calculated.map((c) => c.pricePerKg));
-  const minDistance = Math.min(...calculated.map((c) => c.distanceKm));
-  const minTransport = Math.min(...calculated.map((c) => c.transportCost));
-
-  const allWithScores: CalculatedMarketResult[] = calculated.map((item) => {
-    const netReturnScore = Math.round((item.netReturn / bestNet) * 100);
-    const priceScore = Math.round((item.pricePerKg / bestPrice) * 100);
-    const distanceScore = Math.round((minDistance / item.distanceKm) * 100);
-    const transportScore = Math.round((minTransport / item.transportCost) * 100);
-    const smartMarketScore = Math.round(
-      netReturnScore * 0.6 + priceScore * 0.2 + distanceScore * 0.1 + transportScore * 0.1
-    );
-
-    return {
-      ...item,
-      smartMarketScore,
-      scoreBreakdown: {
-        netReturnScore,
-        priceScore,
-        distanceScore,
-        transportScore,
-      },
-      whyRecommended: item.isRecommended
-        ? `This mandi gives you ₹${item.netReturn.toLocaleString('en-IN')} net return — the highest of ${calculated.length} markets compared. Transport cost is ₹${item.transportCost.toLocaleString('en-IN')} for ${item.distanceKm} km, leaving you the maximum take-home profit.`
-        : undefined,
-    };
-  });
-
-  return {
-    recommended: allWithScores[0],
-    all: allWithScores,
-  };
->>>>>>> d0499aae7177a6bd6ca71bedf07ed448f122649c
 }
