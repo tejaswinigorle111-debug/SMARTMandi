@@ -580,6 +580,300 @@ const teBuyerRegistration: BuyerRegistrationTranslations = {
     backToHomeBtn: 'SMARTMandi హోమ్‌కు తిరిగి వెళ్లండి',
   },
 };
+const hiBuyerRegistration: BuyerRegistrationTranslations = {
+  badge: 'खरीदार पंजीकरण',
+  title: 'खरीदार पंजीकरण',
+  subtitle: 'स्थानीय किसानों और FPO से सीधे जुड़कर पारदर्शी कीमतों पर गुणवत्तापूर्ण कृषि उत्पाद खरीदें।',
+  backToHome: 'होम पर वापस जाएँ',
+  heroBannerTitle: 'क्या आप थोक खरीदार, व्यापारी या खाद्य प्रसंस्करणकर्ता हैं?',
+  heroBannerSub: 'बिचौलियों के बिना पंजीकृत किसानों और FPO से सीधे ताज़ी कृषि उपज प्राप्त करें।',
+  heroBannerCta: 'खरीदार के रूप में पंजीकरण करें',
+
+  sectionBasic: 'व्यवसाय और मूल विवरण',
+  sectionBasicDesc: 'अपनी व्यापारिक संस्था का नाम और खरीदार श्रेणी दर्ज करें',
+
+  fullNameLabel: 'पूरा नाम',
+  fullNamePlaceholder: 'उदा. राजेश कुमार',
+
+  businessNameLabel: 'व्यवसाय / फर्म का नाम',
+  businessNamePlaceholder: 'उदा. श्री बालाजी एग्रो ट्रेडर्स',
+
+  buyerTypeLabel: 'खरीदार का प्रकार',
+  buyerTypePlaceholder: 'अपने व्यवसाय का प्रकार चुनें',
+
+  buyerTypes: {
+    wholesaler: 'थोक विक्रेता',
+    retailer: 'खुदरा विक्रेता',
+    processor: 'प्रसंस्करणकर्ता',
+    exporter: 'निर्यातक',
+    other: 'अन्य',
+  },
+
+  sectionContact: 'संपर्क जानकारी',
+  sectionContactDesc: 'व्यापार पुष्टि और आपूर्ति समन्वय के लिए उपयोग किया जाएगा',
+
+  mobileLabel: 'मोबाइल नंबर',
+  mobilePlaceholder: '10 अंकों का मोबाइल नंबर',
+
+  emailLabel: 'ईमेल पता',
+  emailPlaceholder: 'उदा. buyer@example.com',
+
+  optionalBadge: 'वैकल्पिक',
+
+  sectionLocation: 'व्यावसायिक स्थान और मंडी',
+  sectionLocationDesc: 'आपका मुख्य खरीद केंद्र, लक्ष्य बाजार और व्यवसाय का पता',
+
+  stateLabel: 'राज्य',
+  statePlaceholder: 'राज्य चुनें',
+
+  districtLabel: 'जिला',
+  districtPlaceholder: 'उदा. गुंटूर',
+
+  marketAreaLabel: 'बाजार / क्षेत्र',
+  marketAreaPlaceholder: 'उदा. गुंटूर मिर्ची यार्ड',
+
+  businessAddressLabel: 'व्यवसाय का पता',
+  businessAddressPlaceholder: 'दुकान / गोदाम नंबर, सड़क, लैंडमार्क, पिनकोड',
+
+  sectionCrops: 'उत्पाद आवश्यकताएँ',
+  sectionCropsDesc: 'वे कृषि उत्पाद चुनें जिन्हें आप खरीदते हैं',
+
+  preferredCropsLabel: 'पसंदीदा फसलें',
+  preferredCropsSub: 'अपने व्यापार के लिए आवश्यक एक या अधिक फसलें चुनें',
+
+  searchCropsPlaceholder: 'नाम से फसल खोजें...',
+
+  selectedCount: '{count} फसलें चुनी गईं',
+
+  selectAll: 'सभी चुनें',
+  clearAll: 'चयन हटाएँ',
+
+  noCropsMatch: 'कोई मेल खाने वाली फसल नहीं मिली',
+
+  sectionQuantity: 'खरीद मात्रा और इकाई',
+  sectionQuantityDesc: 'अपनी न्यूनतम और अधिकतम खरीद क्षमता निर्धारित करें',
+
+  minQuantityLabel: 'न्यूनतम आवश्यक मात्रा',
+  minQuantityPlaceholder: 'उदा. 50',
+
+  maxQuantityLabel: 'अधिकतम आवश्यक मात्रा',
+  maxQuantityPlaceholder: 'उदा. 500',
+
+  quantityUnitLabel: 'मात्रा की इकाई',
+
+  units: {
+    kg: 'किलोग्राम',
+    quintal: 'क्विंटल',
+    tonne: 'टन',
+  },
+
+  sectionPricing: 'लक्षित खरीद मूल्य और आवृत्ति',
+  sectionPricingDesc: 'अपनी खरीद मूल्य सीमा और खरीद कार्यक्रम निर्धारित करें',
+
+  minPriceLabel: 'न्यूनतम खरीद मूल्य (₹)',
+  minPricePlaceholder: 'उदा. 25',
+
+  maxPriceLabel: 'अधिकतम खरीद मूल्य (₹)',
+  maxPricePlaceholder: 'उदा. 45',
+
+  buyingFrequencyLabel: 'खरीद की आवृत्ति',
+  buyingFrequencyPlaceholder: 'खरीद चक्र चुनें',
+
+  frequencies: {
+    daily: 'प्रतिदिन',
+    weekly: 'साप्ताहिक',
+    monthly: 'मासिक',
+    asNeeded: 'आवश्यकतानुसार',
+  },
+
+  submitBtn: 'खरीदार पंजीकृत करें',
+  submittingBtn: 'जाँच और सबमिट किया जा रहा है...',
+
+  requiredFieldsNote: '* चिह्नित फ़ील्ड अनिवार्य हैं',
+
+  validation: {
+    fullNameRequired: 'पूरा नाम आवश्यक है।',
+    businessNameRequired: 'व्यवसाय का नाम आवश्यक है।',
+    buyerTypeRequired: 'कृपया खरीदार का प्रकार चुनें।',
+    mobileRequired: 'मोबाइल नंबर आवश्यक है।',
+    mobileInvalid: 'कृपया सही 10 अंकों का मोबाइल नंबर दर्ज करें।',
+    emailInvalid: 'कृपया सही ईमेल पता दर्ज करें।',
+    stateRequired: 'राज्य आवश्यक है।',
+    districtRequired: 'जिला आवश्यक है।',
+    marketAreaRequired: 'बाजार / क्षेत्र आवश्यक है।',
+    addressRequired: 'व्यवसाय का पता आवश्यक है।',
+    cropsRequired: 'कृपया कम से कम एक पसंदीदा फसल चुनें।',
+    minQtyPositive: 'न्यूनतम मात्रा शून्य से अधिक होनी चाहिए।',
+    maxQtyMinConstraint: 'अधिकतम मात्रा न्यूनतम मात्रा से कम नहीं हो सकती।',
+    minPriceNonNegative: 'न्यूनतम मूल्य नकारात्मक नहीं हो सकता।',
+    maxPriceMinConstraint: 'अधिकतम मूल्य न्यूनतम मूल्य से कम नहीं हो सकता।',
+    frequencyRequired: 'कृपया खरीद की आवृत्ति चुनें।',
+    fixErrorsAlert: 'सबमिट करने से पहले कृपया सभी त्रुटियाँ ठीक करें।',
+  },
+
+  confirmation: {
+    readyTitle: 'खरीदार पंजीकरण फ़ॉर्म तैयार है',
+    backendNotice: 'खरीदार पंजीकरण फ़ॉर्म तैयार है। बैकएंड पंजीकरण जल्द जोड़ा जाएगा।',
+    summaryTitle: 'जमा किए गए पंजीकरण विवरण',
+    buyerInfoLabel: 'खरीदार और व्यवसाय',
+    contactLabel: 'संपर्क जानकारी',
+    locationLabel: 'व्यावसायिक स्थान',
+    commoditiesLabel: 'पसंदीदा फसलें',
+    volumePriceLabel: 'मात्रा और मूल्य लक्ष्य',
+    frequencyLabel: 'खरीद की आवृत्ति',
+    frontendStateOnlyNotice: 'फ़ॉर्म डेटा केवल स्थानीय React state में रखा गया है। बैकएंड पंजीकरण अभी जोड़ा जाना बाकी है।',
+    registerAnotherBtn: 'एक और खरीदार पंजीकृत करें',
+    backToHomeBtn: 'SMARTMandi होम पर वापस जाएँ',
+  },
+};
+
+
+const mrBuyerRegistration: BuyerRegistrationTranslations = {
+  badge: 'खरेदीदार नोंदणी',
+  title: 'खरेदीदार नोंदणी',
+  subtitle: 'स्थानिक शेतकरी आणि FPO यांच्याशी थेट संपर्क साधून पारदर्शक दरांमध्ये दर्जेदार कृषी उत्पादने खरेदी करा।',
+  backToHome: 'मुख्यपृष्ठावर परत जा',
+  heroBannerTitle: 'तुम्ही घाऊक खरेदीदार, व्यापारी किंवा अन्न प्रक्रिया करणारे आहात का?',
+  heroBannerSub: 'मध्यस्थांशिवाय नोंदणीकृत शेतकरी आणि FPO कडून थेट ताजी कृषी उत्पादने मिळवा.',
+  heroBannerCta: 'खरेदीदार म्हणून नोंदणी करा',
+
+  sectionBasic: 'व्यवसाय आणि मूलभूत माहिती',
+  sectionBasicDesc: 'तुमच्या व्यापार संस्थेचे नाव आणि खरेदीदार श्रेणी नमूद करा',
+
+  fullNameLabel: 'पूर्ण नाव',
+  fullNamePlaceholder: 'उदा. राजेश कुमार',
+
+  businessNameLabel: 'व्यवसाय / फर्मचे नाव',
+  businessNamePlaceholder: 'उदा. श्री बालाजी अॅग्रो ट्रेडर्स',
+
+  buyerTypeLabel: 'खरेदीदाराचा प्रकार',
+  buyerTypePlaceholder: 'तुमच्या व्यवसायाचा प्रकार निवडा',
+
+  buyerTypes: {
+    wholesaler: 'घाऊक विक्रेता',
+    retailer: 'किरकोळ विक्रेता',
+    processor: 'प्रक्रिया करणारा',
+    exporter: 'निर्यातदार',
+    other: 'इतर',
+  },
+
+  sectionContact: 'संपर्क माहिती',
+  sectionContactDesc: 'व्यापार पुष्टीकरण आणि पुरवठा समन्वयासाठी वापरले जाईल',
+
+  mobileLabel: 'मोबाइल नंबर',
+  mobilePlaceholder: '10 अंकी मोबाइल नंबर',
+
+  emailLabel: 'ईमेल पत्ता',
+  emailPlaceholder: 'उदा. buyer@example.com',
+
+  optionalBadge: 'ऐच्छिक',
+
+  sectionLocation: 'व्यवसायाचे ठिकाण आणि बाजार',
+  sectionLocationDesc: 'तुमचे मुख्य खरेदी केंद्र, लक्ष्य बाजार आणि व्यवसायाचा पत्ता',
+
+  stateLabel: 'राज्य',
+  statePlaceholder: 'राज्य निवडा',
+
+  districtLabel: 'जिल्हा',
+  districtPlaceholder: 'उदा. गुंटूर',
+
+  marketAreaLabel: 'बाजार / क्षेत्र',
+  marketAreaPlaceholder: 'उदा. गुंटूर मिरची यार्ड',
+
+  businessAddressLabel: 'व्यवसायाचा पत्ता',
+  businessAddressPlaceholder: 'दुकान / गोदाम क्रमांक, रस्ता, खूण, पिनकोड',
+
+  sectionCrops: 'उत्पादन आवश्यकता',
+  sectionCropsDesc: 'तुम्ही खरेदी करत असलेली कृषी उत्पादने निवडा',
+
+  preferredCropsLabel: 'पसंतीची पिके',
+  preferredCropsSub: 'तुमच्या व्यवसायासाठी आवश्यक असलेली एक किंवा अधिक पिके निवडा',
+
+  searchCropsPlaceholder: 'नावाने पिके शोधा...',
+
+  selectedCount: '{count} पिके निवडली आहेत',
+
+  selectAll: 'सर्व निवडा',
+  clearAll: 'निवड साफ करा',
+
+  noCropsMatch: 'जुळणारी पिके आढळली नाहीत',
+
+  sectionQuantity: 'खरेदीचे प्रमाण आणि एकक',
+  sectionQuantityDesc: 'तुमची किमान आणि कमाल खरेदी क्षमता निश्चित करा',
+
+  minQuantityLabel: 'किमान आवश्यक प्रमाण',
+  minQuantityPlaceholder: 'उदा. 50',
+
+  maxQuantityLabel: 'कमाल आवश्यक प्रमाण',
+  maxQuantityPlaceholder: 'उदा. 500',
+
+  quantityUnitLabel: 'प्रमाणाचे एकक',
+
+  units: {
+    kg: 'किलोग्राम',
+    quintal: 'क्विंटल',
+    tonne: 'टन',
+  },
+
+  sectionPricing: 'लक्ष्य खरेदी किंमत आणि वारंवारिता',
+  sectionPricingDesc: 'तुमची खरेदी किंमत मर्यादा आणि खरेदीचे वेळापत्रक निश्चित करा',
+
+  minPriceLabel: 'किमान खरेदी किंमत (₹)',
+  minPricePlaceholder: 'उदा. 25',
+
+  maxPriceLabel: 'कमाल खरेदी किंमत (₹)',
+  maxPricePlaceholder: 'उदा. 45',
+
+  buyingFrequencyLabel: 'खरेदीची वारंवारिता',
+  buyingFrequencyPlaceholder: 'खरेदी चक्र निवडा',
+
+  frequencies: {
+    daily: 'दररोज',
+    weekly: 'साप्ताहिक',
+    monthly: 'मासिक',
+    asNeeded: 'गरजेनुसार',
+  },
+
+  submitBtn: 'खरेदीदार नोंदणी करा',
+  submittingBtn: 'तपासणी आणि सबमिट केले जात आहे...',
+
+  requiredFieldsNote: '* चिन्हांकित फील्ड अनिवार्य आहेत',
+
+  validation: {
+    fullNameRequired: 'पूर्ण नाव आवश्यक आहे.',
+    businessNameRequired: 'व्यवसायाचे नाव आवश्यक आहे.',
+    buyerTypeRequired: 'कृपया खरेदीदाराचा प्रकार निवडा.',
+    mobileRequired: 'मोबाइल नंबर आवश्यक आहे.',
+    mobileInvalid: 'कृपया वैध 10 अंकी मोबाइल नंबर प्रविष्ट करा.',
+    emailInvalid: 'कृपया वैध ईमेल पत्ता प्रविष्ट करा.',
+    stateRequired: 'राज्य आवश्यक आहे.',
+    districtRequired: 'जिल्हा आवश्यक आहे.',
+    marketAreaRequired: 'बाजार / क्षेत्र आवश्यक आहे.',
+    addressRequired: 'व्यवसायाचा पत्ता आवश्यक आहे.',
+    cropsRequired: 'कृपया किमान एक पसंतीचे पीक निवडा.',
+    minQtyPositive: 'किमान प्रमाण शून्यापेक्षा जास्त असावे.',
+    maxQtyMinConstraint: 'कमाल प्रमाण किमान प्रमाणापेक्षा कमी असू शकत नाही.',
+    minPriceNonNegative: 'किमान किंमत नकारात्मक असू शकत नाही.',
+    maxPriceMinConstraint: 'कमाल किंमत किमान किंमतीपेक्षा कमी असू शकत नाही.',
+    frequencyRequired: 'कृपया खरेदीची वारंवारिता निवडा.',
+    fixErrorsAlert: 'सबमिट करण्यापूर्वी कृपया सर्व त्रुटी दुरुस्त करा.',
+  },
+
+  confirmation: {
+    readyTitle: 'खरेदीदार नोंदणी फॉर्म तयार आहे',
+    backendNotice: 'खरेदीदार नोंदणी फॉर्म तयार आहे. बॅकएंड नोंदणी लवकरच जोडली जाईल.',
+    summaryTitle: 'सबमिट केलेले नोंदणी तपशील',
+    buyerInfoLabel: 'खरेदीदार आणि व्यवसाय',
+    contactLabel: 'संपर्क माहिती',
+    locationLabel: 'व्यवसायाचे ठिकाण',
+    commoditiesLabel: 'पसंतीची पिके',
+    volumePriceLabel: 'प्रमाण आणि किंमत लक्ष्य',
+    frequencyLabel: 'खरेदीची वारंवारिता',
+    frontendStateOnlyNotice: 'फॉर्म डेटा फक्त स्थानिक React state मध्ये ठेवला आहे. बॅकएंड नोंदणी अजून जोडायची आहे.',
+    registerAnotherBtn: 'आणखी एक खरेदीदार नोंदणी करा',
+    backToHomeBtn: 'SMARTMandi मुख्यपृष्ठावर परत जा',
+  },
+};
 
 export const translations: Record<Language, TranslationSchema> = {
   en: {
@@ -1455,7 +1749,7 @@ export const translations: Record<Language, TranslationSchema> = {
       archEngine: 'शुद्ध आय सिफारिश इंजन',
       closeBtn: 'बंद करें',
     },
-    buyerRegistration: enBuyerRegistration,
+    buyerRegistration: hiBuyerRegistration,
   },
 
   mr: {
@@ -1747,7 +2041,7 @@ export const translations: Record<Language, TranslationSchema> = {
       archEngine: 'निव्वळ नफा शिफारस इंजिन',
       closeBtn: 'बंद करा',
     },
-    buyerRegistration: enBuyerRegistration,
+    buyerRegistration: mrBuyerRegistration,
   },
 };
 
