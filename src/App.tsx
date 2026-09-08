@@ -145,6 +145,9 @@ export default function App() {
         onGoHome={navigateToHome}
         onOpenFarmerLogin={() => { setAuthContext('farmer'); setIsAuthModalOpen(true); }}
         onOpenBuyerLogin={() => { setAuthContext('buyer'); setIsAuthModalOpen(true); }}
+        onScrollToInput={scrollToInput}
+        onRequireAuth={() => { setAuthContext('generic'); setIsAuthModalOpen(true); }}
+        isAuthenticated={!!currentUser}
       />
       
       {/* Top Navigation */}
