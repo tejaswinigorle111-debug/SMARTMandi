@@ -47,6 +47,7 @@ export const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ onAuthExpired 
   const [profileForm, setProfileForm] = useState(emptyProfile);
   const [listingForm, setListingForm] = useState(emptyListing);
   const [editingListingId, setEditingListingId] = useState<number | null>(null);
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -98,6 +99,7 @@ export const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ onAuthExpired 
       });
       setDashboard((current) => current ? { ...current, profile: response.profile } : current);
       setNotice('Farm profile saved.');
+      setIsEditingProfile(false);
     } catch (saveError) {
       setError(saveError instanceof Error ? saveError.message : 'Unable to save profile');
     } finally { setIsSaving(false); }
@@ -196,15 +198,67 @@ export const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ onAuthExpired 
         {notice && <p className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm font-bold text-emerald-800">{notice}</p>}
 
         <div className="grid gap-5 lg:grid-cols-2">
-          <form onSubmit={saveProfile} className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm">
-            <div className="mb-4 flex items-center gap-2"><MapPin className="h-5 w-5 text-[#2D6A4F]" /><h3 className="text-xl font-black">Farm profile</h3></div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {(['farm_name', 'land_area_acres', 'village', 'district', 'state', 'pincode'] as const).map((field) => <label key={field} className="text-sm font-black text-stone-700">{field.replaceAll('_', ' ')}<input value={profileForm[field]} type={field === 'land_area_acres' ? 'number' : 'text'} min={field === 'land_area_acres' ? 0 : undefined} onChange={(event) => setProfileForm({ ...profileForm, [field]: event.target.value })} className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5 font-medium" /></label>)}
-              <label className="text-sm font-black text-stone-700 sm:col-span-2">Farming details<textarea value={profileForm.farming_details} onChange={(event) => setProfileForm({ ...profileForm, farming_details: event.target.value })} className="mt-1 min-h-20 w-full rounded-xl border border-stone-300 px-3 py-2.5 font-medium" /></label>
+          <div className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm">
+            <div className="mb-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <MapPin className="h-5 w-5 text-[#2D6A4F]" />
+                <h3 className="text-xl font-black uppercase tracking-wide">Farmer Profile</h3>
+              </div>
+              {!isEditingProfile && (
+                <button type="button" onClick={() => setIsEditingProfile(true)} className="inline-flex items-center gap-1 rounded-lg border border-stone-300 px-3 py-1.5 text-xs font-black hover:bg-stone-50">
+                  <Pencil className="h-3 w-3" /> Edit
+                </button>
+              )}
             </div>
-            <p className="mt-3 text-sm font-bold text-stone-500">FPO membership: {dashboard.profile.fpos.length ? dashboard.profile.fpos.map((fpo) => fpo.name).join(', ') : 'No FPO membership recorded'}</p>
-            <button disabled={isSaving} className="mt-4 inline-flex items-center gap-2 rounded-xl bg-[#165B33] px-4 py-2.5 font-black text-white disabled:opacity-60"><Save className="h-4 w-4" /> Save profile</button>
-          </form>
+
+            {!isEditingProfile ? (
+              <div className="space-y-4">
+                <div>
+                  <span className="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-0.5">Farmer Name</span>
+                  <span className="text-lg font-black text-stone-900">{dashboard.profile.name || 'Not provided'}</span>
+                </div>
+                <div>
+                  <span className="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-0.5">Location</span>
+                  <span className="text-base font-bold text-stone-800">{locationText || 'Not provided'}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <span className="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-0.5">Preferred Language</span>
+                    <span className="text-sm font-bold text-stone-800">App Setting</span>
+                  </div>
+                  <div>
+                    <span className="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-0.5">Farmer Type</span>
+                    <span className="text-sm font-bold text-stone-800">
+                      {dashboard.profile.fpos.length ? 'FPO Member' : 'Individual Farmer'}
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <span className="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-0.5">Farming Information</span>
+                  <span className="text-sm font-medium text-stone-700 block bg-stone-50 p-3 rounded-xl border border-stone-100">
+                    {dashboard.profile.farming_details || 'No additional farming information provided.'}
+                  </span>
+                </div>
+                {dashboard.profile.fpos.length > 0 && (
+                  <div>
+                    <span className="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-0.5">FPO Membership</span>
+                    <span className="text-sm font-bold text-stone-800">{dashboard.profile.fpos.map(f => f.name).join(', ')}</span>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <form onSubmit={saveProfile} className="space-y-3">
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {(['farm_name', 'land_area_acres', 'village', 'district', 'state', 'pincode'] as const).map((field) => <label key={field} className="text-sm font-black text-stone-700">{field.replaceAll('_', ' ')}<input value={profileForm[field]} type={field === 'land_area_acres' ? 'number' : 'text'} min={field === 'land_area_acres' ? 0 : undefined} onChange={(event) => setProfileForm({ ...profileForm, [field]: event.target.value })} className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5 font-medium" /></label>)}
+                  <label className="text-sm font-black text-stone-700 sm:col-span-2">Farming details<textarea value={profileForm.farming_details} onChange={(event) => setProfileForm({ ...profileForm, farming_details: event.target.value })} className="mt-1 min-h-20 w-full rounded-xl border border-stone-300 px-3 py-2.5 font-medium" /></label>
+                </div>
+                <div className="flex gap-2 mt-4">
+                  <button disabled={isSaving} type="submit" className="inline-flex flex-1 justify-center items-center gap-2 rounded-xl bg-[#165B33] px-4 py-2.5 font-black text-white disabled:opacity-60"><Save className="h-4 w-4" /> Save profile</button>
+                  <button type="button" onClick={() => setIsEditingProfile(false)} className="inline-flex flex-1 justify-center items-center gap-2 rounded-xl bg-stone-100 border border-stone-300 px-4 py-2.5 font-black text-stone-800 hover:bg-stone-200">Cancel</button>
+                </div>
+              </form>
+            )}
+          </div>
 
           <form id="farmer-listing-form" onSubmit={submitListing} className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm">
             <div className="mb-4 flex items-center justify-between"><div className="flex items-center gap-2"><Plus className="h-5 w-5 text-[#2D6A4F]" /><h3 className="text-xl font-black">{editingListingId ? 'Edit crop listing' : 'Add crop listing'}</h3></div>{editingListingId && <button type="button" onClick={() => { setEditingListingId(null); setListingForm(emptyListing); }} className="text-sm font-black text-stone-500">Cancel</button>}</div>

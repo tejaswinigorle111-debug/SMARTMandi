@@ -136,3 +136,8 @@ export interface BuyerRegistrationFormData {
   buyingFrequency: BuyingFrequency | '';
 }
 
+export interface SmartDealEvaluation {
+  score: number;
+  evaluation_id: string;
+  factors: Record<string, string>;
+}

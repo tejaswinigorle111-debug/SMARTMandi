@@ -12,6 +12,15 @@ export interface TranslationSchema {
     findMarket: string;
     registerBuyer: string;
   };
+  auth: {
+    farmerLogin: string;
+    buyerLogin: string;
+    signIn: string;
+    mobileNumber: string;
+    emailOrPhone: string;
+    dontHaveAccount: string;
+    alreadyRegistered: string;
+  };
   hero: {
     subLabel: string;
     headingPart1: string;
@@ -888,6 +897,15 @@ export const translations: Record<Language, TranslationSchema> = {
       findMarket: 'Find Best Market',
       registerBuyer: 'Register as Buyer',
     },
+    auth: {
+      farmerLogin: 'Farmer Login',
+      buyerLogin: 'Buyer Login',
+      signIn: 'Sign in',
+      mobileNumber: 'Mobile Number',
+      emailOrPhone: 'Email or phone',
+      dontHaveAccount: "Don't have an account? Register",
+      alreadyRegistered: 'Already registered? Sign in',
+    },
     hero: {
       subLabel: 'SMART AGRICULTURE • MARKET DECISION SUPPORT',
       headingPart1: 'Find the',
@@ -1180,6 +1198,15 @@ export const translations: Record<Language, TranslationSchema> = {
       findMarket: 'ఉత్తమ మార్కెట్ కనుగొనండి',
       registerBuyer: 'కొనుగోలుదారుగా నమోదు',
     },
+    auth: {
+      farmerLogin: 'రైతు లాగిన్',
+      buyerLogin: 'కొనుగోలుదారు లాగిన్',
+      signIn: 'సైన్ ఇన్ (లాగిన్)',
+      mobileNumber: 'మొబైల్ నంబర్',
+      emailOrPhone: 'ఈమెయిల్ లేదా ఫోన్',
+      dontHaveAccount: 'ఖాతా లేదా? నమోదు చేసుకోండి',
+      alreadyRegistered: 'ఇప్పటికే ఖాతా ఉందా? లాగిన్ అవ్వండి',
+    },
     hero: {
       subLabel: 'స్మార్ట్ వ్యవసాయం • మార్కెట్ నిర్ణయ మద్దతు',
       headingPart1: 'మీ పంటకు',
@@ -1470,7 +1497,16 @@ export const translations: Record<Language, TranslationSchema> = {
       howItWorks: 'यह कैसे काम करता है',
       about: 'हमारे बारे में',
       findMarket: 'सर्वोत्तम मंडी खोजें',
-      registerBuyer: 'Register as Buyer',
+      registerBuyer: 'खरीदार के रूप में पंजीकरण करें',
+    },
+    auth: {
+      farmerLogin: 'किसान लॉगिन',
+      buyerLogin: 'खरीदार लॉगिन',
+      signIn: 'साइन इन करें',
+      mobileNumber: 'मोबाइल नंबर',
+      emailOrPhone: 'ईमेल या फ़ोन',
+      dontHaveAccount: 'खाता नहीं है? रजिस्टर करें',
+      alreadyRegistered: 'पहले से पंजीकृत हैं? साइन इन करें',
     },
     hero: {
       subLabel: 'स्मार्ट कृषि • मंडी निर्णय सहायता प्रणाली',
@@ -1762,7 +1798,16 @@ export const translations: Record<Language, TranslationSchema> = {
       howItWorks: 'हे कसे कार्य करते',
       about: 'आमच्याबद्दल',
       findMarket: 'सर्वोत्तम बाजार शोधा',
-      registerBuyer: 'Register as Buyer',
+      registerBuyer: 'खरेदीदार म्हणून नोंदणी करा',
+    },
+    auth: {
+      farmerLogin: 'शेतकरी लॉगिन',
+      buyerLogin: 'खरेदीदार लॉगिन',
+      signIn: 'साइन इन करा',
+      mobileNumber: 'मोबाइल नंबर',
+      emailOrPhone: 'ईमेल किंवा फोन',
+      dontHaveAccount: 'खाते नाही? नोंदणी करा',
+      alreadyRegistered: 'आधीच नोंदणीकृत आहात? साइन इन करा',
     },
     hero: {
       subLabel: 'स्मार्ट कृषी • बाजारपेठ निर्णय सहाय्य',

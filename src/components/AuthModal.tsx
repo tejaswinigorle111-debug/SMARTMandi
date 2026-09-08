@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import { LogIn, UserPlus, X } from 'lucide-react';
 import { register, login, UserRole, AuthUser } from '../services/auth';
+import { Language } from '../types';
+import { getTranslation } from '../utils/translations';
 
 interface AuthModalProps {
+  language: Language;
   isOpen: boolean;
   onClose: () => void;
   onAuthenticated: (user: AuthUser) => void;
+  context?: 'generic' | 'farmer' | 'buyer';
+  onNavigateBuyerRegister?: () => void;
 }
 
 const roleLabels: Record<Extract<UserRole, 'FARMER' | 'FPO' | 'BUYER'>, string> = {
@@ -14,7 +19,8 @@ const roleLabels: Record<Extract<UserRole, 'FARMER' | 'FPO' | 'BUYER'>, string> 
   BUYER: 'Buyer / Retailer',
 };
 
-export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthenticated }) => {
+export const AuthModal: React.FC<AuthModalProps> = ({ language, isOpen, onClose, onAuthenticated, context = 'generic', onNavigateBuyerRegister }) => {
+  const t = getTranslation(language);
   const [mode, setMode] = useState<'login' | 'register'>('login');
   const [identifier, setIdentifier] = useState('');
   const [fullName, setFullName] = useState('');
@@ -24,6 +30,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthent
   const [role, setRole] = useState<UserRole>('FARMER');
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  React.useEffect(() => {
+    if (isOpen) {
+      if (context === 'farmer') setRole('FARMER');
+      else if (context === 'buyer') setRole('BUYER');
+      setMode('login');
+      setError(null);
+    }
+  }, [isOpen, context]);
 
   if (!isOpen) return null;
 
@@ -58,7 +73,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthent
             <div className="mb-1 flex items-center gap-2 text-[#165B33]">
               {mode === 'login' ? <LogIn className="h-5 w-5" /> : <UserPlus className="h-5 w-5" />}
               <h2 className="text-2xl font-black text-stone-950">
-                {mode === 'login' ? 'Sign in' : 'Create account'}
+                {mode === 'login' 
+                  ? (context === 'farmer' ? t.auth.farmerLogin : context === 'buyer' ? t.auth.buyerLogin : t.auth.signIn)
+                  : 'Create account'}
               </h2>
             </div>
             <p className="text-sm font-medium text-stone-500">
@@ -98,8 +115,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthent
 
           {mode === 'login' && (
             <label className="block text-sm font-black text-stone-700">
-              Email or phone
-              <input required value={identifier} onChange={(event) => setIdentifier(event.target.value)} className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5 font-medium outline-none focus:border-[#2D6A4F]" />
+              {context === 'farmer' ? t.auth.mobileNumber : t.auth.emailOrPhone}
+              <input required value={identifier} onChange={(event) => setIdentifier(event.target.value)} type={context === 'farmer' ? 'tel' : 'text'} className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2.5 font-medium outline-none focus:border-[#2D6A4F]" />
             </label>
           )}
 
@@ -111,12 +128,24 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthent
           {error && <p role="alert" className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm font-bold text-rose-800">{error}</p>}
 
           <button disabled={isSubmitting} type="submit" className="w-full rounded-xl bg-[#165B33] px-5 py-3 font-black text-white transition-colors hover:bg-[#114828] disabled:cursor-wait disabled:opacity-60">
-            {isSubmitting ? 'Please wait...' : mode === 'login' ? 'Sign in' : 'Create account'}
+            {isSubmitting ? 'Please wait...' : mode === 'login' ? 'Login' : 'Create account'}
           </button>
         </form>
 
-        <button type="button" onClick={() => { setMode(mode === 'login' ? 'register' : 'login'); setError(null); }} className="mt-5 w-full text-center text-sm font-black text-[#165B33] hover:underline">
-          {mode === 'login' ? 'Need an account? Register' : 'Already registered? Sign in'}
+        <button 
+          type="button" 
+          onClick={() => { 
+            if (mode === 'login' && context === 'buyer' && onNavigateBuyerRegister) {
+              onClose();
+              onNavigateBuyerRegister();
+            } else {
+              setMode(mode === 'login' ? 'register' : 'login'); 
+              setError(null); 
+            }
+          }} 
+          className="mt-5 w-full text-center text-sm font-black text-[#165B33] hover:underline"
+        >
+          {mode === 'login' ? t.auth.dontHaveAccount : t.auth.alreadyRegistered}
         </button>
       </div>
     </div>

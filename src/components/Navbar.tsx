@@ -11,11 +11,11 @@ interface NavbarProps {
   onOpenMarketPrices: () => void;
   onOpenAbout: () => void;
   onScrollToInput: () => void;
-  onNavigateBuyerRegister: () => void;
   onGoHome?: () => void;
   user: AuthUser | null;
   onOpenAuth: () => void;
   onLogout: () => Promise<void>;
+  onToggleSidebar: () => void;
 }
 
 export const languages: { code: Language; name: string; native: string }[] = [
@@ -31,11 +31,11 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenMarketPrices,
   onOpenAbout,
   onScrollToInput,
-  onNavigateBuyerRegister,
   onGoHome,
   user,
   onOpenAuth,
   onLogout,
+  onToggleSidebar,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
@@ -70,6 +70,14 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="flex items-center justify-between h-20">
           {/* Brand */}
           <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={onToggleSidebar}
+              className="p-2 -ml-2 text-stone-600 hover:text-stone-900 hover:bg-stone-100 focus:outline-hidden rounded-lg transition-colors cursor-pointer"
+              aria-label="Toggle Sidebar Menu"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
             <a
               href="#"
               onClick={(e) => {
@@ -139,15 +147,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               id="nav-about"
             >
               {t.nav.about}
-            </button>
-            <button
-              type="button"
-              onClick={onNavigateBuyerRegister}
-              className="hover:text-emerald-800 transition-colors py-1 cursor-pointer font-bold flex items-center gap-1.5"
-              id="nav-register-buyer"
-            >
-              <Store className="w-4 h-4 text-[#165B33]" />
-              <span>{t.nav.registerBuyer}</span>
             </button>
           </nav>
 
@@ -312,15 +311,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="text-left px-3 py-2 rounded-lg hover:bg-stone-50 text-stone-600 cursor-pointer"
             >
               <span>{t.nav.about}</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleNavClick(onNavigateBuyerRegister)}
-              className="text-left px-3 py-2.5 rounded-xl hover:bg-[#E5F5E9] bg-emerald-50/50 border border-emerald-200 flex items-center justify-between text-[#165B33] font-black cursor-pointer transition-colors"
-              id="mobile-nav-register-buyer"
-            >
-              <span>{t.nav.registerBuyer}</span>
-              <Store className="w-4 h-4 text-[#165B33]" />
             </button>
           </div>
 

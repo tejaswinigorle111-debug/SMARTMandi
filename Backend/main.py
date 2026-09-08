@@ -96,7 +96,11 @@ if os.path.exists(_ENV_PATH):
 def _cors_origins() -> list[str]:
     configured = os.environ.get("CORS_ORIGINS", "")
     origins = [origin.strip().rstrip("/") for origin in configured.split(",") if origin.strip()]
-    return origins or ["http://localhost:3000", "http://127.0.0.1:3000"]
+    return origins or [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "https://smart-mandi-six.vercel.app",
+    ]
 
 
 _LOCAL_DEV_ORIGIN_REGEX = r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$"
@@ -295,12 +299,18 @@ def recommend_market(request: RecommendationRequest):
     if quantity <= 0:
         raise HTTPException(status_code=422, detail="quantity must be greater than zero")
 
-    nearby = market_data_service.getNearbyMarketPrices(
-        crop=crop,
-        location=request.location,
-        latitude=request.latitude,
-        longitude=request.longitude,
-    )
+    try:
+        nearby = market_data_service.getNearbyMarketPrices(
+            crop=crop,
+            location=request.location,
+            latitude=request.latitude,
+            longitude=request.longitude,
+        )
+    except Exception as error:
+        raise HTTPException(
+            status_code=503,
+            detail=f"Market data service unavailable: {error.__class__.__name__}",
+        ) from error
 
     if not nearby["records"] or nearby["data_state"] == "unavailable":
         return {

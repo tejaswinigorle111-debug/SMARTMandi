@@ -201,7 +201,7 @@ class MarketDataService:
                 f"{_DATA_GOV_RESOURCE_URL}/{resource_id}",
                 params=params,
                 headers=_HEADERS,
-                timeout=(5, 30),
+                timeout=(5, 15),
             )
             response.raise_for_status()
             records = response.json().get("records", [])
@@ -251,7 +251,11 @@ class MarketDataService:
             "source": None,
             "data_state": "unavailable",
             "last_updated": None,
-            "message": "Live market data is temporarily unavailable.",
+            "message": (
+                "Live market data is temporarily unavailable."
+                if not error
+                else f"Live market data provider request failed: {error}."
+            ),
             "error": error,
         }
 
@@ -266,9 +270,15 @@ class MarketDataService:
         crop: str | None = None,
         state: str | None = None,
         district: str | None = None,
+        limit: int = 500,
     ) -> dict[str, Any]:
         key = self._cache_key(crop, state, district)
-        records, error = self._fetch_records(crop=crop, state=state, district=district)
+        records, error = self._fetch_records(
+            crop=crop,
+            state=state,
+            district=district,
+            limit=limit,
+        )
         return self._result(records, cache_key=key, error=error)
 
     def getCropPrices(self, crop: str, *, state: str | None = None) -> dict[str, Any]:
@@ -406,14 +416,14 @@ class MarketDataService:
                 origin = (float(geocoded["latitude"]), float(geocoded["longitude"]))
                 origin_state = reverse_geocode_location(origin[0], origin[1]).get("state")
 
-        prices = self.getMarketPrices(crop=crop, state=origin_state)
+        prices = self.getMarketPrices(crop=crop, state=origin_state, limit=100)
         if prices["data_state"] == "unavailable":
             return prices
 
         # If state filter returned nothing, retry without state (still distance-filter later).
         records = list(prices["records"])
         if not records and origin_state:
-            fallback = self.getMarketPrices(crop=crop)
+            fallback = self.getMarketPrices(crop=crop, limit=100)
             if fallback["records"]:
                 prices = fallback
                 records = list(fallback["records"])
