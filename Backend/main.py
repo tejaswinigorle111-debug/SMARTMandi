@@ -26,16 +26,38 @@ from buyer import (
     search_listings,
 )
 from ai_service import ai_service
+from admin import list_buyer_registration_requests, review_buyer_registration_request
 from database import test_db_connection, verify_tables_exist
 from farmer import (
     cancel_listing,
     create_listing,
     get_farmer_dashboard,
+    list_farmer_offers,
     update_farmer_profile,
     update_listing,
 )
 from location_service import geocode_location, location_distance, reverse_geocode_location
+from logistics import list_logistics_inventory, list_logistics_shipments, logistics_options, logistics_timeline
+from lots import create_crop_lot, delete_crop_lot, get_crop_lot, list_crop_lots, update_crop_lot
 from market_comparison import CostConfigurationError, compare_markets
+from fpo import (
+    add_member,
+    calculate_settlements,
+    claim_fpo,
+    create_bulk_offer,
+    create_fpo,
+    create_pooled_lot as create_fpo_pooled_lot,
+    list_farmer_memberships,
+    list_available_farmers,
+    list_lot_offers,
+    list_member_listings,
+    decide_bulk_offer,
+    list_members,
+    list_my_fpos,
+    list_my_lots,
+    remove_member,
+    review_quality,
+)
 from market_data import market_data_service
 from marketplace_growth import (
     AlertCreate,
@@ -43,6 +65,7 @@ from marketplace_growth import (
     VerificationDecision,
     VerificationDocumentCreate,
     create_market_alert,
+    get_buyer_verification,
     create_pooled_lot,
     list_market_alerts,
     list_pooled_lots,
@@ -419,10 +442,20 @@ def buyer_registration_request(request: BuyerRegistrationRequest):
 
 
 app.add_api_route("/farmer/dashboard", get_farmer_dashboard, methods=["GET"])
+app.add_api_route("/farmer/offers", list_farmer_offers, methods=["GET"])
 app.add_api_route("/farmer/profile", update_farmer_profile, methods=["PATCH"])
+app.add_api_route("/logistics/options", logistics_options, methods=["GET"])
+app.add_api_route("/logistics/shipments", list_logistics_shipments, methods=["GET"])
+app.add_api_route("/logistics/inventory", list_logistics_inventory, methods=["GET"])
+app.add_api_route("/logistics/timeline/{order_id}", logistics_timeline, methods=["GET"])
 app.add_api_route("/farmer/listings", create_listing, methods=["POST"])
 app.add_api_route("/farmer/listings/{listing_id}", update_listing, methods=["PATCH"])
 app.add_api_route("/farmer/listings/{listing_id}", cancel_listing, methods=["DELETE"])
+app.add_api_route("/farmer/lots", create_crop_lot, methods=["POST"])
+app.add_api_route("/farmer/lots", list_crop_lots, methods=["GET"])
+app.add_api_route("/farmer/lots/{lot_id}", get_crop_lot, methods=["GET"])
+app.add_api_route("/farmer/lots/{lot_id}", update_crop_lot, methods=["PATCH"])
+app.add_api_route("/farmer/lots/{lot_id}", delete_crop_lot, methods=["DELETE"])
 app.add_api_route("/buyer/listings", search_listings, methods=["GET"])
 app.add_api_route("/buyer/listings/{listing_id}", get_listing, methods=["GET"])
 app.add_api_route("/buyer/listings/{listing_id}/offers", create_offer, methods=["POST"])
@@ -442,9 +475,25 @@ app.add_api_route("/disputes/{dispute_id}/decision", decide_dispute, methods=["P
 app.add_api_route("/audit/{entity_type}/{entity_id}", list_audit_events, methods=["GET"])
 app.add_api_route("/farmer/orders/{order_id}/profit", record_profit, methods=["POST"])
 app.add_api_route("/buyer/verification-documents", submit_verification, methods=["POST"])
+app.add_api_route("/buyer/verification", get_buyer_verification, methods=["GET"])
 app.add_api_route("/admin/verification-documents/{document_id}", review_verification, methods=["POST"])
-app.add_api_route("/fpo/lots", create_pooled_lot, methods=["POST"])
-app.add_api_route("/fpo/lots", list_pooled_lots, methods=["GET"])
+app.add_api_route("/fpos", create_fpo, methods=["POST"])
+app.add_api_route("/fpos", list_my_fpos, methods=["GET"])
+app.add_api_route("/fpos/farmers", list_available_farmers, methods=["GET"])
+app.add_api_route("/fpos/{fpo_id}/claim", claim_fpo, methods=["POST"])
+app.add_api_route("/fpos/{fpo_id}/members", list_members, methods=["GET"])
+app.add_api_route("/fpos/{fpo_id}/members", add_member, methods=["POST"])
+app.add_api_route("/fpos/{fpo_id}/members/{farmer_user_id}", remove_member, methods=["DELETE"])
+app.add_api_route("/farmer/fpo-memberships", list_farmer_memberships, methods=["GET"])
+app.add_api_route("/fpos/{fpo_id}/members/{farmer_user_id}/listings", list_member_listings, methods=["GET"])
+app.add_api_route("/fpos/{fpo_id}/lots", create_fpo_pooled_lot, methods=["POST"])
+app.add_api_route("/fpos/lots", list_my_lots, methods=["GET"])
+app.add_api_route("/pooled-lots", list_pooled_lots, methods=["GET"])
+app.add_api_route("/fpos/lots/{lot_id}/quality", review_quality, methods=["POST"])
+app.add_api_route("/fpos/lots/{lot_id}/offers", list_lot_offers, methods=["GET"])
+app.add_api_route("/fpos/offers/{offer_id}/decision", decide_bulk_offer, methods=["POST"])
+app.add_api_route("/fpos/offers/{offer_id}/settlements", calculate_settlements, methods=["POST"])
+app.add_api_route("/fpos/lots/{lot_id}/offers", create_bulk_offer, methods=["POST"])
 app.add_api_route("/market-matches", match_demands, methods=["GET"])
 app.add_api_route("/alerts", create_market_alert, methods=["POST"])
 app.add_api_route("/alerts", list_market_alerts, methods=["GET"])
@@ -455,3 +504,6 @@ app.add_api_route("/warehouses/inventory/receive", receive_inventory, methods=["
 app.add_api_route("/warehouses/inventory/{inventory_id}/move", move_inventory, methods=["POST"])
 app.add_api_route("/warehouses/inventory/{inventory_id}/spoilage", report_spoilage, methods=["POST"])
 app.add_api_route("/warehouses/inventory/{inventory_id}/release", release_inventory, methods=["POST"])
+
+app.add_api_route("/admin/buyer-registration-requests", list_buyer_registration_requests, methods=["GET"])
+app.add_api_route("/admin/buyer-registration-requests/{request_id}/review", review_buyer_registration_request, methods=["PATCH"])

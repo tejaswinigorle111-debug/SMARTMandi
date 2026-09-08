@@ -55,8 +55,8 @@ export async function searchBuyerListings(filters: BuyerListingFilters) {
   return authenticatedRequest<{ items: BuyerListing[]; page: number; page_size: number; total: number; has_next: boolean }>(`/buyer/listings${query ? `?${query}` : ''}`);
 }
 
-export async function makeOffer(listingId: number, quantity: number, offeredPricePerKg: number) {
-  return authenticatedRequest<{ id: number; listing_id: number; status: string }>(`/buyer/listings/${listingId}/offers`, { method: 'POST', body: JSON.stringify({ quantity, offered_price_per_kg: offeredPricePerKg }) });
+export async function makeOffer(listingId: number, quantity: number, offeredPricePerKg: number, expiresAt?: string) {
+  return authenticatedRequest<{ id: number; listing_id: number; status: string; expires_at: string | null }>(`/buyer/listings/${listingId}/offers`, { method: 'POST', body: JSON.stringify({ quantity, offered_price_per_kg: offeredPricePerKg, expires_at: expiresAt || null }) });
 }
 
 export async function createBuyerOrder(listingId: number, quantity: number, agreedPricePerKg: number) {

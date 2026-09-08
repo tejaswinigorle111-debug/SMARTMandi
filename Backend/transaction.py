@@ -44,6 +44,7 @@ class ShipmentAssignment(BaseModel):
     vehicle_id: int | None = None
     driver_id: int | None = None
     scheduled_pickup_at: str | None = None
+    transport_rate_per_kg: float | None = Field(default=None, ge=0)
 
 
 class WarehouseBookingCreate(BaseModel):
@@ -114,13 +115,15 @@ def list_buyer_demands(user=AnyParticipant, status: str = Query(default="OPEN"))
             cursor.execute(
                 """SELECT demands.id, commodities.name, demands.quantity_kg, demands.target_price_per_kg,
                 demands.quality_requirements, demands.delivery_location, demands.delivery_from, demands.delivery_to,
-                demands.status, demands.created_at, users.full_name
+                demands.status, demands.created_at, users.full_name,
+                buyers.verification_status = 'APPROVED'
                 FROM buyer_demands demands JOIN commodities ON commodities.id = demands.commodity_id
                 JOIN users ON users.id = demands.buyer_user_id
+                JOIN buyers ON buyers.user_id = demands.buyer_user_id
                 WHERE (%s = 'ALL' OR demands.status = %s) ORDER BY demands.created_at DESC LIMIT 100""",
                 (status, status),
             )
-            return [{"id": row[0], "commodity": row[1], "quantity_kg": float(row[2]), "target_price_per_kg": float(row[3]) if row[3] is not None else None, "quality_requirements": row[4], "delivery_location": row[5], "delivery_from": row[6].isoformat() if row[6] else None, "delivery_to": row[7].isoformat() if row[7] else None, "status": row[8], "created_at": row[9].isoformat(), "buyer_name": row[10]} for row in cursor.fetchall()]
+            return [{"id": row[0], "commodity": row[1], "quantity_kg": float(row[2]), "target_price_per_kg": float(row[3]) if row[3] is not None else None, "quality_requirements": row[4], "delivery_location": row[5], "delivery_from": row[6].isoformat() if row[6] else None, "delivery_to": row[7].isoformat() if row[7] else None, "status": row[8], "created_at": row[9].isoformat(), "buyer_name": row[10], "buyer_verified": row[11]} for row in cursor.fetchall()]
 
 
 def inspect_listing(listing_id: int, payload: QualityInspectionCreate, user=AnyParticipant):
@@ -178,17 +181,33 @@ def decide_offer(offer_id: int, payload: OfferDecision, user=FarmerUser):
 
 
 def create_shipment(order_id: int, payload: ShipmentAssignment, user=AnyParticipant):
+    if "WAREHOUSE_MANAGER" in user["roles"]:
+        raise HTTPException(status_code=403, detail="Warehouse managers cannot assign transport")
     with get_db_connection() as connection:
         with connection.cursor() as cursor:
-            cursor.execute("SELECT status FROM orders WHERE id = %s AND (buyer_user_id = %s OR farmer_user_id = %s)", (order_id, user["id"], user["id"]))
+            if "ADMIN" in user["roles"] or "TRANSPORT_PROVIDER" in user["roles"]:
+                cursor.execute("SELECT status FROM orders WHERE id = %s", (order_id,))
+            else:
+                cursor.execute("SELECT status FROM orders WHERE id = %s AND (buyer_user_id = %s OR farmer_user_id = %s)", (order_id, user["id"], user["id"]))
             order = cursor.fetchone()
             if not order:
                 raise HTTPException(status_code=404, detail="Order not found")
-            cursor.execute("""INSERT INTO shipments (order_id, vehicle_id, driver_id, status, scheduled_pickup_at)
-                VALUES (%s, %s, %s, 'ASSIGNED', %s)
+            if "TRANSPORT_PROVIDER" in user["roles"]:
+                if payload.vehicle_id:
+                    cursor.execute("SELECT 1 FROM vehicles WHERE id = %s AND provider_user_id = %s", (payload.vehicle_id, user["id"]))
+                    if not cursor.fetchone():
+                        raise HTTPException(status_code=403, detail="Selected vehicle is not managed by this transport provider")
+                if payload.driver_id:
+                    cursor.execute("SELECT 1 FROM drivers WHERE id = %s AND provider_user_id = %s", (payload.driver_id, user["id"]))
+                    if not cursor.fetchone():
+                        raise HTTPException(status_code=403, detail="Selected driver is not managed by this transport provider")
+                if not payload.vehicle_id and not payload.driver_id:
+                    raise HTTPException(status_code=422, detail="Select a vehicle or driver")
+            cursor.execute("""INSERT INTO shipments (order_id, vehicle_id, driver_id, status, scheduled_pickup_at, transport_rate_per_kg)
+                VALUES (%s, %s, %s, 'ASSIGNED', %s, %s)
                 ON CONFLICT (order_id) DO UPDATE SET vehicle_id = EXCLUDED.vehicle_id, driver_id = EXCLUDED.driver_id,
-                status = 'ASSIGNED', scheduled_pickup_at = EXCLUDED.scheduled_pickup_at, updated_at = NOW()
-                RETURNING id""", (order_id, payload.vehicle_id, payload.driver_id, payload.scheduled_pickup_at))
+                status = 'ASSIGNED', scheduled_pickup_at = EXCLUDED.scheduled_pickup_at, transport_rate_per_kg = EXCLUDED.transport_rate_per_kg, updated_at = NOW()
+                RETURNING id""", (order_id, payload.vehicle_id, payload.driver_id, payload.scheduled_pickup_at, payload.transport_rate_per_kg))
             shipment_id = cursor.fetchone()[0]
             _event(cursor, "ORDER", order_id, user["id"], "SHIPMENT_ASSIGNED", metadata={"shipment_id": shipment_id, "vehicle_id": payload.vehicle_id, "driver_id": payload.driver_id})
         connection.commit()

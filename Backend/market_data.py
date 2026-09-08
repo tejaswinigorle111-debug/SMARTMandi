@@ -96,6 +96,13 @@ class MarketDataService:
         cutoff = datetime.now(timezone.utc) - timedelta(days=max_age)
         return price_date >= cutoff
 
+    @classmethod
+    def _freshness_days(cls, record: dict[str, Any]) -> int | None:
+        price_date = cls._parse_price_date(record.get("date") or record.get("last_updated"))
+        if price_date is None:
+            return None
+        return max(0, (datetime.now(timezone.utc).date() - price_date.date()).days)
+
     def _geocode_cached(self, query: str) -> tuple[float, float] | None:
         key = query.strip().lower()
         if not key:
@@ -166,6 +173,7 @@ class MarketDataService:
             "maximum_price_per_kg": maximum_price_per_kg,
             "source": _DATA_GOV_SOURCE,
             "last_updated": date_value,
+            "freshness_days": self._freshness_days({"date": date_value}),
         }
 
     def _fetch_records(
@@ -290,22 +298,29 @@ class MarketDataService:
         crop: str | None = None,
         market: str | None = None,
     ) -> dict[str, Any]:
-        records = [
+        cached_records = [
             item for item in self._history_cache
             if (not crop or item["commodity"].lower() == crop.lower())
             and (not market or item["market"].lower() == market.lower())
         ]
+        live_records, error = self._fetch_records(crop=crop, limit=500)
+        records = live_records or cached_records
         if not records:
             return {
                 "records": [], "source": None, "data_state": "unavailable", "last_updated": None,
-                "message": "Live market history is temporarily unavailable.",
+                "message": "Official historical market data is unavailable.", "error": error,
             }
+        unique: dict[tuple[Any, ...], dict[str, Any]] = {}
+        for item in records:
+            key = (item.get("commodity"), item.get("market"), item.get("date"), item.get("modal_price"))
+            unique[key] = item
+        records = list(unique.values())
         return {
-            "records": [dict(item, data_state="cached") for item in records],
+            "records": [dict(item, data_state="live" if live_records else "cached") for item in records],
             "source": _DATA_GOV_SOURCE,
-            "data_state": "cached",
+            "data_state": "live" if live_records else "cached",
             "last_updated": max(item.get("last_updated") or "" for item in records),
-            "message": "Historical records are from previously retrieved official data and are cached.",
+            "message": None if live_records else "Historical records are from previously retrieved official data and are cached.",
         }
 
     def getMarketArrivals(

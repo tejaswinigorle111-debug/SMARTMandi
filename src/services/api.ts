@@ -230,3 +230,49 @@ export async function getRecommendation(
     throw new Error('Unable to load market recommendations.');
   }
 }
+
+export async function getAdminBuyerRegistrationRequests(
+  token: string,
+  status?: string,
+  page: number = 1
+): Promise<import('../types').BuyerRegistrationRequestsResponse> {
+  const query = new URLSearchParams();
+  if (status) query.set('status', status);
+  query.set('page', String(page));
+
+  const response = await fetch(`${API_BASE_URL}/admin/buyer-registration-requests?${query}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.json().catch(() => ({}));
+    throw new Error(errorBody.detail || 'Failed to fetch buyer registration requests');
+  }
+
+  return response.json();
+}
+
+export async function reviewAdminBuyerRegistrationRequest(
+  token: string,
+  requestId: number,
+  status: 'APPROVED' | 'REJECTED' | 'CONTACTED',
+  reviewNotes?: string
+): Promise<{ id: number; status: string; reviewed_at: string; review_notes: string | null }> {
+  const response = await fetch(`${API_BASE_URL}/admin/buyer-registration-requests/${requestId}/review`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ status, review_notes: reviewNotes }),
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.json().catch(() => ({}));
+    throw new Error(errorBody.detail || 'Failed to update buyer registration request');
+  }
+
+  return response.json();
+}

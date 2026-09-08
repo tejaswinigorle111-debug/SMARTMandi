@@ -18,11 +18,13 @@ class VerificationDocumentCreate(BaseModel):
     document_type: str = Field(min_length=2, max_length=80)
     document_reference: str | None = Field(default=None, max_length=160)
     document_url: str | None = Field(default=None, max_length=500)
+    document_metadata: dict[str, Any] = Field(default_factory=dict)
 
 
 class VerificationDecision(BaseModel):
     status: Literal["APPROVED", "REJECTED"]
     review_note: str | None = Field(default=None, max_length=500)
+    rejection_reason: str | None = Field(default=None, max_length=500)
 
 
 class PooledLotCreate(BaseModel):
@@ -43,24 +45,118 @@ class AlertCreate(BaseModel):
 def submit_verification(payload: VerificationDocumentCreate, user=BuyerUser):
     with get_db_connection() as connection:
         with connection.cursor() as cursor:
-            cursor.execute("INSERT INTO buyer_verification_documents (buyer_user_id, document_type, document_reference, document_url) VALUES (%s, %s, %s, %s) RETURNING id", (user["id"], payload.document_type, payload.document_reference, payload.document_url))
+            cursor.execute(
+                """INSERT INTO buyer_verification_documents
+                (buyer_user_id, document_type, document_reference, document_url, document_metadata)
+                VALUES (%s, %s, %s, %s, %s) RETURNING id""",
+                (user["id"], payload.document_type, payload.document_reference, payload.document_url, Json(payload.document_metadata)),
+            )
             document_id = cursor.fetchone()[0]
-            cursor.execute("UPDATE buyers SET verification_status = 'PENDING', updated_at = NOW() WHERE user_id = %s", (user["id"],))
+            cursor.execute(
+                """UPDATE buyers SET verification_status = 'PENDING', verification_notes = NULL,
+                updated_at = NOW() WHERE user_id = %s""",
+                (user["id"],),
+            )
+            cursor.execute(
+                """INSERT INTO buyer_verification_reviews
+                (buyer_user_id, document_id, previous_status, status, reviewed_by)
+                VALUES (%s, %s, NULL, 'PENDING', NULL)""",
+                (user["id"], document_id),
+            )
         connection.commit()
-    return {"id": document_id, "status": "PENDING"}
+    return {"id": document_id, "status": "PENDING", "document_metadata": payload.document_metadata}
 
 
 def review_verification(document_id: int, payload: VerificationDecision, user=AdminUser):
     with get_db_connection() as connection:
         with connection.cursor() as cursor:
-            cursor.execute("SELECT buyer_user_id FROM buyer_verification_documents WHERE id = %s FOR UPDATE", (document_id,))
+            cursor.execute(
+                """SELECT buyer_user_id, status FROM buyer_verification_documents
+                WHERE id = %s FOR UPDATE""",
+                (document_id,),
+            )
             document = cursor.fetchone()
             if not document:
                 raise HTTPException(status_code=404, detail="Verification document not found")
-            cursor.execute("UPDATE buyer_verification_documents SET status = %s, reviewed_by = %s, reviewed_at = NOW(), review_note = %s WHERE id = %s", (payload.status, user["id"], payload.review_note, document_id))
-            cursor.execute("UPDATE buyers SET verification_status = %s, verification_notes = %s, updated_at = NOW() WHERE user_id = %s", (payload.status, payload.review_note, document[0]))
+            rejection_reason = payload.rejection_reason if payload.status == "REJECTED" else None
+            cursor.execute(
+                """UPDATE buyer_verification_documents
+                SET status = %s, reviewed_by = %s, reviewed_at = NOW(), review_note = %s,
+                    rejection_reason = %s
+                WHERE id = %s""",
+                (payload.status, user["id"], payload.review_note, rejection_reason, document_id),
+            )
+            cursor.execute(
+                """UPDATE buyers SET verification_status = %s, verification_notes = %s,
+                updated_at = NOW() WHERE user_id = %s""",
+                (payload.status, rejection_reason or payload.review_note, document[0]),
+            )
+            cursor.execute(
+                """INSERT INTO buyer_verification_reviews
+                (buyer_user_id, document_id, previous_status, status, rejection_reason, review_note, reviewed_by)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)""",
+                (document[0], document_id, document[1], payload.status, rejection_reason, payload.review_note, user["id"]),
+            )
         connection.commit()
-    return {"id": document_id, "status": payload.status, "buyer_user_id": str(document[0])}
+    return {
+        "id": document_id,
+        "status": payload.status,
+        "buyer_user_id": str(document[0]),
+        "rejection_reason": rejection_reason,
+    }
+
+
+def get_buyer_verification(user=BuyerUser):
+    with get_db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """SELECT verification_status, verification_notes
+                FROM buyers WHERE user_id = %s""",
+                (user["id"],),
+            )
+            buyer = cursor.fetchone()
+            if not buyer:
+                raise HTTPException(status_code=404, detail="Buyer profile not found")
+            cursor.execute(
+                """SELECT id, document_type, document_reference, document_url, document_metadata,
+                status, rejection_reason, reviewed_at, created_at
+                FROM buyer_verification_documents WHERE buyer_user_id = %s
+                ORDER BY created_at DESC""",
+                (user["id"],),
+            )
+            documents = [
+                {
+                    "id": row[0], "document_type": row[1], "document_reference": row[2],
+                    "document_url": row[3], "document_metadata": row[4], "status": row[5],
+                    "rejection_reason": row[6],
+                    "reviewed_at": row[7].isoformat() if row[7] else None,
+                    "created_at": row[8].isoformat(),
+                }
+                for row in cursor.fetchall()
+            ]
+            cursor.execute(
+                """SELECT id, document_id, previous_status, status, rejection_reason,
+                review_note, reviewed_by, created_at
+                FROM buyer_verification_reviews WHERE buyer_user_id = %s
+                ORDER BY created_at DESC""",
+                (user["id"],),
+            )
+            history = [
+                {
+                    "id": row[0], "document_id": row[1], "previous_status": row[2],
+                    "status": row[3], "rejection_reason": row[4], "review_note": row[5],
+                    "reviewed_by": str(row[6]) if row[6] else None,
+                    "created_at": row[7].isoformat(),
+                }
+                for row in cursor.fetchall()
+            ]
+    return {
+        "status": buyer[0],
+        "rejection_reason": buyer[1] if buyer[0] == "REJECTED" else None,
+        "verified_badge": buyer[0] == "APPROVED",
+        "documents": documents,
+        "review_history": history,
+    }
 
 
 def create_pooled_lot(payload: PooledLotCreate, user=FarmerUser):
@@ -104,9 +200,11 @@ def match_demands(user=Participant, commodity: str | None = None):
     with get_db_connection() as connection:
         with connection.cursor() as cursor:
             cursor.execute("""SELECT demands.id, commodities.name, demands.quantity_kg, demands.target_price_per_kg,
-                demands.quality_requirements, demands.delivery_location, users.full_name
+                demands.quality_requirements, demands.delivery_location, users.full_name,
+                buyers.verification_status = 'APPROVED'
                 FROM buyer_demands demands JOIN commodities ON commodities.id = demands.commodity_id
                 JOIN users ON users.id = demands.buyer_user_id
+                JOIN buyers ON buyers.user_id = demands.buyer_user_id
                 WHERE demands.status = 'OPEN' AND (%s IS NULL OR commodities.name ILIKE %s)
                 ORDER BY demands.created_at DESC LIMIT 100""", (commodity, f"%{commodity}%" if commodity else None))
             demands = cursor.fetchall()
@@ -118,7 +216,7 @@ def match_demands(user=Participant, commodity: str | None = None):
                     JOIN users ON users.id = listings.farmer_user_id
                     WHERE listings.status IN ('ACTIVE', 'PUBLISHED') AND commodities.name = %s
                     ORDER BY listings.created_at DESC LIMIT 20""", (demand[1],))
-                results.append({"demand": {"id": demand[0], "commodity": demand[1], "quantity_kg": float(demand[2]), "target_price_per_kg": float(demand[3]) if demand[3] is not None else None, "quality_requirements": demand[4], "delivery_location": demand[5], "buyer_name": demand[6]}, "matching_listings": [{"id": row[0], "quantity": float(row[1]), "unit": row[2], "expected_price": float(row[3]) if row[3] is not None else None, "quality": row[4], "farmer_name": row[5]} for row in cursor.fetchall()]})
+                results.append({"demand": {"id": demand[0], "commodity": demand[1], "quantity_kg": float(demand[2]), "target_price_per_kg": float(demand[3]) if demand[3] is not None else None, "quality_requirements": demand[4], "delivery_location": demand[5], "buyer_name": demand[6], "buyer_verified": demand[7]}, "matching_listings": [{"id": row[0], "quantity": float(row[1]), "unit": row[2], "expected_price": float(row[3]) if row[3] is not None else None, "quality": row[4], "farmer_name": row[5]} for row in cursor.fetchall()]})
             return results
 
 

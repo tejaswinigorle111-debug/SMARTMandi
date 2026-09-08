@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime, timezone
 from typing import Literal
 
 from fastapi import Depends, HTTPException, Query
@@ -14,6 +14,7 @@ BuyerUser = Depends(require_roles("BUYER"))
 class OfferCreate(BaseModel):
     quantity: float = Field(gt=0)
     offered_price_per_kg: float = Field(gt=0)
+    expires_at: datetime | None = None
 
 
 class OrderCreate(BaseModel):
@@ -212,6 +213,8 @@ def get_listing(listing_id: int, user=BuyerUser):
 
 
 def create_offer(listing_id: int, payload: OfferCreate, user=BuyerUser):
+    if payload.expires_at and payload.expires_at <= datetime.now(timezone.utc):
+        raise HTTPException(status_code=422, detail="Offer expiry must be in the future")
     with get_db_connection() as connection:
         with connection.cursor() as cursor:
             cursor.execute(
@@ -224,9 +227,9 @@ def create_offer(listing_id: int, payload: OfferCreate, user=BuyerUser):
             if payload.quantity > float(listing[1]):
                 raise HTTPException(status_code=422, detail="Offer quantity exceeds listing quantity")
             cursor.execute(
-                """INSERT INTO offers (listing_id, buyer_user_id, quantity_kg, offered_price_per_kg)
-                VALUES (%s, %s, %s, %s) RETURNING id""",
-                (listing_id, user["id"], payload.quantity, payload.offered_price_per_kg),
+                """INSERT INTO offers (listing_id, buyer_user_id, quantity_kg, offered_price_per_kg, expires_at)
+                VALUES (%s, %s, %s, %s, %s) RETURNING id""",
+                (listing_id, user["id"], payload.quantity, payload.offered_price_per_kg, payload.expires_at),
             )
             offer_id = cursor.fetchone()[0]
             cursor.execute(
@@ -234,7 +237,7 @@ def create_offer(listing_id: int, payload: OfferCreate, user=BuyerUser):
                 (listing_id,),
             )
         connection.commit()
-    return {"id": offer_id, "listing_id": listing_id, "status": "PENDING"}
+    return {"id": offer_id, "listing_id": listing_id, "status": "PENDING", "expires_at": payload.expires_at.isoformat() if payload.expires_at else None}
 
 
 def create_order(listing_id: int, payload: OrderCreate, user=BuyerUser):

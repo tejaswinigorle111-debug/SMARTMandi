@@ -246,6 +246,17 @@ export interface TranslationSchema {
     archEngine: string;
     closeBtn: string;
   };
+  sidebar: {
+    dashboard: string;
+    findBestMarket: string;
+    marketIntelligence: string;
+    buyerOpportunities: string;
+    myOrders: string;
+    fpo: string;
+    transactions: string;
+    notifications: string;
+    profileSettings: string;
+  };
   buyerRegistration: BuyerRegistrationTranslations;
 }
 
@@ -1183,6 +1194,17 @@ export const translations: Record<Language, TranslationSchema> = {
       archEngine: 'Net Return Recommendation Engine',
       closeBtn: 'Close',
     },
+    sidebar: {
+      dashboard: 'Dashboard',
+      findBestMarket: 'Find Best Market',
+      marketIntelligence: 'Market Intelligence',
+      buyerOpportunities: 'Buyer Opportunities',
+      myOrders: 'My Orders',
+      fpo: 'FPO',
+      transactions: 'Transactions',
+      notifications: 'Notifications',
+      profileSettings: 'Profile & Settings',
+    },
     buyerRegistration: enBuyerRegistration,
   },
 
@@ -1483,6 +1505,17 @@ export const translations: Record<Language, TranslationSchema> = {
       archFeed: 'జాతీయ వ్యవసాయ మార్కెట్ (e-NAM / APMC) ఫీడ్',
       archEngine: 'నికర లాభం సిఫార్సు ఇంజిన్',
       closeBtn: 'మూసివేయి',
+    },
+    sidebar: {
+      dashboard: 'డ్యాష్‌బోర్డ్',
+      findBestMarket: 'ఉత్తమ మార్కెట్ కనుగొనండి',
+      marketIntelligence: 'మార్కెట్ విశ్లేషణ',
+      buyerOpportunities: 'కొనుగోలుదారుల అవకాశాలు',
+      myOrders: 'నా ఆర్డర్‌లు',
+      fpo: 'FPO',
+      transactions: 'లావాదేవీలు',
+      notifications: 'నోటిఫికేషన్‌లు',
+      profileSettings: 'ప్రొఫైల్ & సెట్టింగ్‌లు',
     },
     buyerRegistration: teBuyerRegistration,
   },
@@ -1785,6 +1818,17 @@ export const translations: Record<Language, TranslationSchema> = {
       archEngine: 'शुद्ध आय सिफारिश इंजन',
       closeBtn: 'बंद करें',
     },
+    sidebar: {
+      dashboard: 'डैशबोर्ड',
+      findBestMarket: 'सर्वोत्तम मंडी खोजें',
+      marketIntelligence: 'बाज़ार की जानकारी',
+      buyerOpportunities: 'खरीदार अवसर',
+      myOrders: 'मेरे ऑर्डर्स',
+      fpo: 'FPO',
+      transactions: 'लेन-देन',
+      notifications: 'सूचनाएं',
+      profileSettings: 'प्रोफ़ाइल और सेटिंग्स',
+    },
     buyerRegistration: hiBuyerRegistration,
   },
 
@@ -2085,6 +2129,17 @@ export const translations: Record<Language, TranslationSchema> = {
       archFeed: 'राष्ट्रीय कृषी बाजार (e-NAM / APMC) फीड',
       archEngine: 'निव्वळ नफा शिफारस इंजिन',
       closeBtn: 'बंद करा',
+    },
+    sidebar: {
+      dashboard: 'डॅशबोर्ड',
+      findBestMarket: 'सर्वोत्तम बाजार शोधा',
+      marketIntelligence: 'बाजारपेठेची माहिती',
+      buyerOpportunities: 'खरेदीदारांच्या संधी',
+      myOrders: 'माझ्या ऑर्डर्स',
+      fpo: 'FPO',
+      transactions: 'व्यवहार',
+      notifications: 'सूचना',
+      profileSettings: 'प्रोफाइल आणि सेटिंग्ज',
     },
     buyerRegistration: mrBuyerRegistration,
   },

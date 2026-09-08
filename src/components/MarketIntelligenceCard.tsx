@@ -16,7 +16,7 @@ export const MarketIntelligenceCard: React.FC<MarketIntelligenceCardProps> = ({ 
           <h3 className="text-xl font-black text-stone-950">AI market intelligence</h3>
         </div>
         <span className={`rounded-full px-2.5 py-1 text-xs font-black uppercase ${isInsufficient ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}`}>
-          {isInsufficient ? 'Limited data' : intelligence.recommendation_type === 'sell_now' ? 'Consider sell now' : 'Monitor'}
+          {isInsufficient ? 'Unavailable' : intelligence.recommendation_type === 'sell_now' ? 'Sell now' : intelligence.recommendation_type === 'hold' ? 'Hold' : 'Monitor'}
         </span>
       </div>
 

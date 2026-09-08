@@ -155,7 +155,7 @@ export const MarketResults: React.FC<MarketResultsProps> = ({
             {/* Charts Side-by-Side */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <PriceComparisonChart results={results} language={language} />
-              <PriceTrendChart crop={crop} language={language} />
+              <PriceTrendChart crop={crop} language={language} intelligence={intelligence} />
             </div>
           </div>
 
@@ -167,7 +167,7 @@ export const MarketResults: React.FC<MarketResultsProps> = ({
               cropName={crop}
               language={language}
             />
-            <BestSellingWindow language={language} />
+            <BestSellingWindow language={language} intelligence={intelligence} />
           </div>
         </div>
       </div>

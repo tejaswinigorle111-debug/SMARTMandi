@@ -98,10 +98,23 @@ export interface MarketIntelligence {
   status: 'available' | 'insufficient_data';
   summary: string;
   recommendation: string;
-  recommendation_type: 'sell_now' | 'monitor' | 'insufficient_data';
+  recommendation_type: 'sell_now' | 'hold' | 'monitor' | 'insufficient_data';
   uncertainty: string;
   insights: string[];
   data_availability: Record<string, 'available' | 'insufficient' | 'unavailable'>;
+  metrics?: {
+    history_available: boolean;
+    trend_direction: 'rising' | 'falling' | 'stable' | 'unavailable';
+    change_percent_30d: number | null;
+    average_price_30d: number | null;
+    volatility_percent: number | null;
+    freshness_days: number | null;
+    latest_arrival_quantity: number | null;
+  };
+  price_history?: {
+    '7d': Array<{ date: string; price_per_kg: number }>;
+    '30d': Array<{ date: string; price_per_kg: number }>;
+  };
 }
 
 export interface CropHistoricalTrend {
@@ -140,4 +153,38 @@ export interface SmartDealEvaluation {
   score: number;
   evaluation_id: string;
   factors: Record<string, string>;
+}
+
+export interface BuyerRegistrationRequest {
+  id: number;
+  full_name: string;
+  business_name: string;
+  buyer_type: BuyerType;
+  mobile_number: string;
+  email: string | null;
+  state: string;
+  district: string;
+  market_area: string;
+  business_address: string;
+  preferred_crops: string[];
+  min_quantity: number;
+  max_quantity: number;
+  quantity_unit: QuantityUnit;
+  min_price: number;
+  max_price: number;
+  buying_frequency: BuyingFrequency;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'CONTACTED';
+  reviewed_by: string | null;
+  reviewed_at: string | null;
+  review_notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BuyerRegistrationRequestsResponse {
+  items: BuyerRegistrationRequest[];
+  page: number;
+  page_size: number;
+  total: number;
+  has_next: boolean;
 }

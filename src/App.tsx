@@ -13,16 +13,16 @@ import { AuthModal } from './components/AuthModal';
 import { FarmerDashboard } from './components/FarmerDashboard';
 import { BuyerMarketplace } from './components/BuyerMarketplace';
 import { BuyerRegistration } from './components/BuyerRegistration';
-import { TransactionCenter } from './components/TransactionCenter';
 import { MarketplaceGrowthCenter } from './components/MarketplaceGrowthCenter';
-import { WarehouseCenter } from './components/WarehouseCenter';
+import { LogisticsCenter } from './components/LogisticsCenter';
+import { AdminPanel } from './components/AdminPanel';
 import { Language, CropType, CalculatedMarketResult, FarmerInputData, MarketIntelligence } from './types';
 import { getRecommendation } from './services/api';
 import { AuthUser, getCurrentUser, hasRole, logout } from './services/auth';
 import { getTranslation } from './utils/translations';
 
 export default function App() {
-  const [currentView, setCurrentView] = useState<'home' | 'buyer-register'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'buyer-register' | 'admin-panel'>('home');
   const [language, setLanguage] = useState<Language>(() => {
     const saved = localStorage.getItem('smartmandi_language');
     if (saved && (saved === 'en' || saved === 'te' || saved === 'hi' || saved === 'mr')) {
@@ -162,12 +162,18 @@ export default function App() {
             setCurrentUser(null);
           }}
           onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+          onOpenAdminPanel={() => { setCurrentView('admin-panel'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
         />
 
         <main className="flex-1">
           {currentView === 'buyer-register' ? (
             <BuyerRegistration
               language={language}
+              onBack={navigateToHome}
+            />
+          ) : currentView === 'admin-panel' && currentUser && hasRole(currentUser, ['ADMIN']) ? (
+            <AdminPanel
+              user={currentUser}
               onBack={navigateToHome}
             />
           ) : (
@@ -201,9 +207,8 @@ export default function App() {
                 />
               )}
 
-              {currentUser && <TransactionCenter user={currentUser} />}
+              {currentUser && <LogisticsCenter user={currentUser} />}
               {currentUser && <MarketplaceGrowthCenter user={currentUser} />}
-              {currentUser && <WarehouseCenter user={currentUser} />}
 
               {/* Farmer Input Section */}
               <FarmerInput

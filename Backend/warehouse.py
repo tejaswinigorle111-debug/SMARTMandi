@@ -56,31 +56,40 @@ def _warehouse_access(cursor, warehouse_id: int, user):
 def warehouse_capacity(warehouse_id: int | None = Query(default=None), user=Participant):
     with get_db_connection() as connection:
         with connection.cursor() as cursor:
+            if warehouse_id is not None and "WAREHOUSE_MANAGER" in user["roles"] and "ADMIN" not in user["roles"]:
+                _warehouse_access(cursor, warehouse_id, user)
             if warehouse_id is not None:
-                cursor.execute("""SELECT warehouses.id, warehouses.name, warehouses.capacity_kg, warehouses.status,
+                cursor.execute("""SELECT warehouses.id, warehouses.name, warehouses.capacity_kg, warehouses.storage_rate_per_kg, warehouses.status,
                     COALESCE(SUM(CASE WHEN inventory.status IN ('IN_STORAGE', 'RESERVED') THEN inventory.quantity_kg - inventory.spoiled_quantity_kg ELSE 0 END), 0)
                     FROM warehouses LEFT JOIN inventory ON inventory.warehouse_id = warehouses.id
                     WHERE warehouses.id = %s GROUP BY warehouses.id""", (warehouse_id,))
             else:
-                cursor.execute("""SELECT warehouses.id, warehouses.name, warehouses.capacity_kg, warehouses.status,
+                manager_filter = " AND warehouses.manager_user_id = %s" if "WAREHOUSE_MANAGER" in user["roles"] and "ADMIN" not in user["roles"] else ""
+                manager_params = (user["id"],) if manager_filter else ()
+                cursor.execute(f"""SELECT warehouses.id, warehouses.name, warehouses.capacity_kg, warehouses.storage_rate_per_kg, warehouses.status,
                     COALESCE(SUM(CASE WHEN inventory.status IN ('IN_STORAGE', 'RESERVED') THEN inventory.quantity_kg - inventory.spoiled_quantity_kg ELSE 0 END), 0)
                     FROM warehouses LEFT JOIN inventory ON inventory.warehouse_id = warehouses.id
-                    WHERE warehouses.status = 'ACTIVE' GROUP BY warehouses.id ORDER BY warehouses.name""")
+                    WHERE warehouses.status = 'ACTIVE'{manager_filter} GROUP BY warehouses.id ORDER BY warehouses.name""", manager_params)
             rows = cursor.fetchall()
-    return [{"id": row[0], "name": row[1], "capacity_kg": float(row[2]), "used_capacity_kg": float(row[4]), "available_capacity_kg": max(0, float(row[2]) - float(row[4])), "status": row[3]} for row in rows]
+    return [{"id": row[0], "name": row[1], "capacity_kg": float(row[2]), "storage_rate_per_kg": float(row[3]), "used_capacity_kg": float(row[5]), "available_capacity_kg": max(0, float(row[2]) - float(row[5])), "status": row[4]} for row in rows]
 
 
 def list_warehouse_bookings(status: str = Query(default="ALL"), user=Participant):
     with get_db_connection() as connection:
         with connection.cursor() as cursor:
-            cursor.execute("""SELECT bookings.id, bookings.warehouse_id, warehouses.name, bookings.farmer_user_id,
+            if "ADMIN" in user["roles"]:
+                scope_sql, scope_params = "TRUE", ()
+            elif "WAREHOUSE_MANAGER" in user["roles"]:
+                scope_sql, scope_params = "warehouses.manager_user_id = %s", (user["id"],)
+            else:
+                scope_sql, scope_params = "bookings.farmer_user_id = %s", (user["id"],)
+            cursor.execute(f"""SELECT bookings.id, bookings.warehouse_id, warehouses.name, bookings.farmer_user_id,
                 users.full_name, bookings.quantity_kg, bookings.approved_quantity_kg, bookings.starts_on, bookings.ends_on,
                 bookings.status, bookings.approved_at, bookings.released_at
                 FROM warehouse_bookings bookings JOIN warehouses ON warehouses.id = bookings.warehouse_id
                 JOIN users ON users.id = bookings.farmer_user_id
-                WHERE (%s = 'ALL' OR bookings.status = %s)
-                AND (%s = 'WAREHOUSE_MANAGER' OR bookings.farmer_user_id = %s)
-                ORDER BY bookings.created_at DESC LIMIT 200""", (status, status, "WAREHOUSE_MANAGER" if "WAREHOUSE_MANAGER" in user["roles"] or "ADMIN" in user["roles"] else "FARMER", user["id"]))
+                WHERE (%s = 'ALL' OR bookings.status = %s) AND {scope_sql}
+                ORDER BY bookings.created_at DESC LIMIT 200""", (status, status, *scope_params))
             return [{"id": row[0], "warehouse_id": row[1], "warehouse_name": row[2], "farmer_user_id": str(row[3]), "farmer_name": row[4], "quantity_kg": float(row[5]), "approved_quantity_kg": float(row[6]) if row[6] is not None else None, "starts_on": row[7].isoformat(), "ends_on": row[8].isoformat() if row[8] else None, "status": row[9], "approved_at": row[10].isoformat() if row[10] else None, "released_at": row[11].isoformat() if row[11] else None} for row in cursor.fetchall()]
 
 

@@ -32,6 +32,7 @@ export const BuyerMarketplace: React.FC<BuyerMarketplaceProps> = ({ onAuthExpire
   const [orders, setOrders] = useState<Awaited<ReturnType<typeof getBuyerOrders>>['items']>([]);
   const [offerQuantity, setOfferQuantity] = useState('');
   const [offerPrice, setOfferPrice] = useState('');
+  const [offerExpiry, setOfferExpiry] = useState('');
   const [orderQuantity, setOrderQuantity] = useState('');
   const [orderPrice, setOrderPrice] = useState('');
   const [reviewOrderId, setReviewOrderId] = useState<number | null>(null);
@@ -83,7 +84,7 @@ export const BuyerMarketplace: React.FC<BuyerMarketplaceProps> = ({ onAuthExpire
   const submitOffer = async (event: React.FormEvent) => {
     event.preventDefault(); if (!selectedListing) return;
     setWorking(true); setError(null); setNotice(null);
-    try { await makeOffer(selectedListing.id, Number(offerQuantity), Number(offerPrice)); setNotice('Offer submitted to the farmer.'); setSelectedListing(null); await loadListings(); }
+    try { await makeOffer(selectedListing.id, Number(offerQuantity), Number(offerPrice), offerExpiry ? new Date(offerExpiry).toISOString() : undefined); setNotice('Offer submitted to the farmer.'); setSelectedListing(null); await loadListings(); }
     catch (submitError) { setError(submitError instanceof Error ? submitError.message : 'Unable to submit offer'); }
     finally { setWorking(false); }
   };

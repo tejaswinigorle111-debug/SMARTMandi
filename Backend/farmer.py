@@ -1,12 +1,13 @@
 from datetime import date
 from typing import Literal
 
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 from psycopg2.extras import Json
 
 from auth import require_roles
 from database import get_db_connection
+from market_comparison import load_cost_configuration
 
 
 FarmerUser = Depends(require_roles("FARMER", "FPO"))
@@ -71,6 +72,92 @@ def _listing(row):
     }
 
 
+def _offer_records(cursor, farmer_user_id: str, listing_id: int | None = None):
+    cursor.execute(
+        """SELECT offers.id, offers.listing_id, commodities.name, crop_listings.variety,
+               users.full_name, offers.quantity_kg, offers.offered_price_per_kg, offers.status,
+               offers.created_at, offers.expires_at, offers.parent_offer_id,
+               buyers.verification_status = 'APPROVED',
+               COALESCE(order_stats.total_orders, 0), COALESCE(order_stats.successful_payments, 0)
+        FROM offers
+        JOIN crop_listings ON crop_listings.id = offers.listing_id
+        JOIN commodities ON commodities.id = crop_listings.commodity_id
+        JOIN users ON users.id = offers.buyer_user_id
+        JOIN buyers ON buyers.user_id = offers.buyer_user_id
+        LEFT JOIN (
+            SELECT orders.buyer_user_id, COUNT(DISTINCT orders.id) AS total_orders,
+                   COUNT(DISTINCT orders.id) FILTER (
+                       WHERE payments.status IN ('PAYMENT_CONFIRMED', 'ESCROWED', 'RELEASED')
+                   ) AS successful_payments
+            FROM orders
+            LEFT JOIN payments ON payments.order_id = orders.id
+            GROUP BY orders.buyer_user_id
+        ) order_stats ON order_stats.buyer_user_id = offers.buyer_user_id
+        WHERE crop_listings.farmer_user_id = %s
+          AND (%s IS NULL OR offers.listing_id = %s)
+        ORDER BY offers.created_at DESC""",
+        (farmer_user_id, listing_id, listing_id),
+    )
+    rows = cursor.fetchall()
+    try:
+        config = load_cost_configuration()
+    except Exception:
+        config = None
+    by_id = {row[0]: row for row in rows}
+    records = []
+    for row in rows:
+        quantity = float(row[5])
+        price = float(row[6])
+        gross_value = quantity * price
+        estimated_net = (
+            gross_value - (gross_value * config.platform_fee_percent / 100) - (quantity * config.other_cost_per_kg)
+            if config else None
+        )
+        history = []
+        parent_id = row[10]
+        while parent_id is not None and parent_id in by_id:
+            parent = by_id[parent_id]
+            history.append({
+                "buyer_name": parent[4],
+                "quantity": float(parent[5]),
+                "offered_price_per_kg": float(parent[6]),
+                "status": parent[7],
+                "created_at": parent[8].isoformat(),
+                "expires_at": parent[9].isoformat() if parent[9] else None,
+            })
+            parent_id = parent[10]
+        total_orders = int(row[12])
+        successful_payments = int(row[13])
+        if total_orders == 0:
+            payment_reliability = "No payment history"
+        elif successful_payments == total_orders:
+            payment_reliability = "Reliable"
+        elif successful_payments == 0:
+            payment_reliability = "Needs review"
+        else:
+            payment_reliability = "Mixed"
+        records.append({
+            "id": row[0],
+            "listing_id": row[1],
+            "listing_name": f"{row[2]}{f' · {row[3]}' if row[3] else ''}",
+            "commodity": row[2],
+            "variety": row[3],
+            "buyer_name": row[4],
+            "quantity": quantity,
+            "offered_price_per_kg": price,
+            "estimated_net_realization": round(estimated_net, 2) if estimated_net is not None else None,
+            "net_realization_basis": "Offer value less configured platform and other costs; transport and storage are not included." if config else "Unavailable: cost configuration is incomplete.",
+            "status": row[7],
+            "created_at": row[8].isoformat(),
+            "expires_at": row[9].isoformat() if row[9] else None,
+            "buyer_verified": bool(row[11]),
+            "payment_reliability": payment_reliability,
+            "payment_history": {"orders": total_orders, "successful_payments": successful_payments},
+            "counteroffer_history": list(reversed(history)),
+        })
+    return records
+
+
 def get_farmer_dashboard(user=FarmerUser):
     with get_db_connection() as connection:
         with connection.cursor() as cursor:
@@ -114,27 +201,7 @@ def get_farmer_dashboard(user=FarmerUser):
             )
             listings = [_listing(row) for row in cursor.fetchall()]
 
-            cursor.execute(
-                """
-                SELECT offers.id, offers.listing_id, commodities.name, users.full_name,
-                       offers.quantity_kg, offers.offered_price_per_kg, offers.status, offers.created_at
-                FROM offers
-                JOIN crop_listings ON crop_listings.id = offers.listing_id
-                JOIN commodities ON commodities.id = crop_listings.commodity_id
-                JOIN users ON users.id = offers.buyer_user_id
-                WHERE crop_listings.farmer_user_id = %s
-                ORDER BY offers.created_at DESC
-                """,
-                (user["id"],),
-            )
-            offers = [
-                {
-                    "id": row[0], "listing_id": row[1], "commodity": row[2], "buyer_name": row[3],
-                    "quantity": float(row[4]), "offered_price_per_kg": float(row[5]),
-                    "status": row[6], "created_at": row[7].isoformat(),
-                }
-                for row in cursor.fetchall()
-            ]
+            offers = _offer_records(cursor, user["id"])
 
             cursor.execute(
                 """
@@ -234,6 +301,15 @@ def get_farmer_dashboard(user=FarmerUser):
         "listings": listings, "offers": offers, "orders": orders, "payments": payments,
         "logistics": logistics, "reviews": reviews, "notifications": notifications,
     }
+
+
+def list_farmer_offers(
+    listing_id: int | None = Query(default=None, ge=1),
+    user=FarmerUser,
+):
+    with get_db_connection() as connection:
+        with connection.cursor() as cursor:
+            return _offer_records(cursor, user["id"], listing_id)
 
 
 def update_farmer_profile(payload: FarmerProfileUpdate, user=FarmerUser):

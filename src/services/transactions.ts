@@ -14,6 +14,7 @@ export interface DemandRecord extends BuyerDemandInput {
   id: number;
   status: string;
   buyer_name: string;
+  buyer_verified: boolean;
   created_at: string;
 }
 
@@ -44,6 +45,7 @@ export async function assignShipment(orderId: number, input: {
   vehicle_id?: number | null;
   driver_id?: number | null;
   scheduled_pickup_at?: string | null;
+  transport_rate_per_kg?: number | null;
 }) {
   return authenticatedRequest<{ id: number; order_id: number; status: string }>(`/orders/${orderId}/shipments`, {
     method: 'POST',
@@ -122,12 +124,44 @@ export async function recordFarmerProfit(orderId: number, input: {
   });
 }
 
-export async function submitBuyerVerification(input: { document_type: string; document_reference?: string; document_url?: string }) {
-  return authenticatedRequest<{ id: number; status: string }>('/buyer/verification-documents', { method: 'POST', body: JSON.stringify(input) });
+export interface BuyerVerification {
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  rejection_reason: string | null;
+  verified_badge: boolean;
+  documents: Array<{
+    id: number;
+    document_type: string;
+    document_reference: string | null;
+    document_url: string | null;
+    document_metadata: Record<string, unknown>;
+    status: string;
+    rejection_reason: string | null;
+    reviewed_at: string | null;
+    created_at: string;
+  }>;
+  review_history: Array<{
+    id: number;
+    document_id: number | null;
+    previous_status: string | null;
+    status: string;
+    rejection_reason: string | null;
+    review_note: string | null;
+    reviewed_by: string | null;
+    created_at: string;
+  }>;
 }
 
-export async function createPooledLot(input: { fpo_id: number; commodity_name: string; target_price_per_kg?: number | null; quality_grade?: string | null; members: Array<{ farmer_user_id: string; listing_id?: number | null; quantity_kg: number }> }) {
-  return authenticatedRequest<{ id: number; total_quantity_kg: number; status: string }>('/fpo/lots', { method: 'POST', body: JSON.stringify(input) });
+export async function submitBuyerVerification(input: { document_type: string; document_reference?: string; document_url?: string; document_metadata?: Record<string, unknown> }) {
+  return authenticatedRequest<{ id: number; status: string; document_metadata: Record<string, unknown> }>('/buyer/verification-documents', { method: 'POST', body: JSON.stringify(input) });
+}
+
+export async function getBuyerVerification() {
+  return authenticatedRequest<BuyerVerification>('/buyer/verification');
+}
+
+export async function createPooledLot(input: { fpo_id: number; commodity_name: string; target_price_per_kg?: number | null; quality_standard?: string; quality_notes?: string | null; members: Array<{ farmer_user_id: string; listing_id?: number | null; quantity_kg: number }> }) {
+  const { fpo_id, ...payload } = input;
+  return authenticatedRequest<{ id: number; total_quantity_kg: number; status: string }>(`/fpos/${fpo_id}/lots`, { method: 'POST', body: JSON.stringify(payload) });
 }
 
 export async function getMarketMatches(commodity?: string) {

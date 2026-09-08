@@ -8,6 +8,7 @@ interface OfferCardProps {
     listing_id: number;
     commodity: string;
     buyer_name: string;
+    buyer_verified?: boolean;
     quantity: number;
     offered_price_per_kg: number;
     status: string;
@@ -56,7 +57,7 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, dealEval, onAccept,
         <div className="flex justify-between items-start mb-4">
           <div>
             <h3 className="text-2xl font-black text-stone-950 flex items-center gap-2">
-              {offer.buyer_name}
+              {offer.buyer_name}{offer.buyer_verified && <span className="rounded-full bg-emerald-100 px-2 py-1 text-xs font-black text-emerald-800">Verified buyer</span>}
             </h3>
             <p className="text-sm font-bold text-stone-600 flex items-center gap-2 mt-1">
               <Package className="w-4 h-4" /> {offer.commodity} · {offer.quantity} kg

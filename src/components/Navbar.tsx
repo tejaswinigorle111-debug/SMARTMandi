@@ -16,6 +16,7 @@ interface NavbarProps {
   onOpenAuth: () => void;
   onLogout: () => Promise<void>;
   onToggleSidebar: () => void;
+  onOpenAdminPanel?: () => void;
 }
 
 export const languages: { code: Language; name: string; native: string }[] = [
@@ -36,6 +37,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenAuth,
   onLogout,
   onToggleSidebar,
+  onOpenAdminPanel,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
@@ -148,6 +150,15 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               {t.nav.about}
             </button>
+            {user && user.roles.includes('ADMIN') && onOpenAdminPanel && (
+              <button
+                type="button"
+                onClick={onOpenAdminPanel}
+                className="text-emerald-700 hover:text-emerald-900 transition-colors py-1 cursor-pointer font-bold border border-emerald-200 bg-emerald-50 px-3 rounded-lg"
+              >
+                Admin Panel
+              </button>
+            )}
           </nav>
 
           {/* Right Action: Language Selector & CTA Button */}
@@ -312,6 +323,15 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               <span>{t.nav.about}</span>
             </button>
+            {user && user.roles.includes('ADMIN') && onOpenAdminPanel && (
+              <button
+                type="button"
+                onClick={() => handleNavClick(onOpenAdminPanel)}
+                className="text-left px-3 py-2 rounded-lg hover:bg-emerald-50 text-emerald-700 font-bold cursor-pointer border border-emerald-100"
+              >
+                <span>Admin Panel</span>
+              </button>
+            )}
           </div>
 
           <div className="pt-2 border-t border-stone-200">

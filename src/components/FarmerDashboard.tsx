@@ -3,6 +3,8 @@ import { Bell, Boxes, Check, ClipboardList, CreditCard, MapPin, Pencil, Plus, Re
 import { CalculatedMarketResult, CropType } from '../types';
 import { getMarketPrices, getRecommendation } from '../services/api';
 import { MarketPriceRecord } from '../types';
+import { CropLotManager } from './CropLotManager';
+import { OfferComparisonPanel } from './OfferComparisonPanel';
 import {
   cancelFarmerListing,
   createFarmerListing,
@@ -277,6 +279,16 @@ export const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ onAuthExpired 
           </form>
         </div>
 
+        <CropLotManager onAuthExpired={onAuthExpired} />
+
+        <OfferComparisonPanel
+          listings={dashboard.listings}
+          offers={dashboard.offers}
+          onAccept={(offerId) => void decideOffer(offerId, 'ACCEPT')}
+          onCounter={counterOffer}
+          onReject={(offerId) => void decideOffer(offerId, 'REJECT')}
+        />
+
         <div className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm"><div className="mb-4 flex items-center gap-2"><Boxes className="h-5 w-5 text-[#2D6A4F]" /><h3 className="text-xl font-black">Crop listings</h3></div>{dashboard.listings.length === 0 ? <EmptyState message="No crop listings yet." /> : <div className="grid gap-3 md:grid-cols-2">{dashboard.listings.map((listing) => <div key={listing.id} className="rounded-xl border border-stone-200 p-4"><div className="flex items-start justify-between gap-3"><div><h4 className="text-lg font-black">{listing.commodity}{listing.variety ? ` · ${listing.variety}` : ''}</h4><p className="text-sm font-bold text-stone-500">{listing.quantity} {listing.unit} · {listing.buyer_interest_count} buyer interest{listing.buyer_interest_count === 1 ? '' : 's'}</p></div><span className="rounded-full bg-stone-100 px-2.5 py-1 text-xs font-black text-stone-700">{statusLabel[listing.status] || listing.status}</span></div><p className="mt-2 text-sm font-bold text-stone-600">Expected price: {listing.expected_price === null || listing.expected_price === undefined ? 'Not provided' : `₹${listing.expected_price.toLocaleString('en-IN')} / ${listing.unit}`}</p><div className="mt-3 flex flex-wrap gap-2"><button type="button" onClick={() => editListing(listing)} className="inline-flex items-center gap-1 rounded-lg border border-stone-300 px-3 py-1.5 text-xs font-black"><Pencil className="h-3 w-3" /> Edit</button><button type="button" onClick={() => void changeListingStatus(listing)} className="rounded-lg border border-stone-300 px-3 py-1.5 text-xs font-black">{listing.status === 'ACTIVE' || listing.status === 'PUBLISHED' ? 'Pause' : listing.status === 'DRAFT' ? 'Publish' : 'Cancel'}</button><button type="button" onClick={() => void recommendFor(listing)} className="rounded-lg bg-emerald-50 px-3 py-1.5 text-xs font-black text-emerald-800">Compare markets</button></div></div>)}</div>}</div>
 
         <div className="grid gap-5 lg:grid-cols-2">
@@ -286,13 +298,13 @@ export const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ onAuthExpired 
 
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
           {[
-            { title: 'Offers', icon: <ClipboardList className="h-5 w-5" />, rows: dashboard.offers.map((item) => `${item.commodity} · ${item.buyer_name} · ${item.status}`) },
+            { title: 'Offers', icon: <ClipboardList className="h-5 w-5" />, rows: dashboard.offers.map((item) => `${item.commodity} · ${item.buyer_name}${item.buyer_verified ? ' · Verified buyer' : ''} · ${item.status}`) },
             { title: 'Orders', icon: <ClipboardList className="h-5 w-5" />, rows: dashboard.orders.map((item) => `Order #${item.id} · ${item.status}`) },
             { title: 'Payments', icon: <CreditCard className="h-5 w-5" />, rows: dashboard.payments.map((item) => `Order #${item.order_id} · ${item.status}`) },
             { title: 'Logistics', icon: <Truck className="h-5 w-5" />, rows: dashboard.logistics.map((item) => `Order #${item.order_id} · ${item.status}`) },
             { title: 'Reviews', icon: <Star className="h-5 w-5" />, rows: dashboard.reviews.map((item) => `${item.rating}/5 · ${item.reviewer_name}`) },
             { title: 'Notifications', icon: <Bell className="h-5 w-5" />, rows: dashboard.notifications.map((item) => item.title) },
-          ].map((section) => <div key={section.title} className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm"><div className="mb-3 flex items-center gap-2"><span className="text-[#2D6A4F]">{section.icon}</span><h3 className="font-black">{section.title}</h3></div>{section.title === 'Offers' ? dashboard.offers.length === 0 ? <p className="text-sm font-bold text-stone-400">No records yet.</p> : <ul className="space-y-3 text-sm font-bold text-stone-700">{dashboard.offers.slice(0, 5).map((offer) => <li key={offer.id} className="border-b border-stone-100 pb-3"><p>{offer.commodity} · {offer.buyer_name}</p><p className="text-xs text-stone-500">{offer.quantity} kg · ₹{offer.offered_price_per_kg}/kg · {offer.status}</p>{offer.status === 'PENDING' && <div className="mt-2 flex flex-wrap gap-2"><button type="button" onClick={() => void decideOffer(offer.id, 'ACCEPT')} className="rounded-lg bg-[#165B33] px-2.5 py-1.5 text-xs font-black text-white">Accept</button><button type="button" onClick={() => void counterOffer(offer)} className="rounded-lg border border-amber-600 px-2.5 py-1.5 text-xs font-black text-amber-800">Counter</button><button type="button" onClick={() => void decideOffer(offer.id, 'REJECT')} className="rounded-lg border border-rose-300 px-2.5 py-1.5 text-xs font-black text-rose-700">Reject</button></div>}</li>)}</ul> : section.rows.length === 0 ? <p className="text-sm font-bold text-stone-400">No records yet.</p> : <ul className="space-y-2 text-sm font-bold text-stone-700">{section.rows.slice(0, 5).map((row, index) => <li key={`${section.title}-${index}`} className="border-b border-stone-100 pb-2">{row}</li>)}</ul>}</div>)}
+          ].map((section) => <div key={section.title} className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm"><div className="mb-3 flex items-center gap-2"><span className="text-[#2D6A4F]">{section.icon}</span><h3 className="font-black">{section.title}</h3></div>{section.title === 'Offers' ? dashboard.offers.length === 0 ? <p className="text-sm font-bold text-stone-400">No records yet.</p> : <ul className="space-y-3 text-sm font-bold text-stone-700">{dashboard.offers.slice(0, 5).map((offer) => <li key={offer.id} className="border-b border-stone-100 pb-3"><p className="flex items-center gap-2">{offer.commodity} · {offer.buyer_name}{offer.buyer_verified && <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-black text-emerald-800">Verified buyer</span>}</p><p className="text-xs text-stone-500">{offer.quantity} kg · ₹{offer.offered_price_per_kg}/kg · {offer.status}</p>{offer.status === 'PENDING' && <div className="mt-2 flex flex-wrap gap-2"><button type="button" onClick={() => void decideOffer(offer.id, 'ACCEPT')} className="rounded-lg bg-[#165B33] px-2.5 py-1.5 text-xs font-black text-white">Accept</button><button type="button" onClick={() => void counterOffer(offer)} className="rounded-lg border border-amber-600 px-2.5 py-1.5 text-xs font-black text-amber-800">Counter</button><button type="button" onClick={() => void decideOffer(offer.id, 'REJECT')} className="rounded-lg border border-rose-300 px-2.5 py-1.5 text-xs font-black text-rose-700">Reject</button></div>}</li>)}</ul> : section.rows.length === 0 ? <p className="text-sm font-bold text-stone-400">No records yet.</p> : <ul className="space-y-2 text-sm font-bold text-stone-700">{section.rows.slice(0, 5).map((row, index) => <li key={`${section.title}-${index}`} className="border-b border-stone-100 pb-2">{row}</li>)}</ul>}</div>)}
         </div>
       </div>
     </section>
