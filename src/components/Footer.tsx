@@ -8,7 +8,6 @@ interface FooterProps {
   onOpenMarketPrices: () => void;
   onOpenAbout: () => void;
   onScrollToInput: () => void;
-  onNavigateBuyerRegister: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -16,7 +15,6 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenMarketPrices,
   onOpenAbout,
   onScrollToInput,
-  onNavigateBuyerRegister,
 }) => {
   const t = getTranslation(language);
 
@@ -79,16 +77,6 @@ export const Footer: React.FC<FooterProps> = ({
                     {t.nav.about}
                   </button>
                 </li>
-                <li>
-                  <button
-                    type="button"
-                    onClick={onNavigateBuyerRegister}
-                    className="hover:text-white text-stone-200 transition-colors cursor-pointer text-left font-bold"
-                    id="footer-link-register-buyer"
-                  >
-                    {t.nav.registerBuyer}
-                  </button>
-                </li>
               </ul>
             </div>
 
@@ -103,14 +91,6 @@ export const Footer: React.FC<FooterProps> = ({
                   className="bg-[#2D6A4F] hover:bg-[#1B4332] text-white font-black px-6 py-3 rounded-xl text-sm transition-colors cursor-pointer border-2 border-[#52B788] shadow-sm text-center"
                 >
                   {t.nav.findMarket}
-                </button>
-                <button
-                  type="button"
-                  onClick={onNavigateBuyerRegister}
-                  className="bg-stone-800 hover:bg-stone-700 text-emerald-300 font-bold px-6 py-2.5 rounded-xl text-sm transition-colors cursor-pointer border border-stone-600 text-center"
-                  id="footer-btn-register-buyer"
-                >
-                  {t.nav.registerBuyer}
                 </button>
               </div>
             </div>

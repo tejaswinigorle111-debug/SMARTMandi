@@ -9,14 +9,12 @@ interface HeroProps {
   language: Language;
   onFindMarketClick: () => void;
   onHowItWorksClick: () => void;
-  onNavigateBuyerRegister: () => void;
 }
 
 export const Hero: React.FC<HeroProps> = ({
   language,
   onFindMarketClick,
   onHowItWorksClick,
-  onNavigateBuyerRegister,
 }) => {
   const t = getTranslation(language);
 
@@ -156,35 +154,6 @@ export const Hero: React.FC<HeroProps> = ({
               </p>
             </div>
           </div>
-        </div>
-
-        {/* Buyer Procurement Callout Card */}
-        <div className="mt-8 p-6 sm:p-7 rounded-3xl bg-white border-2 border-emerald-600/30 shadow-md flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-[#165B33] flex items-center justify-center text-white shrink-0 shadow-md">
-              <Store className="w-7 h-7 text-emerald-100" />
-            </div>
-            <div>
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-950 font-black text-xs uppercase tracking-wider mb-1">
-                <span>{t.buyerRegistration.badge}</span>
-              </div>
-              <h3 className="text-xl font-black text-stone-950 font-display">
-                {t.buyerRegistration.heroBannerTitle}
-              </h3>
-              <p className="text-stone-700 text-sm font-bold mt-0.5 max-w-2xl">
-                {t.buyerRegistration.heroBannerSub}
-              </p>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={onNavigateBuyerRegister}
-            className="w-full md:w-auto px-6 py-3.5 rounded-xl bg-[#165B33] hover:bg-[#114828] text-white font-black text-base shadow-sm transition-all cursor-pointer whitespace-nowrap flex items-center justify-center gap-2 tracking-wide shrink-0"
-            id="hero-btn-register-as-buyer"
-          >
-            <span>{t.buyerRegistration.heroBannerCta}</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
         </div>
       </div>
     </section>

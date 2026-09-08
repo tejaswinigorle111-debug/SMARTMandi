@@ -39,12 +39,12 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
   // Score colour
   const scoreColor =
     score !== undefined && score >= 75 ? '#165B33'
-    : score !== undefined && score >= 50 ? '#92400e'
-    : '#6b7280';
+      : score !== undefined && score >= 50 ? '#92400e'
+        : '#6b7280';
   const scoreBg =
     score !== undefined && score >= 75 ? 'bg-emerald-50 border-emerald-200'
-    : score !== undefined && score >= 50 ? 'bg-amber-50 border-amber-200'
-    : 'bg-stone-50 border-stone-200';
+      : score !== undefined && score >= 50 ? 'bg-amber-50 border-amber-200'
+        : 'bg-stone-50 border-stone-200';
 
   const signalStyle = {
     sellNow: {
