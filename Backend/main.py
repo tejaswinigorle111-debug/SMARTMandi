@@ -15,6 +15,8 @@ from auth import (
     revoke_session,
 )
 from buyer import (
+    BuyerRegistrationRequest,
+    create_buyer_registration_request,
     create_offer,
     create_order,
     create_review,
@@ -399,6 +401,11 @@ def logout(request: Request):
     if token:
         revoke_session(token)
     return {"success": True}
+
+
+@app.post("/buyer/registration-requests")
+def buyer_registration_request(request: BuyerRegistrationRequest):
+    return create_buyer_registration_request(request)
 
 
 app.add_api_route("/farmer/dashboard", get_farmer_dashboard, methods=["GET"])

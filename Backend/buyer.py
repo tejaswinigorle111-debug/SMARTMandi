@@ -27,6 +27,54 @@ class ReviewCreate(BaseModel):
     comment: str | None = Field(default=None, max_length=1000)
 
 
+class BuyerRegistrationRequest(BaseModel):
+    full_name: str = Field(min_length=1, max_length=160)
+    business_name: str = Field(min_length=1, max_length=200)
+    buyer_type: Literal["Wholesaler", "Retailer", "Processor", "Exporter", "Other"]
+    mobile_number: str = Field(min_length=10, max_length=20)
+    email: str | None = Field(default=None, max_length=200)
+    state: str = Field(min_length=1, max_length=120)
+    district: str = Field(min_length=1, max_length=120)
+    market_area: str = Field(min_length=1, max_length=200)
+    business_address: str = Field(min_length=1, max_length=500)
+    preferred_crops: list[str] = Field(min_length=1, max_length=36)
+    min_quantity: float = Field(gt=0)
+    max_quantity: float = Field(gt=0)
+    quantity_unit: Literal["kg", "quintal", "tonne"]
+    min_price: float = Field(ge=0)
+    max_price: float = Field(ge=0)
+    buying_frequency: Literal["Daily", "Weekly", "Monthly", "As Needed"]
+
+
+def create_buyer_registration_request(payload: BuyerRegistrationRequest):
+    if payload.max_quantity < payload.min_quantity:
+        raise HTTPException(status_code=422, detail="Maximum quantity cannot be less than minimum quantity")
+    if payload.max_price < payload.min_price:
+        raise HTTPException(status_code=422, detail="Maximum price cannot be less than minimum price")
+
+    with get_db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """INSERT INTO buyer_registration_requests
+                (full_name, business_name, buyer_type, mobile_number, email, state, district,
+                 market_area, business_address, preferred_crops, min_quantity, max_quantity,
+                 quantity_unit, min_price, max_price, buying_frequency)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                RETURNING id, status, created_at""",
+                (
+                    payload.full_name.strip(), payload.business_name.strip(), payload.buyer_type,
+                    payload.mobile_number.strip(), payload.email.strip() if payload.email else None,
+                    payload.state.strip(), payload.district.strip(), payload.market_area.strip(),
+                    payload.business_address.strip(), payload.preferred_crops, payload.min_quantity,
+                    payload.max_quantity, payload.quantity_unit, payload.min_price, payload.max_price,
+                    payload.buying_frequency,
+                ),
+            )
+            request_id, status, created_at = cursor.fetchone()
+        connection.commit()
+    return {"id": request_id, "status": status, "created_at": created_at.isoformat()}
+
+
 def _distance_expression(origin_latitude: float | None, origin_longitude: float | None) -> tuple[str, list[float]]:
     if origin_latitude is None or origin_longitude is None:
         return "NULL::double precision", []

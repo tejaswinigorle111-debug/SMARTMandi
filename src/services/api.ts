@@ -4,9 +4,38 @@ import {
   CalculatedMarketResult,
   MarketPriceRecord,
   MarketIntelligence,
+  BuyerRegistrationFormData,
 } from '../types';
 
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000').replace(/\/$/, '');
+
+export async function submitBuyerRegistration(data: BuyerRegistrationFormData): Promise<{ id: number; status: string; created_at: string }> {
+  const response = await fetch(`${API_BASE_URL}/buyer/registration-requests`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      full_name: data.fullName.trim(),
+      business_name: data.businessName.trim(),
+      buyer_type: data.buyerType,
+      mobile_number: data.mobileNumber.trim(),
+      email: data.email.trim() || null,
+      state: data.state.trim(),
+      district: data.district.trim(),
+      market_area: data.marketArea.trim(),
+      business_address: data.businessAddress.trim(),
+      preferred_crops: data.preferredCrops,
+      min_quantity: Number(data.minQuantity),
+      max_quantity: Number(data.maxQuantity),
+      quantity_unit: data.quantityUnit,
+      min_price: Number(data.minPrice),
+      max_price: Number(data.maxPrice),
+      buying_frequency: data.buyingFrequency,
+    }),
+  });
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(result.detail || 'Unable to submit buyer registration');
+  return result;
+}
 
 export interface MarketDataResponse {
   records: MarketPriceRecord[];

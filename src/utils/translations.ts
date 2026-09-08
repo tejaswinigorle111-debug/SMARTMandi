@@ -453,7 +453,7 @@ const enBuyerRegistration: BuyerRegistrationTranslations = {
   },
   confirmation: {
     readyTitle: 'Buyer Registration Form is Ready',
-    backendNotice: 'Buyer registration form is ready. Backend registration will be connected next.',
+    backendNotice: 'Your registration request was received and queued for verification.',
     summaryTitle: 'Submitted Registration Details',
     buyerInfoLabel: 'Buyer & Business',
     contactLabel: 'Contact Information',
@@ -461,7 +461,7 @@ const enBuyerRegistration: BuyerRegistrationTranslations = {
     commoditiesLabel: 'Preferred Crops',
     volumePriceLabel: 'Volume & Price Target',
     frequencyLabel: 'Buying Frequency',
-    frontendStateOnlyNotice: 'Form data is held in local React state only. Backend registration will be connected next without storing to Supabase or calling external APIs.',
+    frontendStateOnlyNotice: 'Our team will review your buyer details and contact you before marketplace access is enabled.',
     registerAnotherBtn: 'Register Another Buyer',
     backToHomeBtn: 'Return to SMARTMandi Home',
   },

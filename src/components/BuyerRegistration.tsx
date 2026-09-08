@@ -29,6 +29,7 @@ import {
 } from '../types';
 import { cropOptions } from '../data/demoMarkets';
 import { getTranslation } from '../utils/translations';
+import { submitBuyerRegistration } from '../services/api';
 
 interface BuyerRegistrationProps {
   language: Language;
@@ -83,6 +84,7 @@ export const BuyerRegistration: React.FC<BuyerRegistrationProps> = ({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submittedData, setSubmittedData] = useState<BuyerRegistrationFormData | null>(null);
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
 
   // Crop search and category filter state
   const [cropSearch, setCropSearch] = useState<string>('');
@@ -249,7 +251,7 @@ export const BuyerRegistration: React.FC<BuyerRegistrationProps> = ({
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) {
       const firstErrorElement = document.querySelector('[data-has-error="true"]');
@@ -260,13 +262,16 @@ export const BuyerRegistration: React.FC<BuyerRegistrationProps> = ({
     }
 
     setIsSubmitting(true);
-
-    // Simulate clean frontend-only submission transition with realistic loading
-    setTimeout(() => {
+    setSubmissionError(null);
+    try {
+      await submitBuyerRegistration(formData);
       setIsSubmitting(false);
       setSubmittedData({ ...formData });
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 600);
+    } catch (error) {
+      setIsSubmitting(false);
+      setSubmissionError(error instanceof Error ? error.message : 'Unable to submit buyer registration');
+    }
   };
 
   const getCropDisplayLabel = (id: string) => {
@@ -549,6 +554,13 @@ export const BuyerRegistration: React.FC<BuyerRegistrationProps> = ({
               )}
             </ul>
           </div>
+        </div>
+      )}
+
+      {submissionError && (
+        <div className="mb-8 p-5 rounded-2xl bg-red-50 border-2 border-red-300 shadow-sm flex items-start gap-3" role="alert">
+          <AlertCircle className="w-6 h-6 text-red-600 shrink-0 mt-0.5" />
+          <p className="text-sm font-bold text-red-800">{submissionError}</p>
         </div>
       )}
 

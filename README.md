@@ -43,4 +43,6 @@ Apply `Backend/migrations/005_marketplace_growth.sql` next to enable buyer verif
 
 Apply `Backend/migrations/006_warehouse_operations.sql` after that to enable warehouse-manager booking approval, live inventory capacity, receiving, location movement, spoilage reporting, and partial or complete stock release tracking.
 
+Apply `Backend/migrations/007_buyer_registration_requests.sql` to persist public buyer-registration requests for admin review. The frontend submits these requests to `POST /buyer/registration-requests` with a `PENDING` status.
+
 Keep `.env` and `Backend/.env` local. If either file was ever committed, remove it from Git tracking and rotate every credential inside it before deployment.
