@@ -149,7 +149,7 @@ def list_farmer_memberships(user=FarmerUser):
             return [{"fpo_id": row[0], "fpo_name": row[1], "registration_number": row[2], "joined_at": row[3].isoformat()} for row in cursor.fetchall()]
 
 
-def list_member_listings(farmer_user_id: str = Path(...), fpo_id: int = Query(..., ge=1), user=FpoUser):
+def list_member_listings(farmer_user_id: str = Path(...), fpo_id: int = Path(..., ge=1), user=FpoUser):
     with get_db_connection() as connection:
         with connection.cursor() as cursor:
             _owned_fpo(cursor, fpo_id, user["id"])
